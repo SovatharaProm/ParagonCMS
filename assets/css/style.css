@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&family=Plus+Jakarta+Sans:wght@200;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700;900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.font-bold {
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+/* Add this to your global CSS file */
+.toast--error {
+    background-color: #ff4d4f !important;
+    color: white !important;
+  }
+  
+  .toast--warning {
+    background-color: #ffa502 !important;
+    color: white !important;
+  }
+  
+  .toast--info {
+    background-color: #1e90ff !important;
+    color: white !important;
+  }
+  
+  .toast--default {
+    background-color: #2f3542 !important;
+    color: white !important;
+  }
+  
