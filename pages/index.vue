@@ -32,7 +32,7 @@
 <script setup>
 definePageMeta({
   layout: 'usersidebar',
-  // middleware: 'auth',
+  middleware: 'auth',
 });
 
 const requests = [

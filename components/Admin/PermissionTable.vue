@@ -38,9 +38,7 @@
                                 >
                                     <input
                                         type="checkbox"
-                                        v-model="
-                                            rolePermissions[page.id][permission]
-                                        "
+                                        v-model="rolePermissions[page.id][permission]"
                                         class="mx-auto"
                                     />
                                 </td>
@@ -58,11 +56,7 @@
                                 >
                                     <input
                                         type="checkbox"
-                                        v-model="
-                                            rolePermissions[child.id][
-                                                permission
-                                            ]
-                                        "
+                                        v-model="rolePermissions[child.id][permission]"
                                         class="mx-auto"
                                     />
                                 </td>
@@ -94,9 +88,9 @@
 import { ref, onMounted } from "vue";
 import { useAuthStore } from "~/stores/auth";
 import { useRouter, useRoute } from "vue-router";
-import Toastification from "vue-toastification";
-const toast = Toastification.useToast;
+import { useToast } from "vue-toast-notification";
 
+const toast = useToast();
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
@@ -146,6 +140,9 @@ const fetchPages = async () => {
         });
     } catch (error) {
         console.error("Error fetching pages:", error.message);
+        toast.error("Error fetching pages: " + error.message, {
+            timeout: 3000,
+        });
     }
 };
 
@@ -201,6 +198,9 @@ const fetchRolePermissions = async () => {
         });
     } catch (error) {
         console.error("Error fetching role permissions:", error.message);
+        toast.error("Error fetching role permissions: " + error.message, {
+            timeout: 3000,
+        });
     }
 };
 
@@ -268,7 +268,7 @@ const updatePermissions = async () => {
         router.push("/admin");
     } catch (error) {
         console.error("Error assigning permissions:", error.message);
-        toast.error("Failed to assign permissions", {
+        toast.error("Failed to assign permissions: " + error.message, {
             position: "top-right",
             timeout: 5000,
             closeOnClick: true,

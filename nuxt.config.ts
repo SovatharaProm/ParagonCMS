@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     
   ],
   plugins: [
-    '~/plugins/toastification.js',
+   '~/plugins/vue-toast-notification.js',
     '~/plugins/vuetify.ts',
   ],
   

@@ -15,6 +15,8 @@ export const useAuthStore = defineStore('auth', {
 
       if (this.token) {
         await this.fetchUserRole();
+      } else {
+        console.error('No token found');
       }
     },
 
@@ -48,7 +50,7 @@ export const useAuthStore = defineStore('auth', {
         }
 
         const data = await response.json();
-        if (data && data.data && data.data.profile && data.data.profile.level) {
+        if (data && data.data && data.data.profile) {
           this.userRole = data.data.profile.level;
           this.userName = data.data.profile.name;
         } else {
@@ -72,33 +74,7 @@ export const useAuthStore = defineStore('auth', {
       this.userName = null;
     },
 
-    async fetchUserData() {
-      try {
-        const token = this.token;
-        if (!token) {
-          throw new Error('No token available');
-        }
-
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/get-my-profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Failed to fetch user data, response:', errorText);
-          throw new Error('Failed to fetch user data');
-        }
-
-        const data = await response.json();
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    },
-
-    async logout() {
+    async logout(router) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/log-out`, {
           method: 'POST',
@@ -115,7 +91,7 @@ export const useAuthStore = defineStore('auth', {
         }
 
         this.nullToken();
-        navigateTo('/auth/login');
+        router.push('/auth/login');
       } catch (error) {
         console.error('Error logging out:', error);
       }
