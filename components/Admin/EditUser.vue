@@ -98,7 +98,7 @@
 
       <div class="flex justify-end mt-6">
         <button class="bg-gray-500 text-white font-bold px-4 py-2 rounded-lg mr-4" @click="cancel">Cancel</button>
-        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="updatePermissions">Save</button>
+        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="updateUserDetails">Save</button>
       </div>
     </v-container>
   </div>

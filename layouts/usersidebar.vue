@@ -2,36 +2,29 @@
   <div class="flex h-[100vh]">
     <!-- Sidebar -->
     <div class="h-full w-[300px] rounded-xl flex flex-col justify-between py-3 drop-shadow-lg">
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-20">
         <NuxtLink to="/">
-          <img src="/assets/images/Logo.png" class="w-[200px] h-auto mx-auto" alt="Logo" />
-        </NuxtLink>
-        <NuxtLink to="/profile" class="profile flex flex-col items-center py-2 mx-auto">
-          <img
-            class="profile-pic w-[70px] h-[70px] rounded-[50%] object-cover mb-[10px]"
-            src="/assets/images/profile.jpeg"
-            alt="Profile Picture"
-          />
-          <span class="username text-[16px] text-[#333] font-bold">{{ user.name }}</span>
+            <img src="/assets/images/Logo.png" class="w-[200px] h-auto mx-auto" alt="Logo">
         </NuxtLink>
         <div>
           <NuxtLink to="/" class="flex gap-3 sidebar-link">
             <Icon name="ph:house-bold" class="icon" />
             <span>Website</span>
           </NuxtLink>
-          <NuxtLink to="/notification" class="flex gap-3 sidebar-link">
-            <Icon name="ph:bell-bold" class="icon" />
-            <span>Notification</span>
+          <NuxtLink to="/change-request" class="flex gap-3 sidebar-link">
+            <Icon name="ph:git-pull-request-bold" class="icon" />
+            <span>Change Request</span>
+          </NuxtLink>
+          <NuxtLink to="/profile" class="flex gap-3 sidebar-link">
+            <Icon name="ph:user-bold" class="icon" />
+            <span>Profile</span>
           </NuxtLink>
         </div>
       </div>
-      <button
-        class="text-blue-900 hover:text-blue-900 font-bold text-lg ps-5 py-4 pe-16 hover:bg-[#f0f7ff] rounded-full"
-        @click="handleLogout"
-      >
+      <NuxtLink to="/auth/login" class="text-blue-900 hover:text-blue-900 font-bold text-lg gap-2 px-4 py-4 flex items-center hover:bg-[#f0f7ff]">
         <Icon name="material-symbols:logout" class="icon" />
         <span class="">Sign out</span>
-      </button>
+      </NuxtLink>
     </div>
 
     <!-- Main content area -->
@@ -44,32 +37,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth'; // Adjust the import path as needed
-
-const authStore = useAuthStore();
-const router = useRouter();
-
-const user = ref({ name: '', email: '', role: '' });
-
-const handleLogout = async () => {
-  await authStore.logout(router);
-};
-
-// onMounted(async () => {
-//   authStore.initializeStore();
-//   if (authStore.token) {
-//     await authStore.fetchUserData();
-//     if (authStore.user) {
-//       user.value = authStore.user;
-//     }
-//   } else {
-//     router.push('/auth/login');
-//   }
-// });
+const user = {
+  name: 'Bunseng Tang'
+}
 </script>
-
+  
 <style scoped>
 @import "@/assets/css/style.css";
 .sidebar-link {
@@ -96,3 +68,4 @@ const handleLogout = async () => {
   align-items: flex-end;
 }
 </style>
+  

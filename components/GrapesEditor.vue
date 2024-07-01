@@ -3,32 +3,91 @@
 
   <div class="flex justify-end my-5 ml-[300px] flex-grow">
     <NuxtLink to="/" class="mr-5">
-      <v-btn class="text-none"
-            color="blue-darken-4"
-            variant="outlined"
-            v-bind="props">Discard</v-btn>
+      <v-btn class="text-none" color="blue-darken-4" variant="outlined">Discard</v-btn>
     </NuxtLink>
-    <NuxtLink to="/">
-      <v-btn class="text-none text-white px-8 mr-5"
-        color="blue-darken-4"
-        variant="flat">Save</v-btn>
-    </NuxtLink>
+    <v-btn class="text-none text-white px-8 mr-5" color="blue-darken-4" variant="flat" @click="saveContent">Save</v-btn>
+    <div v-html="outputHtml"></div>
+    <pre>{{ outputCss }}</pre>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
+import plugin from 'grapesjs-tailwind';
 
 const grapesjsEditor = ref(null);
+const route = useRoute();
+const router = useRouter();
+const token = '1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin'; // Replace this with your actual token
+let editor;
+
+const saveContent = async () => {
+  if (!editor) {
+    console.error('Editor is not initialized');
+    return;
+  }
+
+  const html = editor.getHtml();
+  const css = editor.getCss();
+  const pageId = route.query.id; // Get the page ID from the route query
+
+  const data = {
+    page_id: pageId,
+    html: html,
+    css: css,
+  };
+
+  try {
+    const response = await fetch('http://157.230.37.48/api/update-page-content', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (result.code === 200) {
+      alert('Content saved successfully!');
+      router.push('/');
+    } else {
+      alert('Error: ' + result.message);
+    }
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+};
+
+const fetchPageContent = async (pageId) => {
+  try {
+    const response = await fetch(`http://157.230.37.48/api/edit-page-content?page_id=${pageId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+    if (data.code === 200) {
+      return data.data['Page Content'];
+    } else {
+      console.error('Error fetching page content:', data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching page content:', error);
+    return null;
+  }
+};
+
 const customElementsPlugin = editor => {
   editor.Blocks.add('1-column', {
     label: '1 Column',
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Basic',
+    category: 'Column',
     attributes: { class: 'fa fa-columns' }
   });
 
@@ -38,9 +97,19 @@ const customElementsPlugin = editor => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Basic',
+    category: 'Column',
     attributes: { class: 'fa fa-columns' }
   });
+
+  editor.Blocks.add('2-columns-2-3', {
+      label: '2 Columns 2/3',
+      content: `<div style="display:flex;">
+                  <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                  <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                </div>`,
+      category: 'Column',
+      attributes: { class: 'fa fa-columns' }
+    });
 
   editor.Blocks.add('2-columns-3-7', {
     label: '2 Columns 3/7',
@@ -48,7 +117,17 @@ const customElementsPlugin = editor => {
                 <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Basic',
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
+
+  editor.Blocks.add('2-columns-7-3', {
+    label: '2 Columns 7/3',
+    content: `<div style="display:flex;">
+                <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
     attributes: { class: 'fa fa-columns' }
   });
 
@@ -59,7 +138,19 @@ const customElementsPlugin = editor => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Basic',
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
+
+  editor.Blocks.add('4-columns', {
+    label: '4 Columns',
+    content: `<div style="display:flex;">
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
     attributes: { class: 'fa fa-columns' }
   });
 
@@ -75,6 +166,23 @@ const customElementsPlugin = editor => {
     content: '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
     category: 'Basic',
     attributes: { class: 'fa fa-image' }
+  });
+
+  editor.Blocks.add('image-slideshow-block', {
+    label: 'Image Slideshow',
+    content: `
+        <div class="image-slideshow">
+            <div class="slides">
+                <div class="slide"><img src="path/to/image1.jpg" alt="Image 1"></div>
+                <div class="slide"><img src="path/to/image2.jpg" alt="Image 2"></div>
+                <div class="slide"><img src="path/to/image3.jpg" alt="Image 3"></div>
+            </div>
+            <a class="prev">&#10094;</a>
+            <a class="next">&#10095;</a>
+        </div>
+    `,
+    category: 'Advanced',
+    attributes: { class: 'fa fa-images' }
   });
 
   editor.Blocks.add('video-block', {
@@ -205,16 +313,31 @@ const customElementsPlugin = editor => {
 
   editor.Blocks.add('button-block', {
     label: 'Button',
-    content: `<button class="btn-primary">Click Me</button>`,
+    content: `<button class="btn-primary" style="
+    font-size: .92em !important;
+    padding: 15px 35px !important;
+    background: #2a3037 !important;
+    color: #ffffff !important;
+    letter-spacing: 1px;
+    font-weight: bold !important;
+    text-transform: uppercase;
+    border: none !important;
+    border-radius: 3px !important;
+    height: auto !important;">Click Me</button>`,
     category: 'Forms',
     attributes: { class: 'fa fa-minus-square-o' }
   });
 
   editor.Blocks.add('navbar-block', {
     label: 'Navigation Bar',
-    content: `<nav class="navbar">
+    content: `<nav class="navbar" 
+    style="background-color: #fff;
+    color: white;
+    padding: 10px 0;">
                 <a href="#home">Home</a>
                 <a href="#services">Services</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>
               </nav>`,
@@ -290,6 +413,32 @@ const customElementsPlugin = editor => {
     attributes: { class: 'fa fa-bullhorn' }
   });
 
+  editor.Blocks.add('curriculum-table', {
+    label: 'Curriculum Table',
+    content: `<div style="display: flex; justify-content: space-around; padding: 20px;">
+                <div style="background-color: #f9f9f9; border: 2px solid #ccc; padding: 20px; width: 48%;">
+                    <h3 style="color: #333; margin-bottom: 15px;">Semester I</h3>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ENGL 101 - Academic English I</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ECON 100 - Introductory Economics</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">KHM 101 - Khmer Studies I</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">MATH 131 - Calculus I</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">CS 125 - Principles of Programming I</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">MIS 120 - Computers, the Internet, and the Networked Society</div>
+                </div>
+                <div style="background-color: #f9f9f9; border: 2px solid #ccc; padding: 20px; width: 48%;">
+                    <h3 style="color: #333; margin-bottom: 15px;">Semester II</h3>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ENGL 102 - Academic English II</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">KHM 102 - Khmer Studies II</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ECON 201 - Microeconomics</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">CS 126 - Principles of Programming II</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">MATH 241 - Linear Algebra</div>
+                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">CS 260 - Web Design & Development</div>
+                </div>
+            </div>`,
+    category: 'Extra',
+    attributes: { class: 'fa fa-table' }
+  });
+
   editor.DomComponents.addType('fixed-content', {
      model: {
        defaults: {
@@ -307,927 +456,155 @@ const customElementsPlugin = editor => {
   
    // Now, add this new fixed content block to the canvas
    editor.BlockManager.add('fixed-content-block', {
-     label: 'Fixed Content',
-     content: { type: 'fixed-content' },
-     category: 'Fixed Elements',
+     label: 'NavBar',
+     content: `<header class="bg-blue-950 py-2 my-auto">
+        <div class="container mx-auto flex items-center justify-between">
+            <nav class="flex space-x-8">
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto bg-yellow-300 p-2">My.Paragon.U</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="mx-20 my-auto py-3 border-b-2 ">
+        <div class="flex items-center justify-between">
+            <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+            <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+        </div>
+    </main>`,
+     category: 'Layout',
      attributes: { class: 'fa fa-lock' }
    });
+   
 };
- // You can define a fixed content block here that won't change
 
-const editor = grapesjs.init({
-  container : '#gjs',
-  plugins: [customElementsPlugin],
-});
+const uploadFileToSpace = async (file) => {
+  // Fetch the pre-signed URL from the backend
+  const response = await fetch(`http://157.230.37.48/generate-url?filename=${file.name}`);
+  if (!response.ok) {
+    throw new Error('Failed to generate pre-signed URL');
+  }
+  const data = await response.json();
 
-onMounted(() => {
-  const editor = grapesjs.init({
+  if (!data.success) {
+    throw new Error('Failed to generate pre-signed URL');
+  }
+
+  // Upload the file to DigitalOcean Spaces using the pre-signed URL
+  const uploadResponse = await fetch(data.uploadUrl, {
+    method: 'PUT',
+    body: file,
+    headers: {
+      'Content-Type': file.type,
+      'x-amz-acl': 'public-read',
+    }
+  });
+
+  if (!uploadResponse.ok) {
+    throw new Error('Failed to upload file to DigitalOcean Space');
+  }
+
+  return data.fileUrl;
+};
+
+onMounted(async () => {
+  const pageId = route.query.id;
+  if (!pageId) {
+    console.error('Page ID is missing');
+    return;
+  }
+
+  editor = grapesjs.init({
     container: grapesjsEditor.value,
-    plugins: [customElementsPlugin],
+    plugins: [customElementsPlugin, plugin],
     fromElement: true,
     height: '100vh',
     width: '100%',
-    storageManager: false,
+    assetManager: {
+      upload: false, // Disable default upload
+      uploadFile: async (e) => {
+        const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+        const images = [];
+
+        for (const file of files) {
+          try {
+            const fileUrl = await uploadFileToSpace(file);
+            images.push({ src: fileUrl });
+          } catch (error) {
+            console.error('Error uploading file:', error);
+          }
+        }
+
+        editor.AssetManager.add(images);
+      },
+    },
   });
   
   document.documentElement.style.setProperty('--gjs-primary-color', '#172947');
   document.documentElement.style.setProperty('--gjs-secondary-color', '#fff');
 
-    // Immediately load the fixed content into the editor on mount
+  const pageContent = await fetchPageContent(pageId);
+  if (pageContent && pageContent.html && pageContent.css) {
+    editor.setComponents(pageContent.html);
+    editor.setStyle(pageContent.css);
+  } else {
+    // Immediately load the fixed content into the editor on mount if no existing content
     editor.BlockManager.get('fixed-content-block').set({ active: true });
-  editor.runCommand('core:canvas-clear');
-  editor.addComponents(
-    `<body>
-    <header class="header-banner" id="i8zx">
-    <div id="isk2" class="container-width">
-      <div class="logo-container">
-        <div class="logo">GrapesJS
+    editor.runCommand('core:canvas-clear');
+    editor.addComponents(
+      `<header class="bg-blue-950 py-2 my-auto">
+        <div class="container mx-auto flex items-center justify-between">
+            <nav class="flex space-x-8">
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
+                <a href="#" class="text-white hover:text-gray-300 my-auto bg-[#FFC107] p-2">My.Paragon.U</a>
+            </nav>
         </div>
-      </div>
-      <nav class="menu">
-        <div class="menu-item">BUILDER
-        </div>
-        <div class="menu-item">TEMPLATE
-        </div>
-        <div class="menu-item">WEB
-        </div>
-      </nav>
-      <div class="clearfix">
-      </div>
-      <div id="igboek">
-        <span data-js="countdown" class="countdown-cont"><div class="countdown-block">
-          <div data-js="countdown-day" class="countdown-digit">
-          </div>
-          <div class="countdown-label">days
-          </div>
-          </div><div class="countdown-block">
-          <div data-js="countdown-hour" class="countdown-digit">
-          </div>
-          <div class="countdown-label">hours
-          </div>
-          </div><div class="countdown-block">
-          <div data-js="countdown-minute" class="countdown-digit">
-          </div>
-          <div class="countdown-label">minutes
-          </div>
-          </div><div class="countdown-block">
-          <div data-js="countdown-second" class="countdown-digit">
-          </div>
-          <div class="countdown-label">seconds
-          </div>
-          </div></span>
-        <span data-js="countdown-endtext" class="countdown-endtext"></span>
-      </div>
-      <label>Label</label>
-      <div id="igtewq" class="gjs-row">
-        <div class="gjs-cell">
-        </div>
-        <div class="gjs-cell">
-        </div>
-      </div>
-      <a id="i0jfzi"></a>
-      <blockquote class="quote">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ipsum dolor sit
-      </blockquote>
-      <iframe frameborder="0" id="itdg1y" src="https://maps.google.com/maps?&q=cambodia&z=6&t=q&output=embed"></iframe>
-      <div class="lead-title">Build your templates without coding
-      </div>
-      <div id="irty9i">Insert your text here
-      </div>
-      <div class="sub-lead-title">All text blocks could be edited easily with double clicking on it. You can create new text blocks with the command from the left panel
-      </div>
-      <div id="iq2z51" class="gjs-row">
-        <div class="gjs-cell">
-        </div>
-        <div class="gjs-cell">
-        </div>
-        <div id="i6mwnk" class="gjs-cell">
-        </div>
-      </div>
-      <div class="lead-btn">Hover me
-      </div>
-    </div>
-  </header>
-  <section class="flex-sect">
-    <div class="container-width">
-      <div class="flex-title">Flex is the new black
-      </div>
-      <div class="flex-desc">With flexbox system you're able to build complex layouts easily and with free responsivity
-      </div>
-      <div class="cards">
-        <div class="card">
-          <div class="card-header">
-          </div>
-          <div class="card-body">
-            <div class="card-title">Title one
-            </div>
-            <div class="card-sub-title">Subtitle one
-            </div>
-            <div class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header ch2">
-          </div>
-          <div class="card-body">
-            <div class="card-title">Title two
-            </div>
-            <div class="card-sub-title">Subtitle two
-            </div>
-            <div class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header ch3">
-          </div>
-          <div class="card-body">
-            <div class="card-title">Title three
-            </div>
-            <div class="card-sub-title">Subtitle three
-            </div>
-            <div class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header ch4">
-          </div>
-          <div class="card-body">
-            <div class="card-title">Title four
-            </div>
-            <div class="card-sub-title">Subtitle four
-            </div>
-            <div class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header ch5">
-          </div>
-          <div class="card-body">
-            <div class="card-title">Title five
-            </div>
-            <div class="card-sub-title">Subtitle five
-            </div>
-            <div class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header ch6">
-          </div>
-          <div class="card-body">
-            <div class="card-title">Title six
-            </div>
-            <div class="card-sub-title">Subtitle six
-            </div>
-            <div class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="am-sect">
-    <div class="container-width">
-      <div class="am-container">
-        <img src="./img/phone-app.png" class="img-phone"/>
-        <div class="am-content">
-          <div class="am-pre">ASSET MANAGER
-          </div>
-          <div class="am-title">Manage your images with Asset Manager
-          </div>
-          <div class="am-desc">You can create image blocks with the command from the left panel and edit them with double click
-          </div>
-          <div class="am-post">Image uploading is not allowed in this demo
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="blk-sect">
-    <div class="container-width">
-      <div class="blk-title">Blocks
-      </div>
-      <div class="blk-desc">Each element in HTML page could be seen as a block. On the left panel you could find different kind of blocks that you can create, move and style
-      </div>
-      <div class="price-cards">
-        <div class="price-card-cont">
-          <div class="price-card">
-            <div class="pc-title">Starter
-            </div>
-            <div class="pc-desc">Some random list
-            </div>
-            <div class="pc-feature odd-feat">+ Starter feature 1
-            </div>
-            <div class="pc-feature">+ Starter feature 2
-            </div>
-            <div class="pc-feature odd-feat">+ Starter feature 3
-            </div>
-            <div class="pc-feature">+ Starter feature 4
-            </div>
-            <div class="pc-amount odd-feat">$ 9,90/mo
-            </div>
-          </div>
-        </div>
-        <div class="price-card-cont">
-          <div class="price-card pc-regular">
-            <div class="pc-title">Regular
-            </div>
-            <div class="pc-desc">Some random list
-            </div>
-            <div class="pc-feature odd-feat">+ Regular feature 1
-            </div>
-            <div class="pc-feature">+ Regular feature 2
-            </div>
-            <div class="pc-feature odd-feat">+ Regular feature 3
-            </div>
-            <div class="pc-feature">+ Regular feature 4
-            </div>
-            <div class="pc-amount odd-feat">$ 19,90/mo
-            </div>
-          </div>
-        </div>
-        <div class="price-card-cont">
-          <div class="price-card pc-enterprise">
-            <div class="pc-title">Enterprise
-            </div>
-            <div class="pc-desc">Some random list
-            </div>
-            <div class="pc-feature odd-feat">+ Enterprise feature 1
-            </div>
-            <div class="pc-feature">+ Enterprise feature 2
-            </div>
-            <div class="pc-feature odd-feat">+ Enterprise feature 3
-            </div>
-            <div class="pc-feature">+ Enterprise feature 4
-            </div>
-            <div class="pc-amount odd-feat">$ 29,90/mo
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="bdg-sect">
-    <div class="container-width">
-      <h1 class="bdg-title">The team
-      </h1>
-      <div class="badges">
-        <div class="badge">
-          <div class="badge-header">
-          </div>
-          <img src="img/team1.jpg" class="badge-avatar"/>
-          <div class="badge-body">
-            <div class="badge-name">Adam Smith
-            </div>
-            <div class="badge-role">CEO
-            </div>
-            <div class="badge-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ipsum dolor sit
-            </div>
-          </div>
-          <div class="badge-foot">
-            <span class="badge-link">f</span>
-            <span class="badge-link">t</span>
-            <span class="badge-link">ln</span>
-          </div>
-        </div>
-        <div id="ilewj8" class="badge-header">
-        </div>
-        <div class="badge-header">
-        </div>
-        <div class="badge">
-          <div id="ik1cs4" class="badge">
-            <img src="img/team2.jpg" class="badge-avatar"/>
-            <div class="badge-body">
-              <div class="badge-name">John Black
-              </div>
-              <div class="badge-role">Software Engineer
-              </div>
-              <div class="badge-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ipsum dolor sit
-              </div>
-            </div>
-            <div class="badge-foot">
-              <span class="badge-link">f</span>
-              <span class="badge-link">t</span>
-              <span class="badge-link">ln</span>
-            </div>
-          </div>
-          <img src="img/team3.jpg" class="badge-avatar"/>
-          <div class="badge-body">
-            <div class="badge-name">Jessica White
-            </div>
-            <div class="badge-role">Web Designer
-            </div>
-            <div class="badge-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ipsum dolor sit
-            </div>
-          </div>
-          <div class="badge-foot">
-            <span class="badge-link">f</span>
-            <span class="badge-link">t</span>
-            <span class="badge-link">ln</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <footer class="footer-under">
-    <div class="container-width">
-      <div class="footer-container">
-        <div class="foot-lists">
-          <div class="foot-list">
-            <div class="foot-list-title">About us
-            </div>
-            <div class="foot-list-item">Contact
-            </div>
-            <div class="foot-list-item">Events
-            </div>
-            <div class="foot-list-item">Company
-            </div>
-            <div class="foot-list-item">Jobs
-            </div>
-            <div class="foot-list-item">Blog
-            </div>
-          </div>
-          <div class="foot-list">
-            <div class="foot-list-title">Services
-            </div>
-            <div class="foot-list-item">Education
-            </div>
-            <div class="foot-list-item">Partner
-            </div>
-            <div class="foot-list-item">Community
-            </div>
-            <div class="foot-list-item">Forum
-            </div>
-            <div class="foot-list-item">Download
-            </div>
-            <div class="foot-list-item">Upgrade
-            </div>
-          </div>
-          <div class="clearfix">
-          </div>
-        </div>
-        <div class="form-sub">
-          <div class="foot-form-cont">
-            <div class="foot-form-title">Subscribe
-            </div>
-            <div class="foot-form-desc">Subscribe to our newsletter to receive exclusive offers and the latest news
-            </div>
-            <input type="text" name="name" placeholder="Name" class="sub-input"/>
-            <input type="text" name="email" placeholder="Email" class="sub-input"/>
-            <button type="button" class="sub-btn">Submit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="copyright">
-      <div class="container-width">
-        <div class="made-with">
-          made with GrapesJS
-        </div>
-        <div class="foot-social-btns">facebook twitter linkedin mail
-        </div>
-        <div class="clearfix">
-        </div>
-      </div>
-    </div>
-  </footer>
-</body>
+    </header>
 
-<style>
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-}
-.clearfix{
-  clear:both;
-}
-.header-banner{
-  padding-top:35px;
-  padding-bottom:100px;
-  color:#ffffff;
-  font-family:Helvetica, serif;
-  font-weight:100;
-  background-image:url("https://grapesjs.com/img/bg-gr-v.png"), url("https://grapesjs.com/img/work-desk.jpg");
-  background-attachment:scroll, scroll;
-  background-position:left top, center center;
-  background-repeat:repeat-y, no-repeat;
-  background-size:contain, cover;
-}
-.container-width{
-  width:90%;
-  max-width:1150px;
-  margin:0 auto;
-}
-.logo-container{
-  float:left;
-  width:50%;
-}
-.logo{
-  background-color:#fff;
-  border-radius:5px;
-  width:130px;
-  padding:10px;
-  min-height:30px;
-  text-align:center;
-  line-height:30px;
-  color:#4d114f;
-  font-size:23px;
-}
-.menu{
-  float:right;
-  width:50%;
-}
-.menu-item{
-  float:right;
-  font-size:15px;
-  color:#eee;
-  width:130px;
-  padding:10px;
-  min-height:50px;
-  text-align:center;
-  line-height:30px;
-  font-weight:400;
-}
-.lead-title{
-  margin:150px 0 30px 0;
-  font-size:40px;
-}
-.sub-lead-title{
-  max-width:650px;
-  line-height:30px;
-  margin-bottom:30px;
-  color:#c6c6c6;
-}
-.lead-btn{
-  margin-top:15px;
-  padding:10px;
-  width:190px;
-  min-height:30px;
-  font-size:20px;
-  text-align:center;
-  letter-spacing:3px;
-  line-height:30px;
-  background-color:#d983a6;
-  border-radius:5px;
-  transition:all 0.5s ease;
-  cursor:pointer;
-}
-.lead-btn:hover{
-  background-color:#ffffff;
-  color:#4c114e;
-}
-.lead-btn:active{
-  background-color:#4d114f;
-  color:#fff;
-}
-.flex-sect{
-  background-color:#fafafa;
-  padding:100px 0;
-  font-family:Helvetica, serif;
-}
-.flex-title{
-  margin-bottom:15px;
-  font-size:2em;
-  text-align:center;
-  font-weight:700;
-  color:#555;
-  padding:5px;
-}
-.flex-desc{
-  margin-bottom:55px;
-  font-size:1em;
-  color:rgba(0, 0, 0, 0.5);
-  text-align:center;
-  padding:5px;
-}
-.cards{
-  padding:20px 0;
-  display:flex;
-  justify-content:space-around;
-  flex-flow:wrap;
-}
-.card{
-  background-color:white;
-  height:300px;
-  width:300px;
-  margin-bottom:30px;
-  box-shadow:0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  border-radius:2px;
-  transition:all 0.5s ease;
-  font-weight:100;
-  overflow:hidden;
-}
-.card:hover{
-  margin-top:-5px;
-  box-shadow:0 20px 30px 0 rgba(0, 0, 0, 0.2);
-}
-.card-header{
-  height:155px;
-  background-image:url("https://via.placeholder.com/350x250/78c5d6/fff");
-  background-size:cover;
-  background-position:center center;
-}
-.card-header.ch2{
-  background-image:url("https://via.placeholder.com/350x250/459ba8/fff");
-}
-.card-header.ch3{
-  background-image:url("https://via.placeholder.com/350x250/79c267/fff");
-}
-.card-header.ch4{
-  background-image:url("https://via.placeholder.com/350x250/c5d647/fff");
-}
-.card-header.ch5{
-  background-image:url("https://via.placeholder.com/350x250/f28c33/fff");
-}
-.card-header.ch6{
-  background-image:url("https://via.placeholder.com/350x250/e868a2/fff");
-}
-.card-body{
-  padding:15px 15px 5px 15px;
-  color:#555;
-}
-.card-title{
-  font-size:1.4em;
-  margin-bottom:5px;
-}
-.card-sub-title{
-  color:#b3b3b3;
-  font-size:1em;
-  margin-bottom:15px;
-}
-.card-desc{
-  font-size:0.85rem;
-  line-height:17px;
-}
-.am-sect{
-  padding-top:100px;
-  padding-bottom:100px;
-  font-family:Helvetica, serif;
-}
-.img-phone{
-  float:left;
-}
-.am-container{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:space-around;
-}
-.am-content{
-  float:left;
-  padding:7px;
-  width:490px;
-  color:#444;
-  font-weight:100;
-  margin-top:50px;
-}
-.am-pre{
-  padding:7px;
-  color:#b1b1b1;
-  font-size:15px;
-}
-.am-title{
-  padding:7px;
-  font-size:25px;
-  font-weight:400;
-}
-.am-desc{
-  padding:7px;
-  font-size:17px;
-  line-height:25px;
-}
-.am-post{
-  padding:7px;
-  line-height:25px;
-  font-size:13px;
-}
-.blk-sect{
-  padding-top:100px;
-  padding-bottom:100px;
-  background-color:#222222;
-  font-family:Helvetica, serif;
-}
-.blk-title{
-  color:#fff;
-  font-size:25px;
-  text-align:center;
-  margin-bottom:15px;
-}
-.blk-desc{
-  color:#b1b1b1;
-  font-size:15px;
-  text-align:center;
-  max-width:700px;
-  margin:0 auto;
-  font-weight:100;
-}
-.price-cards{
-  margin-top:70px;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:space-around;
-}
-.price-card-cont{
-  width:300px;
-  padding:7px;
-  float:left;
-}
-.price-card{
-  margin:0 auto;
-  min-height:350px;
-  background-color:#d983a6;
-  border-radius:5px;
-  font-weight:100;
-  color:#fff;
-  width:90%;
-}
-.pc-title{
-  font-weight:100;
-  letter-spacing:3px;
-  text-align:center;
-  font-size:25px;
-  background-color:rgba(0, 0, 0, 0.1);
-  padding:20px;
-}
-.pc-desc{
-  padding:75px 0;
-  text-align:center;
-}
-.pc-feature{
-  color:rgba(255,255,255,0.5);
-  background-color:rgba(0, 0, 0, 0.1);
-  letter-spacing:2px;
-  font-size:15px;
-  padding:10px 20px;
-}
-.pc-feature:nth-of-type(2n){
-  background-color:transparent;
-}
-.pc-amount{
-  background-color:rgba(0, 0, 0, 0.1);
-  font-size:35px;
-  text-align:center;
-  padding:35px 0;
-}
-.pc-regular{
-  background-color:#da78a0;
-}
-.pc-enterprise{
-  background-color:#d66a96;
-}
-.footer-under{
-  background-color:#312833;
-  padding-bottom:100px;
-  padding-top:100px;
-  min-height:500px;
-  color:#eee;
-  position:relative;
-  font-weight:100;
-  font-family:Helvetica,serif;
-}
-.copyright{
-  background-color:rgba(0, 0, 0, 0.15);
-  color:rgba(238, 238, 238, 0.5);
-  bottom:0;
-  padding:1em 0;
-  position:absolute;
-  width:100%;
-  font-size:0.75em;
-}
-.made-with{
-  float:left;
-  width:50%;
-  padding:5px 0;
-}
-.foot-social-btns{
-  display:none;
-  float:right;
-  width:50%;
-  text-align:right;
-  padding:5px 0;
-}
-.footer-container{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:stretch;
-  justify-content:space-around;
-}
-.foot-list{
-  float:left;
-  width:200px;
-}
-.foot-list-title{
-  font-weight:400;
-  margin-bottom:10px;
-  padding:0.5em 0;
-}
-.foot-list-item{
-  color:rgba(238, 238, 238, 0.8);
-  font-size:0.8em;
-  padding:0.5em 0;
-}
-.foot-list-item:hover{
-  color:rgba(238, 238, 238, 1);
-}
-.foot-form-cont{
-  width:300px;
-  float:right;
-}
-.foot-form-title{
-  color:rgba(255,255,255,0.75);
-  font-weight:400;
-  margin-bottom:10px;
-  padding:0.5em 0;
-  text-align:right;
-  font-size:2em;
-}
-.foot-form-desc{
-  font-size:0.8em;
-  color:rgba(255,255,255,0.55);
-  line-height:20px;
-  text-align:right;
-  margin-bottom:15px;
-}
-.sub-input{
-  width:100%;
-  margin-bottom:15px;
-  padding:7px 10px;
-  border-radius:2px;
-  color:#fff;
-  background-color:#554c57;
-  border:none;
-}
-.sub-btn{
-  width:100%;
-  margin:15px 0;
-  background-color:#785580;
-  border:none;
-  color:#fff;
-  border-radius:2px;
-  padding:7px 10px;
-  font-size:1em;
-  cursor:pointer;
-}
-.sub-btn:hover{
-  background-color:#91699a;
-}
-.sub-btn:active{
-  background-color:#573f5c;
-}
-.bdg-sect{
-  padding-top:100px;
-  padding-bottom:100px;
-  font-family:Helvetica, serif;
-  background-color:#fafafa;
-}
-.bdg-title{
-  text-align:center;
-  font-size:2em;
-  margin-bottom:55px;
-  color:#555555;
-}
-.badges{
-  padding:20px;
-  display:flex;
-  justify-content:space-around;
-  align-items:flex-start;
-  flex-wrap:wrap;
-}
-.badge{
-  width:290px;
-  font-family:Helvetica, serif;
-  background-color:white;
-  margin-bottom:30px;
-  box-shadow:0 2px 2px 0 rgba(0, 0, 0, 0.2);
-  border-radius:3px;
-  font-weight:100;
-  overflow:hidden;
-  text-align:center;
-}
-.badge-header{
-  height:115px;
-  background-image:url("https://grapesjs.com/img/bg-gr-v.png"), url("https://grapesjs.com/img/work-desk.jpg");
-  background-position:left top, center center;
-  background-attachment:scroll, fixed;
-  overflow:hidden;
-}
-.badge-name{
-  font-size:1.4em;
-  margin-bottom:5px;
-}
-.badge-role{
-  color:#777;
-  font-size:1em;
-  margin-bottom:25px;
-}
-.badge-desc{
-  font-size:0.85rem;
-  line-height:20px;
-}
-.badge-avatar{
-  width:100px;
-  height:100px;
-  border-radius:100%;
-  border:5px solid #fff;
-  box-shadow:0 1px 1px 0 rgba(0, 0, 0, 0.2);
-  margin-top:-75px;
-  position:relative;
-}
-.badge-body{
-  margin:35px 10px;
-}
-.badge-foot{
-  color:#fff;
-  background-color:#a290a5;
-  padding-top:13px;
-  padding-bottom:13px;
-  display:flex;
-  justify-content:center;
-}
-.badge-link{
-  height:35px;
-  width:35px;
-  line-height:35px;
-  font-weight:700;
-  background-color:#fff;
-  color:#a290a5;
-  display:block;
-  border-radius:100%;
-  margin:0 10px;
-}
-.quote{
-  color:#777;
-  font-weight:300;
-  padding:10px;
-  box-shadow:-5px 0 0 0 #ccc;
-  font-style:italic;
-  margin:20px 30px;
-}
-.gjs-row{
-  display:flex;
-  justify-content:flex-start;
-  align-items:stretch;
-  flex-wrap:nowrap;
-  padding:10px;
-}
-.gjs-cell{
-  min-height:75px;
-  flex-grow:1;
-  flex-basis:100%;
-}
-#irty9i{
-  padding:10px;
-}
-.countdown-block{
-  display:inline-block;
-  margin:0 10px;
-  padding:10px;
-}
-.countdown-digit{
-  font-size:5rem;
-}
-.countdown-endtext{
-  font-size:5rem;
-}
-.countdown-cont{
-  display:inline-block;
-}
-#igboek{
-  float:none;
-  opacity:1;
-}
-#itdg1y{
-  height:350px;
-}
-#i0jfzi{
-  display:inline-block;
-  padding:5px;
-  min-height:50px;
-  min-width:50px;
-}
-@media (max-width: 768px){
-  .foot-form-cont{
-    width:400px;
+    <main class="mx-20 my-auto py-3 border-b-2 ">
+        <div class="flex items-center justify-between">
+            <img src="assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+            <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
+                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+        </div>
+    </main>`
+    );
   }
-  .foot-form-title{
-    width:autopx;
-  }
-  .gjs-row{
-    flex-wrap:wrap;
-  }
-}
-@media (max-width: 480px){
-  .foot-lists{
-    display:none;
-  }
-}
-</style>`);
+
+  // Register the custom elements plugin
+  customElementsPlugin(editor);
 });
 </script>
+
+<style scoped>
+@import "assets/css/style.css";
+</style>
