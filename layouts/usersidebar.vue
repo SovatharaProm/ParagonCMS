@@ -13,7 +13,7 @@
           <div>
             <NuxtLink to="/" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:house-bold" class="icon" />
-              <span>Website</span>
+              <span>Websites</span>
             </NuxtLink>
             <NuxtLink to="/change-request" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:git-pull-request-bold" class="icon" />
