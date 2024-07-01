@@ -15,9 +15,10 @@ export const useAuthStore = defineStore('auth', {
 
       if (this.token) {
         await this.fetchUserRole();
-      } else {
-        console.error('No token found');
-      }
+      } 
+      // else {
+      //   console.error('No token found');
+      // }
     },
 
     setToken(token) {

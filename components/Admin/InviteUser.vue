@@ -280,6 +280,7 @@ const cancel = () => {
             rolePermissions.value[pageId][permission] = false;
         }
     }
+    router.push('/admin/users/usermanagement');
 };
 
 onMounted(() => {

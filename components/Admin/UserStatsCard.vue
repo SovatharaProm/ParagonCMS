@@ -33,22 +33,12 @@
       </svg>
     </div>
 
-    <div
-      class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-4"
-    >
-      <select
-        v-model="selectedRole"
-        class="border border-gray-300 rounded py-2 px-4"
-      >
+    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-4">
+      <select v-model="selectedRole" class="border border-gray-300 rounded py-2 px-4">
         <option value="" class="font-bold">All Roles</option>
-        <option v-for="role in roles" :key="role" :value="role">
-          {{ role }}
-        </option>
+        <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
       </select>
-      <select
-        v-model="selectedStatus"
-        class="border border-gray-300 rounded py-2 px-4"
-      >
+      <select v-model="selectedStatus" class="border border-gray-300 rounded py-2 px-4">
         <option value="">All Status</option>
         <option value="Active">Active</option>
         <option value="Suspended">Suspended</option>
@@ -59,31 +49,11 @@
       <table class="min-w-full leading-normal">
         <thead>
           <tr>
-            <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-blue-900 uppercase tracking-wider"
-            >
-              Name
-            </th>
-            <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold text-blue-900 uppercase tracking-wider"
-            >
-              Email
-            </th>
-            <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold text-blue-900 uppercase tracking-wider"
-            >
-              Roles
-            </th>
-            <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-sm font-bold text-blue-900 uppercase tracking-wider text-center"
-            >
-              Status
-            </th>
-            <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold text-blue-900 uppercase tracking-wider"
-            >
-              Actions
-            </th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-blue-900 uppercase tracking-wider">Name</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold text-blue-900 uppercase tracking-wider">Email</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold text-blue-900 uppercase tracking-wider">Roles</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-sm font-bold text-blue-900 uppercase tracking-wider text-center">Status</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold text-blue-900 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -91,70 +61,32 @@
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               <div class="flex items-center">
                 <div class="ml-3">
-                  <p class="text-gray-900 whitespace-no-wrap">
-                    {{ user.name }}
-                  </p>
+                  <p class="text-gray-900 whitespace-no-wrap">{{ user.name }}</p>
                 </div>
               </div>
             </td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <p class="text-gray-900 whitespace-no-wrap text-center">
-                {{ user.email }}
-              </p>
+              <p class="text-gray-900 whitespace-no-wrap text-center">{{ user.email }}</p>
             </td>
-            <td
-              class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center"
-            >
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
               <div class="flex justify-center">
-                <span
-                  class="relative inline-block px-3 py-1 font-semibold leading-tight"
-                  :class="getRoleClass(user.role)"
-                >
+                <span class="relative inline-block px-3 py-1 font-semibold leading-tight" :class="getRoleClass(user.role)">
                   <span class="relative">{{ user.role }}</span>
                 </span>
               </div>
             </td>
-            <td
-              class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center"
-            >
-              <p
-                class="text-white font-bold whitespace-no-wrap rounded-lg w-fit px-3 py-1 mx-auto"
-                :class="{
-                  'bg-red-500': user.suspended,
-                  'bg-green-500': !user.suspended,
-                }"
-              >
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+              <p class="text-white font-bold whitespace-no-wrap rounded-lg w-fit px-3 py-1 mx-auto" :class="{ 'bg-red-500': user.suspended, 'bg-green-500': !user.suspended }">
                 {{ user.suspended ? "Suspended" : "Active" }}
               </p>
             </td>
-            <td
-              class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center"
-            >
-              <div
-                class="flex flex-col md:flex-row justify-center space-y-2 md:space-y-0 md:space-x-2"
-              >
-                <NuxtLink
-                  :to="{
-                    path: '/admin/users/edituser',
-                    query: { user_id: user.id },
-                  }"
-                  class="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                  title="Edit User"
-                >
-                  <Icon name="lucide:edit" class="text-lg">Edit</Icon>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+              <div class="flex flex-col md:flex-row justify-center space-y-2 md:space-y-0 md:space-x-2">
+                <NuxtLink :to="{ path: '/admin/users/edituser', query: { user_id: user.id } }" class="text-blue-900 hover:text-blue-700" title="Edit User">
+                  <Icon name="lucide:edit" class="text-2xl"></Icon>
                 </NuxtLink>
-                <button
-                  :class="[
-                    'text-white font-bold py-2 px-4 rounded',
-                    user.suspended
-                      ? 'bg-green-500 hover:bg-green-700'
-                      : 'bg-red-500 hover:bg-red-700',
-                  ]"
-                  @click="toggleSuspendUser(user)"
-                  :title="user.suspended ? 'Unsuspend User' : 'Suspend User'"
-                >
-                  {{ user.suspended ? "Unsuspend" : "Suspend" }}
-                  <Icon name="mdi:ban" class="text-lg"></Icon>
+                <button :class="['hover:text-green-700', user.suspended ? 'text-green-500' : 'text-red-500']" @click="toggleSuspendUser(user)" :title="user.suspended ? 'Unsuspend User' : 'Suspend User'">
+                  <Icon name="mdi:ban" class="text-2xl"></Icon>
                 </button>
               </div>
             </td>
@@ -166,9 +98,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useAuthStore } from "~/stores/auth";
-import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from 'vue';
+import { useAuthStore } from '~/stores/auth';
+import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toast-notification';
 
 const toast = useToast();
@@ -177,11 +109,11 @@ const authStore = useAuthStore();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const users = ref([]);
-const roles = ref(["Admin", "User"]);
-const selectedRole = ref("");
-const selectedStatus = ref("");
+const roles = ref(['Admin', 'User']);
+const selectedRole = ref('');
+const selectedStatus = ref('');
 
-const search = ref("");
+const search = ref('');
 
 const filteredUsers = computed(() => {
   return users.value.filter((user) => {
@@ -193,8 +125,8 @@ const filteredUsers = computed(() => {
       !selectedRole.value || user.role === selectedRole.value;
     const matchesStatus =
       !selectedStatus.value ||
-      (selectedStatus.value === "Active" && !user.suspended) ||
-      (selectedStatus.value === "Suspended" && user.suspended);
+      (selectedStatus.value === 'Active' && !user.suspended) ||
+      (selectedStatus.value === 'Suspended' && user.suspended);
 
     return matchesSearch && matchesRole && matchesStatus;
   });
@@ -205,41 +137,41 @@ const fetchUsers = async () => {
     await authStore.initializeStore();
 
     if (!authStore.token) {
-      return router.push("/auth/login");
+      return router.push('/auth/login');
     }
 
     const response = await fetch(`${API_BASE_URL}/get-list-of-user`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch users");
+      throw new Error('Failed to fetch users');
     }
 
     const data = await response.json();
     users.value = data.data.user.map((user) => ({
       id: user.id,
-      name: user.name || "N/A",
+      name: user.name || 'N/A',
       email: user.email,
       role: user.level,
-      suspended: user.status === "deactivated", // Adjust to match backend's "deactivate" status
+      suspended: user.status === 'deactivated', // Adjust to match backend's "deactivate" status
     }));
   } catch (error) {
-    console.error("Error fetching users:", error);
-    toast.error("Error fetching users");
+    console.error('Error fetching users:', error);
+    toast.error('Error fetching users');
   }
 };
 
 const toggleSuspendUser = async (user) => {
   try {
     const response = await fetch(`${API_BASE_URL}/ban-user`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${authStore.token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ user_id: user.id }),
     });
@@ -247,39 +179,39 @@ const toggleSuspendUser = async (user) => {
     const responseData = await response.json();
 
     if (!response.ok) {
-      throw new Error(responseData.message || "Failed to suspend user");
+      throw new Error(responseData.message || 'Failed to suspend user');
     }
 
-    console.log("Suspend/Unsuspend API response:", responseData);
+    console.log('Suspend/Unsuspend API response:', responseData);
 
     // Ensure response data is as expected
     if (!responseData.data || typeof responseData.data.status === 'undefined') {
-      throw new Error("Unexpected response format");
+      throw new Error('Unexpected response format');
     }
 
     // Update the user's suspension status in the local state based on the response
-    user.suspended = responseData.data.status === "deactivated";
+    user.suspended = responseData.data.status === 'deactivated';
 
     // Show a toast notification
     if (user.suspended) {
-      toast.error("User suspended successfully");
+      toast.error('User suspended successfully');
     } else {
-      toast.success("User unsuspended successfully");
+      toast.success('User unsuspended successfully');
     }
   } catch (error) {
-    console.error("Error suspending user:", error.message);
-    toast.error(error.message || "There was an error suspending the user");
+    console.error('Error suspending user:', error.message);
+    toast.error(error.message || 'There was an error suspending the user');
   }
 };
 
 function getRoleClass(role) {
   switch (role) {
-    case "User":
-      return "text-green-700";
-    case "Admin":
-      return "text-red-500";
+    case 'User':
+      return 'text-green-700';
+    case 'Admin':
+      return 'text-red-500';
     default:
-      return "";
+      return '';
   }
 }
 
@@ -287,14 +219,15 @@ const createEventDialog = ref(false);
 
 const cancel = () => {
   createEventDialog.value = false;
-  router.push("/admin/users/usermanagement");
+  router.push('/admin/users/usermanagement');
 };
 
 onMounted(fetchUsers);
 </script>
 
 <style scoped>
-@import "/assets/css/style.css";
+@import '/assets/css/style.css';
+
 .User {
   color: green;
 }

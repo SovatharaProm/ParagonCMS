@@ -10,24 +10,24 @@
         class="bg-white p-5 rounded-lg shadow-lg flex flex-col md:flex-row justify-between"
       >
         <div class="my-auto">
-          <h2 class="font-bold text-lg">{{ request.title }}</h2>
-          <p>{{ request.description }}</p>
+          <h2 class="font-bold text-lg">{{ request.request_name }}</h2>
+          <p>{{ request.page_id }}</p>
         </div>
         <div class="flex gap-4 mt-4 md:mt-0 my-auto">
           <NuxtLink
-            to="/admin/review/review"
-            class="my-auto px-5 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-600"
+            :to="'/admin/review/review?id=' + request.id"
+            class="text-blue-900 hover:text-blue-600"
             title="Review"
           >
-            Review
+            <Icon name="lets-icons:view" class="text-2xl" />
           </NuxtLink>
           <NuxtLink
             :href="'/admin/review/review?id=' + request.id"
             target="_blank"
-            class="px-4 py-2 bg-blue-900 text-white rounded-md flex items-center hover:bg-blue-600"
+            class="text-blue-900 hover:text-blue-600 flex items-center"
             title="View Request"
           >
-            <Icon name="lets-icons:view" class="text-lg" />
+            <Icon name="carbon:new-tab" class="text-2xl"></Icon>
           </NuxtLink>
         </div>
       </div>
@@ -36,21 +36,48 @@
 </template>
 
 <script setup>
-const requests = [
-  { id: 1, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 2, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 3, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 4, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 5, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 6, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 7, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 8, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 9, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 10, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 11, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  { id: 12, title: "Add Faculty contact info in CS Department", description: "Requested by Bunseng Tang" },
-  // Add more requests as needed
-];
+import { ref, onMounted } from "vue";
+import { useAuthStore } from "~/stores/auth";
+import { useToast } from "vue-toast-notification";
+
+const authStore = useAuthStore();
+const toast = useToast();
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const requests = ref([]);
+
+const fetchRequests = async () => {
+  try {
+    const token = authStore.token;
+    const response = await fetch(`${API_BASE_URL}/list-change-request`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error("Unauthorized: Please log in again.");
+      }
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch requests");
+    }
+
+    const data = await response.json();
+    requests.value = data.data.all_change_requests;
+  } catch (error) {
+    console.error("Error fetching requests:", error.message);
+    toast.error(error.message || "An unexpected error occurred", {
+      timeout: 3000,
+    });
+  }
+};
+
+onMounted(() => {
+  authStore.initializeStore();
+  fetchRequests();
+});
 </script>
 
 <style scoped>
