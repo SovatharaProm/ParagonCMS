@@ -11,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     // Redirect to login page if token is not found
     if (!authStore.token) {
-        console.error("No token found during initialization");
+        // console.error("No token found during initialization");
         if (to.fullPath !== "/auth/login") {
             return navigateTo("/auth/login");
         }
