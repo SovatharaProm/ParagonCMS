@@ -27,7 +27,7 @@
         <table class="min-w-full bg-white border-collapse border border-gray-200">
           <thead>
             <tr>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Permissions</th>
+              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Pages</th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">View</th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Edit</th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Publish</th>
@@ -36,8 +36,10 @@
           </thead>
           <tbody>
             <template v-for="page in pages" :key="page.id">
-              <tr class="parent-permission bg-gray-50">
-                <td class="px-6 py-4 border-b border-gray-200">{{ page.page_name }}</td>
+              <tr class="parent-permission">
+                <td class="px-6 py-4 border-b border-gray-200">
+                  <span>{{ page.page_name }}</span>
+                </td>
                 <td class="px-6 py-4 border-b border-gray-200 text-center">
                   <input type="checkbox" v-model="rolePermissions[page.id].View" class="mx-auto" />
                 </td>
@@ -51,21 +53,44 @@
                   <input type="checkbox" v-model="rolePermissions[page.id].Delete" class="mx-auto" />
                 </td>
               </tr>
-              <tr v-for="child in page.children" :key="child.id" class="child-permission bg-gray-50">
-                <td class="px-6 py-4 border-b border-gray-200 pl-10">{{ child.page_name }}</td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[child.id].View" class="mx-auto" />
-                </td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[child.id].Edit" class="mx-auto" />
-                </td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[child.id].Publish" class="mx-auto" />
-                </td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[child.id].Delete" class="mx-auto" />
-                </td>
-              </tr>
+              <template v-if="page.children && page.children.length" v-for="child in page.children" :key="child.id">
+                <tr>
+                  <td class="px-6 py-4 border-b border-gray-200 pl-10">
+                    {{ child.page_name }}
+                  </td>
+                  <td class="px-6 py-4 border-b border-gray-200 text-center">
+                    <input type="checkbox" v-model="rolePermissions[child.id].View" class="mx-auto" />
+                  </td>
+                  <td class="px-6 py-4 border-b border-gray-200 text-center">
+                    <input type="checkbox" v-model="rolePermissions[child.id].Edit" class="mx-auto" />
+                  </td>
+                  <td class="px-6 py-4 border-b border-gray-200 text-center">
+                    <input type="checkbox" v-model="rolePermissions[child.id].Publish" class="mx-auto" />
+                  </td>
+                  <td class="px-6 py-4 border-b border-gray-200 text-center">
+                    <input type="checkbox" v-model="rolePermissions[child.id].Delete" class="mx-auto" />
+                  </td>
+                </tr>
+                <template v-if="child.children && child.children.length" v-for="grandchild in child.children" :key="grandchild.id">
+                  <tr class="child-permission bg-gray-50">
+                    <td class="px-6 py-4 border-b border-gray-200 pl-16">
+                      {{ grandchild.page_name }}
+                    </td>
+                    <td class="px-6 py-4 border-b border-gray-200 text-center">
+                      <input type="checkbox" v-model="rolePermissions[grandchild.id].View" class="mx-auto" />
+                    </td>
+                    <td class="px-6 py-4 border-b border-gray-200 text-center">
+                      <input type="checkbox" v-model="rolePermissions[grandchild.id].Edit" class="mx-auto" />
+                    </td>
+                    <td class="px-6 py-4 border-b border-gray-200 text-center">
+                      <input type="checkbox" v-model="rolePermissions[grandchild.id].Publish" class="mx-auto" />
+                    </td>
+                    <td class="px-6 py-4 border-b border-gray-200 text-center">
+                      <input type="checkbox" v-model="rolePermissions[grandchild.id].Delete" class="mx-auto" />
+                    </td>
+                  </tr>
+                </template>
+              </template>
             </template>
           </tbody>
         </table>
@@ -73,7 +98,7 @@
 
       <div class="flex justify-end mt-6">
         <button class="bg-gray-500 text-white font-bold px-4 py-2 rounded-lg mr-4" @click="cancel">Cancel</button>
-        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="updateUserDetails">Save</button>
+        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="updatePermissions">Save</button>
       </div>
     </v-container>
   </div>
@@ -93,7 +118,7 @@ const router = useRouter();
 const userId = ref(route.query.user_id);
 
 const pages = ref([]);
-const selectedRoles = ref([]); // Updated to multiple roles
+const selectedRoles = ref([]);
 const availableRoles = ref([]);
 const availableUserLevels = ['User', 'Admin'];
 const selectedUserLevel = ref('');
@@ -124,6 +149,7 @@ const fetchPages = async () => {
     const data = await response.json();
     pages.value = data.data.Pages;
 
+    // Initialize rolePermissions based on fetched pages
     pages.value.forEach((page) => {
       rolePermissions.value[page.id] = {
         View: false,
@@ -131,14 +157,26 @@ const fetchPages = async () => {
         Publish: false,
         Delete: false,
       };
-      page.children.forEach((child) => {
-        rolePermissions.value[child.id] = {
-          View: false,
-          Edit: false,
-          Publish: false,
-          Delete: false,
-        };
-      });
+      if (page.children && page.children.length) {
+        page.children.forEach((child) => {
+          rolePermissions.value[child.id] = {
+            View: false,
+            Edit: false,
+            Publish: false,
+            Delete: false,
+          };
+          if (child.children && child.children.length) {
+            child.children.forEach((grandchild) => {
+              rolePermissions.value[grandchild.id] = {
+                View: false,
+                Edit: false,
+                Publish: false,
+                Delete: false,
+              };
+            });
+          }
+        });
+      }
     });
   } catch (error) {
     console.error('Error fetching pages:', error.message);
@@ -201,8 +239,8 @@ const fetchUserDetails = async () => {
       throw new Error('Invalid response structure');
     }
 
-    selectedUserLevel.value = data.data.user.user_level.toLowerCase(); // Changed to 'user_level'
-    selectedRoles.value = data.data.roles.map((role) => role.role_id); // Fetching roles for the user
+    selectedUserLevel.value = data.data.user.user_level.toLowerCase();
+    selectedRoles.value = data.data.roles.map((role) => role.role_id);
     resetPermissions();
 
     if (data.data.permission && data.data.permission.pages) {
@@ -212,13 +250,24 @@ const fetchUserDetails = async () => {
             rolePermissions.value[page.id][permissionTypes[permission - 1]] = true;
           }
         });
-        page.children.forEach((child) => {
-          child.permissions.forEach((permission) => {
-            if (rolePermissions.value[child.id]) {
-              rolePermissions.value[child.id][permissionTypes[permission - 1]] = true;
+        if (page.children && page.children.length) {
+          page.children.forEach((child) => {
+            child.permissions.forEach((permission) => {
+              if (rolePermissions.value[child.id]) {
+                rolePermissions.value[child.id][permissionTypes[permission - 1]] = true;
+              }
+            });
+            if (child.children && child.children.length) {
+              child.children.forEach((grandchild) => {
+                grandchild.permissions.forEach((permission) => {
+                  if (rolePermissions.value[grandchild.id]) {
+                    rolePermissions.value[grandchild.id][permissionTypes[permission - 1]] = true;
+                  }
+                });
+              });
             }
           });
-        });
+        }
       });
     } else {
       console.warn('No pages found in the response');
@@ -283,7 +332,7 @@ const updatePermissions = async () => {
   const formattedPermissions = {
     user_id: userId.value,
     user_level: selectedUserLevel.value,
-    role_id: selectedRoles.value, // Updated to multiple roles
+    role_id: selectedRoles.value,
     pages: Object.entries(rolePermissions.value)
       .filter(([, permissions]) => Object.values(permissions).some((value) => value))
       .map(([pageId, permissions]) => ({
@@ -352,5 +401,13 @@ onMounted(() => {
   border: 1px solid #e2e8f0; /* Border color */
   border-radius: 0.375rem; /* Rounded corners */
   padding: 1rem; /* Padding */
+}
+
+.child-permission td {
+  background-color: #f9f9f9; /* Light gray for children */
+}
+
+.grandchild-permission td {
+  background-color: #fdfdfd; /* Even lighter gray for grandchildren */
 }
 </style>
