@@ -321,7 +321,7 @@ const fetchRoles = async () => {
     roles.value = result.data.roles;
   } catch (error) {
     console.error("Error fetching roles:", error.message);
-    toast.error(error.message || "An unexpected error occurred", {
+    toast.success(error.message || "An unexpected error occurred", {
       timeout: 3000,
     });
   }
@@ -378,7 +378,7 @@ const fetchUsers = async () => {
     }
   } catch (error) {
     console.error("Error fetching users:", error.message);
-    toast.error(error.message || "An unexpected error occurred", {
+    toast.success(error.message || "An unexpected error occurred", {
       timeout: 3000,
     });
   }

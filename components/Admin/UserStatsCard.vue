@@ -194,7 +194,7 @@ const toggleSuspendUser = async (user) => {
 
     // Show a toast notification
     if (user.suspended) {
-      toast.error('User suspended successfully');
+      toast.success('User suspended successfully');
     } else {
       toast.success('User unsuspended successfully');
     }
