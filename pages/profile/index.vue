@@ -56,15 +56,30 @@
     <span class="email my-5">{{ user.description }}</span>
     <div class="role">
       <h2 class="text-[#172947] text-lg font-bold my-5">Role</h2>
-      <v-chip
-        class="mb-5 w-auto h-[150px] p-6"
-        color="blue-darken-4"
-        size="x-large"
-        label
-      >
-        <v-icon icon="mdi-account-circle-outline" start></v-icon>
-        {{ formattedRole }}
-      </v-chip>
+      <div class="flex gap-2 mb-5">
+        <v-chip
+          class="w-auto p-2"
+          color="blue-darken-4"
+          size="large"
+          label
+        >
+          <v-icon icon="mdi-account-circle-outline" start></v-icon>
+          {{ formattedRole }}
+        </v-chip>
+        <div class="flex gap-2">
+          <v-chip
+            v-for="role in user.user_roles"
+            :key="role"
+            class="w-auto p-2"
+            color="blue-darken-4"
+            size="large"
+            label
+          >
+            <v-icon icon="mdi-account-circle-outline" start></v-icon>
+            {{ role }}
+          </v-chip>
+        </div>
+      </div>
     </div>
 
     <!-- Change password -->
@@ -158,6 +173,8 @@ const user = ref({
   name: "",
   email: "",
   role: "",
+  description: "",
+  user_roles: []
 });
 
 const newName = ref(user.value.name);
@@ -207,7 +224,9 @@ const fetchProfile = async () => {
     if (data && data.data && data.data.profile) {
       user.value.name = data.data.profile.name || "";
       user.value.email = data.data.profile.email || "";
-      user.value.role = data.data.profile.user_level || ""; // Fetching user level
+      user.value.role = data.data.profile.level || ""; // Fetching user level
+      user.value.description = data.data.profile.user_role.join(", ") || ""; // Assuming user_role is an array
+      user.value.user_roles = data.data.profile.user_role || []; // Storing user roles array
     } else {
       throw new Error("Invalid profile data");
     }
