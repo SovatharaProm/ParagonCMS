@@ -7,6 +7,14 @@
   font-weight: 700;
   font-family: "Plus Jakarta Sans", sans-serif;
 }
+.font-medium {
+  font-weight: 400;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+.font-semibold {
+  font-weight: 600;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
 /* Add this to your global CSS file */
 .toast--error {
     background-color: #ff4d4f !important;

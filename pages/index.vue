@@ -432,7 +432,7 @@ async function togglePage(page, parentIndex, childIndex = null) {
       if (childIndex !== null) {
         childSwitchStates.value[parentIndex][childIndex].is_active =
           data.new_state;
-      } else {
+      } else {t
         switchStates.value[parentIndex] = data.new_state;
       }
     } else {

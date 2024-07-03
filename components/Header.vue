@@ -6,7 +6,7 @@
     <div class="flex gap-3 items-center">
       <!-- Role Badge -->
       <div v-if="userRole" class="hidden sm:flex items-center gap-2">
-        <span class="font-medium text-sm md:text-lg">Role:</span>
+        <span class="font-semibold text-sm md:text-lg">Role:</span>
         <span
           :class="roleBadgeClass"
           class="font-bold px-2 py-1 rounded-lg text-xs md:text-base"
@@ -16,7 +16,7 @@
       </div>
       <!-- User Name and Profile Icon -->
       <div v-if="userRole" class="flex items-center gap-2 relative">
-        <span class="font-medium text-sm md:text-lg pr-5">{{ userName }}</span>
+        <span class="font-semibold text-sm md:text-lg pr-5">{{ userName }}</span>
         <NuxtLink to="/profile" class="flex items-center">
           <Icon name="gg:profile" class="text-xl md:text-3xl cursor-pointer" />
         </NuxtLink>
