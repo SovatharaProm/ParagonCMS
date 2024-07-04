@@ -2,24 +2,17 @@
   <h1 class="text-3xl font-bold text-blue-900 text-center pt-4 pb-6 h-fit">
     Pages
   </h1>
-  <div class="my-5 flex justify-end">
+  <div class="mb-5 flex justify-end">
     <button
       v-if="isAdmin"
       @click="openCreatePageModal(false)"
-      class="my-auto px-5 py-2 bg-blue-900 text-white rounded-md font-medium"
+      class="my-auto px-5 p-2 bg-blue-900 text-white rounded-md font-medium"
     >
       Create main page
     </button>
-    <button
-      v-else
-      @click="openCreatePageModal(true)"
-      class="my-auto px-5 py-2 bg-blue-900 text-white rounded-md font-medium"
-    >
-      Create sub page
-    </button>
   </div>
 
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col">
     <draggable v-model="requests" group="pages" itemKey="id" @end="onDragEnd">
       <template #item="{ element: request, index }">
         <div
@@ -28,49 +21,30 @@
         >
           <div class="flex justify-between">
             <div class="my-4">
-              <h2 class="font-bold">{{ request.page_name }}</h2>
+              <h2 class="font-bold" @dblclick="enableEditing(request)">
+                <input
+                  v-if="editablePageId === request.id"
+                  v-model="editablePageName"
+                  @keyup.enter="updatePageName(request, index)"
+                  @blur="updatePageName(request, index)"
+                  class="w-full font-bold italic"
+                />
+                <span v-else>{{ request.page_name }}</span>
+              </h2>
             </div>
             <div class="flex gap-5 my-auto">
-              <v-switch
-                v-model="switchStates[index]"
-                @change="togglePage(request, index)"
-                :label="switchStates[index] ? 'On' : 'Off'"
-                false-value="Off"
-                true-value="On"
-                color="indigo-darken-4"
-                hide-details
-                inset
-              ></v-switch>
-
-              <!-- Update page name -->
-              <button @click="openUpdateModal(request)">
-                <Icon name="tabler:edit" class="text-xl" />
-              </button>
-
-              <!-- Route to page builder -->
-              <NuxtLink
-                :to="`/builder?id=${request.id}`"
-                class="my-auto px-5 py-2 bg-blue-900 text-white rounded-md font-medium"
-              >
-                Edit
+              <NuxtLink :to="`/builder?id=${request.id}`" class="my-auto">
+                <Icon name="ph:note-pencil-bold"></Icon>
               </NuxtLink>
-
-              <!-- Add subpage -->
               <button @click="openCreatePageModal(true, request.id)">
                 <Icon name="ph:plus-bold"></Icon>
-              </button>
-
-              <!-- Create Change Request -->
-              <button @click="openCreateChangeRequestDialog(request)">
-                <Icon name="ph:git-pull-request-bold" class="text-xl" />
               </button>
             </div>
           </div>
 
-          <!-- Create children page -->
           <div
             v-if="request.children && request.children.length > 0"
-            class="pl-8 p-5 grid gap-2"
+            class="pl-8 grid gap-2"
           >
             <NestedChildren
               :children="request.children"
@@ -78,6 +52,7 @@
               :parent-state="childSwitchStates[index]"
               @update:children="updateChildren"
               @toggle-child-page="togglePage"
+              @open-create-modal="openCreatePageModal"
             ></NestedChildren>
           </div>
         </div>
@@ -85,7 +60,6 @@
     </draggable>
   </div>
 
-  <!-- Dialogs for creating and updating pages -->
   <div
     v-if="createPageModal"
     class="fixed inset-0 flex justify-center items-start"
@@ -94,7 +68,9 @@
     <div
       class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10"
     >
-      <h2 class="text-2xl font-bold mb-6">Create New Page</h2>
+      <h2 class="text-2xl font-bold mb-6">
+        {{ creatingSubPage ? "Create Subpage" : "Create New Page" }}
+      </h2>
       <div class="mb-4">
         <label for="page-title" class="block text-sm font-medium text-gray-700"
           >Page Title</label
@@ -123,112 +99,20 @@
       </div>
     </div>
   </div>
-
-  <div
-    v-if="updatePageModal"
-    class="fixed mx-auto inset-0 flex justify-center items-center"
-  >
-    <div class="absolute inset-0 bg-opacity-25 backdrop-blur-sm"></div>
-    <div
-      class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10"
-    >
-      <h2 class="text-2xl font-bold mb-6">Update Page Name</h2>
-      <div class="mb-4">
-        <label
-          for="update-page-title"
-          class="block text-sm font-medium text-gray-700"
-          >New Page Title</label
-        >
-        <input
-          v-model="newPageName"
-          id="update-page-title"
-          placeholder="Enter new page title"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          required
-        />
-      </div>
-      <div class="flex items-center justify-end">
-        <button
-          @click="updatePageModal = false"
-          class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300"
-        >
-          Cancel
-        </button>
-        <button
-          @click="updatePageName(selectedPage)"
-          class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
-        >
-          Update
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <v-dialog v-model="isChangeRequestDialogOpen" max-width="600px">
-    <template #activator="{ on, attrs }"></template>
-    <v-card>
-      <v-card-title class="text-2xl text-blue-900 font-bold"
-        >Create Change Request</v-card-title
-      >
-      <v-card-text>
-        <form @submit.prevent="createChangeRequest">
-          <div class="mb-4">
-            <label
-              for="changeRequestName"
-              class="block text-gray-700 font-bold mb-2"
-              >Change Request Name</label
-            >
-            <input
-              type="text"
-              v-model="newChangeRequestName"
-              id="changeRequestName"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label
-              for="notifyApprover"
-              class="flex items-center cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                v-model="notifyApprover"
-                id="notifyApprover"
-                class="m-10px mr-2 leading-tight"
-              />
-              <span class="text-blue-900 font-bold ">Notify Approver</span>
-            </label>
-          </div>
-        </form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          color="blue-darken-4 text-md font-bold"
-          text
-          @click="closeChangeRequestDialog"
-          >Cancel</v-btn
-        >
-        <v-btn
-          color="blue-darken-4 text-md font-bold"
-          text
-          @click="createChangeRequest"
-          >Save</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
 </template>
 
 <script setup>
+definePageMeta({
+  layout: "usersidebar",
+  middleware: "auth",
+});
 import { ref, onMounted, computed } from "vue";
-import { useToast } from "vue-toast-notification";
+import { useAuthStore } from "@/stores/auth";
 import NestedChildren from "/components/NestedChildren.vue";
 import draggable from "vuedraggable";
-import { useAuthStore } from "../stores/auth";
 
-const toast = useToast();
+const authStore = useAuthStore();
+
 const requests = ref([]);
 const childPages = ref([]);
 const switchStates = ref([]);
@@ -236,26 +120,11 @@ const childSwitchStates = ref([]);
 const createPageModal = ref(false);
 const creatingSubPage = ref(false);
 const newPageTitle = ref("");
-const selectedChildPage = ref(null);
-const updatePageModal = ref(false);
-const newPageName = ref("");
-const selectedPage = ref(null);
-const isChangeRequestDialogOpen = ref(false);
-const currentRequest = ref({});
-const newChangeRequestName = ref("");
-const notifyApprover = ref(false);
-
-const authStore = useAuthStore();
-const token = computed(() => authStore.token);
-const userRole = computed(() => authStore.userRole);
-
-const isAdmin = computed(() => userRole.value === "admin" || userRole.value === "super_admin");
+const editablePageId = ref(null);
+const editablePageName = ref("");
 let parentPageId = null;
 
-definePageMeta({
-  layout: "usersidebar",
-  middleware: "auth",
-});
+const isAdmin = computed(() => authStore.userRole === 'admin' || authStore.userRole === 'super_admin');
 
 onMounted(async () => {
   await authStore.initializeStore();
@@ -263,11 +132,16 @@ onMounted(async () => {
   await fetchChildPages();
 });
 
+const enableEditing = (page) => {
+  editablePageId.value = page.id;
+  editablePageName.value = page.page_name;
+};
+
 const fetchPages = async () => {
   try {
-    const response = await fetch("http://157.230.37.48/api/list-page", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
       headers: {
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${authStore.token}`,
       },
     });
     const data = await response.json();
@@ -295,7 +169,6 @@ const initializeChildStates = (children) => {
 
 const collectAllPages = (pages) => {
   const allPages = [];
-
   const traverse = (pages) => {
     for (const page of pages) {
       allPages.push(page);
@@ -304,21 +177,20 @@ const collectAllPages = (pages) => {
       }
     }
   };
-
   traverse(pages);
   return allPages;
 };
 
 const fetchChildPages = async () => {
   try {
-    const response = await fetch("http://157.230.37.48/api/list-page", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
       headers: {
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${authStore.token}`,
       },
     });
     const data = await response.json();
     if (data.code === 200) {
-      childPages.value = collectAllPages(data.data.Pages); // Collect all pages for the dropdown
+      childPages.value = collectAllPages(data.data.Pages);
     } else {
       console.error("Error fetching child pages:", data.message);
     }
@@ -338,26 +210,27 @@ async function createPages(pageName) {
     alert("Title is required.");
     return;
   }
+
   try {
-    const response = await fetch("http://157.230.37.48/api/create-page", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-page`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${authStore.token}`,
       },
       body: JSON.stringify({
         page_name: pageName,
-        parent_id: creatingSubPage.value ? parentPageId : null,
+        is_under_page: creatingSubPage.value ? parentPageId : null,
       }),
     });
 
     const data = await response.json();
     if (data.code === 200) {
       console.log("Page created successfully:", data);
-      createPageModal.value = false; // Close the modal
-      newPageTitle.value = ""; // Reset the form fields
-      parentPageId = null; // Reset the parent page id
-      await fetchPages(); // Fetch updated pages
+      createPageModal.value = false;
+      newPageTitle.value = "";
+      parentPageId = null;
+      await fetchPages();
     } else {
       console.error("Failed to create page:", data.message);
     }
@@ -384,27 +257,22 @@ async function togglePage(page, parentIndex, childIndex = null) {
     page_id: page.id,
   };
 
-  console.log("Request payload:", payload);
-
   try {
-    const response = await fetch("http://157.230.37.48/api/toggle-page", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/toggle-page`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${authStore.token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
 
     const data = await response.json();
-    console.log(data); // Log the response data to debug
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     if (data.code === 200 || data.code === 201) {
-      console.log("Toggle success:", data.message);
       if (childIndex !== null) {
         childSwitchStates.value[parentIndex][childIndex].is_active =
           data.new_state;
@@ -412,7 +280,6 @@ async function togglePage(page, parentIndex, childIndex = null) {
         switchStates.value[parentIndex] = data.new_state;
       }
     } else {
-      console.error("Failed to toggle page:", data.message);
       if (childIndex !== null) {
         childSwitchStates.value[parentIndex][childIndex].is_active =
           originalState;
@@ -421,57 +288,47 @@ async function togglePage(page, parentIndex, childIndex = null) {
       }
     }
   } catch (error) {
-    console.error("Error toggling page:", error.message);
     if (childIndex !== null) {
       childSwitchStates.value[parentIndex][childIndex].is_active =
         originalState;
     } else {
       switchStates.value[parentIndex] = originalState;
     }
+    console.error("Error toggling page:", error);
   }
 }
 
-function openUpdateModal(page) {
-  console.log("Opening modal for page:", page); // Add this line to debug
-  updatePageModal.value = true;
-  selectedPage.value = page;
-  newPageName.value = page.page_name; // Pre-fill current page name
-}
-
-async function updatePageName() {
-  if (!newPageName.value) {
+const updatePageName = async (page, index) => {
+  if (!editablePageName.value) {
     alert("Page name is required.");
     return;
   }
-  if (!selectedPage.value) {
-    console.error("No page selected"); // Add error handling
-    return;
-  }
   try {
-    const response = await fetch("http://157.230.37.48/api/update-page-name", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${authStore.token}`,
       },
       body: JSON.stringify({
-        page_id: selectedPage.value.id, // Use selectedPage.value here
-        page_name: newPageName.value,
+        page_id: page.id,
+        page_name: editablePageName.value,
       }),
     });
 
     const data = await response.json();
     if (data.code === 200) {
+      requests.value[index].page_name = editablePageName.value;
       console.log("Page name updated successfully:", data);
-      updatePageModal.value = false; // Close the modal
-      await fetchPages(); // Refresh the list of pages
     } else {
       console.error("Failed to update page name:", data.message);
     }
   } catch (error) {
     console.error("Error updating page name:", error);
+  } finally {
+    editablePageId.value = null;
   }
-}
+};
 
 const buildNestedPayload = (pages, parentId = null, level = 1) => {
   return pages.map((page, index) => ({
@@ -496,11 +353,11 @@ const onDragEnd = async (event) => {
   console.log("Payload being sent:", JSON.stringify(payload, null, 2));
 
   try {
-    const response = await fetch("http://157.230.37.48/api/change-page-order", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/change-page-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${authStore.token}`,
       },
       body: JSON.stringify(payload),
     });
@@ -526,52 +383,6 @@ const handleUpdateChildren = (newChildren) => {
 
 const handleDragEndFromChildren = (event) => {
   console.log("Drag ended in parent from child:", event);
-  // Handle the reordering or moving logic here
-};
-
-const openCreateChangeRequestDialog = (page) => {
-  currentRequest.value = page;
-  isChangeRequestDialogOpen.value = true;
-};
-
-const closeChangeRequestDialog = () => {
-  isChangeRequestDialogOpen.value = false;
-  currentRequest.value = {};
-  newChangeRequestName.value = "";
-  notifyApprover.value = false;
-};
-
-const createChangeRequest = async () => {
-  try {
-    const response = await fetch(
-      "http://157.230.37.48/api/create-change-request",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token.value}`,
-        },
-        body: JSON.stringify({
-          page_id: currentRequest.value.id,
-          request_name: newChangeRequestName.value,
-          notify_approver: notifyApprover.value,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to create change request");
-    }
-
-    const result = await response.json();
-    console.log("Change request created:", result);
-
-    toast.success("Change request created successfully");
-    closeChangeRequestDialog();
-  } catch (error) {
-    console.error("Error creating change request:", error);
-    toast.error("Failed to create change request");
-  }
 };
 </script>
 

@@ -15,9 +15,9 @@
               <Icon name="ph:house-bold" class="icon" />
               <span>Websites</span>
             </NuxtLink>
-            <NuxtLink to="/change-request" class="flex gap-3 sidebar-link" @click="closeDrawer">
+            <NuxtLink to="/view-change-request" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:git-pull-request-bold" class="icon" />
-              <span>Change Request</span>
+              <span>View Requests</span>
             </NuxtLink>
             <NuxtLink to="/profile" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:user-bold" class="icon" />

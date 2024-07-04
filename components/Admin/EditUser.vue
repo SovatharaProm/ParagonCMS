@@ -286,6 +286,7 @@ const updateUserDetails = async () => {
     console.error('Error updating user details:', error.message);
     toast.error('Error updating user details.');
   }
+  router.push('/admin/users/usermanagement');
 };
 
 const updateRole = async () => {
@@ -373,6 +374,7 @@ const updatePermissions = async () => {
 const cancel = () => {
   router.push('/admin/users/usermanagement');
 };
+
 
 const resetPermissions = () => {
   Object.keys(rolePermissions.value).forEach((pageId) => {

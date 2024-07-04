@@ -58,16 +58,6 @@
         <label for="subpage-title" class="block text-sm font-medium text-gray-700">Subpage Title</label>
         <input v-model="newSubpageTitle" id="subpage-title" placeholder="Enter subpage title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
       </div>
-      <div class="mb-6">
-        <label for="page-child" class="block text-sm font-medium text-gray-700">Child Page</label>
-        <select v-model="selectedChildPageId" id="page-child" class="block w-full mt-1 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          <option disabled value="">Please select one</option>
-          <option value="">None</option>
-          <option v-for="page in childPages" :key="page.id" :value="page.id">
-            {{ page.page_name }}
-          </option>
-        </select>
-      </div>
       <div class="flex items-center justify-end">
         <button @click="createPageModal = false" class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300">Cancel</button>
         <button @click="createSubpage(newSubpageTitle, selectedChildPageId)" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">Create</button>
@@ -133,7 +123,7 @@ const createSubpage = async (title, parentId) => {
     return;
   }
   try {
-    const response = await fetch('http://157.230.37.48/api/create-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-page`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -173,7 +163,7 @@ const updatePageName = async () => {
     return;
   }
   try {
-    const response = await fetch('http://157.230.37.48/api/update-page-name', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -204,7 +194,7 @@ const updatePageName = async () => {
 
 const fetchChildPages = async () => {
   try {
-    const response = await fetch('http://157.230.37.48/api/list-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
