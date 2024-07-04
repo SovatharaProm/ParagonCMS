@@ -35,11 +35,11 @@
           </NuxtLink>
         </div>
         <button
-          class="text-blue-900 hover:text-blue-900 font-bold text-lg ps-5 py-4 pe-16 hover:bg-[#f0f7ff] rounded-lg mx-auto"
+          class="text-blue-900 hover:text-blue-900 font-bold text-lg  gap-2 px-4 py-4 flex items-center hover:bg-[#f0f7ff]"
           @click="handleLogout"
         >
           <Icon name="material-symbols:logout" class="icon" />
-          <span class="">Sign out</span>
+          <span>Sign out</span>
         </button>
       </div>
 

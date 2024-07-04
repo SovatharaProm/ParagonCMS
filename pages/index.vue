@@ -4,10 +4,18 @@
   </h1>
   <div class="my-5 flex justify-end">
     <button
+      v-if="isAdmin"
       @click="openCreatePageModal(false)"
       class="my-auto px-5 py-2 bg-blue-900 text-white rounded-md font-medium"
     >
       Create main page
+    </button>
+    <button
+      v-else
+      @click="openCreatePageModal(true)"
+      class="my-auto px-5 py-2 bg-blue-900 text-white rounded-md font-medium"
+    >
+      Create sub page
     </button>
   </div>
 
@@ -48,7 +56,7 @@
               </NuxtLink>
 
               <!-- Add subpage -->
-              <button @click="openCreatePageModal(true)">
+              <button @click="openCreatePageModal(true, request.id)">
                 <Icon name="ph:plus-bold"></Icon>
               </button>
 
@@ -98,22 +106,6 @@
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           required
         />
-      </div>
-      <div class="mb-6">
-        <label for="page-child" class="block text-sm font-medium text-gray-700"
-          >Child Page</label
-        >
-        <select
-          v-model="selectedChildPage"
-          id="page-child"
-          class="block w-full mt-1 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option disabled value="">Please select one</option>
-          <option value="">None</option>
-          <option v-for="page in childPages" :key="page.id" :value="page.id">
-            {{ page.page_name }}
-          </option>
-        </select>
       </div>
       <div class="flex items-center justify-end">
         <button
@@ -230,10 +222,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useToast } from "vue-toast-notification";
 import NestedChildren from "/components/NestedChildren.vue";
 import draggable from "vuedraggable";
+import { useAuthStore } from "../stores/auth";
 
 const toast = useToast();
 const requests = ref([]);
@@ -247,18 +240,25 @@ const selectedChildPage = ref(null);
 const updatePageModal = ref(false);
 const newPageName = ref("");
 const selectedPage = ref(null);
-const token = "1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin";
-
 const isChangeRequestDialogOpen = ref(false);
 const currentRequest = ref({});
 const newChangeRequestName = ref("");
 const notifyApprover = ref(false);
 
+const authStore = useAuthStore();
+const token = computed(() => authStore.token);
+const userRole = computed(() => authStore.userRole);
+
+const isAdmin = computed(() => userRole.value === "admin" || userRole.value === "super_admin");
+let parentPageId = null;
+
 definePageMeta({
   layout: "usersidebar",
   middleware: "auth",
 });
+
 onMounted(async () => {
+  await authStore.initializeStore();
   await fetchPages();
   await fetchChildPages();
 });
@@ -267,7 +267,7 @@ const fetchPages = async () => {
   try {
     const response = await fetch("http://157.230.37.48/api/list-page", {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
       },
     });
     const data = await response.json();
@@ -313,7 +313,7 @@ const fetchChildPages = async () => {
   try {
     const response = await fetch("http://157.230.37.48/api/list-page", {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
       },
     });
     const data = await response.json();
@@ -327,34 +327,10 @@ const fetchChildPages = async () => {
   }
 };
 
-function openCreatePageModal(isSubPage) {
+function openCreatePageModal(isSubPage, parentId = null) {
   creatingSubPage.value = isSubPage;
   createPageModal.value = true;
-  if (isSubPage) {
-    // Filter for sub pages (level 2)
-    childPages.value = collectPagesByLevel(2);
-  } else {
-    // Filter for main pages (level 1)
-    childPages.value = collectPagesByLevel(1);
-  }
-}
-
-function collectPagesByLevel(level) {
-  const allPages = [];
-
-  const traverse = (pages) => {
-    for (const page of pages) {
-      if (page.page_level === level) {
-        allPages.push(page);
-      }
-      if (page.children && page.children.length > 0) {
-        traverse(page.children);
-      }
-    }
-  };
-
-  traverse(requests.value);
-  return allPages;
+  parentPageId = parentId;
 }
 
 async function createPages(pageName) {
@@ -367,11 +343,11 @@ async function createPages(pageName) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
       },
       body: JSON.stringify({
         page_name: pageName,
-        parent_id: creatingSubPage.value ? selectedChildPage.value : null,
+        parent_id: creatingSubPage.value ? parentPageId : null,
       }),
     });
 
@@ -380,7 +356,7 @@ async function createPages(pageName) {
       console.log("Page created successfully:", data);
       createPageModal.value = false; // Close the modal
       newPageTitle.value = ""; // Reset the form fields
-      selectedChildPage.value = null; // Reset the selected child page
+      parentPageId = null; // Reset the parent page id
       await fetchPages(); // Fetch updated pages
     } else {
       console.error("Failed to create page:", data.message);
@@ -414,7 +390,7 @@ async function togglePage(page, parentIndex, childIndex = null) {
     const response = await fetch("http://157.230.37.48/api/toggle-page", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
@@ -432,7 +408,7 @@ async function togglePage(page, parentIndex, childIndex = null) {
       if (childIndex !== null) {
         childSwitchStates.value[parentIndex][childIndex].is_active =
           data.new_state;
-      } else {t
+      } else {
         switchStates.value[parentIndex] = data.new_state;
       }
     } else {
@@ -476,7 +452,7 @@ async function updatePageName() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
       },
       body: JSON.stringify({
         page_id: selectedPage.value.id, // Use selectedPage.value here
@@ -524,7 +500,7 @@ const onDragEnd = async (event) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
       },
       body: JSON.stringify(payload),
     });
@@ -573,7 +549,7 @@ const createChangeRequest = async () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.value}`,
         },
         body: JSON.stringify({
           page_id: currentRequest.value.id,
