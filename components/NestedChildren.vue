@@ -1,6 +1,6 @@
 <template>
   <div>
-    <draggable :list="children" group="pages" @end="onDragEnd" itemKey="id" >
+    <draggable :list="children" group="pages" @end="onDragEnd" itemKey="id">
       <template #item="{ element: child, index: childIndex }">
         <div :key="child.id" class="flex flex-col gap-2">
           <div class="flex justify-between p-2 px-5 shadow-md items-center rounded bg-red-50">
@@ -29,20 +29,21 @@
                 Edit
               </NuxtLink>
 
-              <!-- Add sub of subpage -->
-              <button @click="openCreatePageModal(true)">
+              <!-- Add sub of subpage if level is less than 3 -->
+              <button v-if="child.page_level < 3" @click="openCreatePageModal(true, child.id)">
                 <Icon name="ph:plus-bold"></Icon>
               </button>
             </div>
           </div>
           <div v-if="child.children && child.children.length > 0" class="pl-8 p-5 grid gap-2">
-            <SubOfSub
+            <NestedChildren
               :children="child.children"
               :parent-index="childIndex"
               :parent-state="parentState[childIndex].children"
               @update:children="updateChildren"
               @toggle-child-page="toggleChildPage"
-            ></SubOfSub>
+              @open-create-modal="openCreatePageModal"
+            ></NestedChildren>
           </div>
         </div>
       </template>
@@ -85,10 +86,10 @@
 <script setup>
 import { ref, defineProps, defineEmits, onMounted } from 'vue';
 import draggable from 'vuedraggable';
+import { useAuthStore } from '@/stores/auth';
 
-onMounted(async () => {
-  await fetchChildPages();
-});
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const authStore = useAuthStore();
 
 const props = defineProps({
   children: Array,
@@ -105,16 +106,14 @@ const childPages = ref([]);
 const selectedChild = ref(null);
 const newSubpageTitle = ref('');
 const selectedChildPageId = ref(null);
-const token = '1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin';
-
 
 const toggleChildPage = (child, parentIndex, childIndex) => {
   emit('toggle-child-page', child, parentIndex, childIndex);
 };
 
-const openCreatePageModal = (childId) => {
+const openCreatePageModal = (isSubPage, parentId) => {
   createPageModal.value = true;
-  selectedChildPageId.value = childId; // Set the parent page ID
+  selectedChildPageId.value = parentId; // Set the parent page ID
 };
 
 const createSubpage = async (title, parentId) => {
@@ -123,22 +122,22 @@ const createSubpage = async (title, parentId) => {
     return;
   }
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-page`, {
+    const response = await fetch(`${API_BASE_URL}/create-page`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({
-        page_name: title, // Changed from title to page_name to match likely API expectations
-        parent_id: parentId
+        page_name: title,
+        is_under_page: parentId
       })
     });
     const data = await response.json();
-    if (data.code === 200) { // Check the actual successful response code or property
+    if (data.code === 200) {
       console.log('Subpage created successfully:', data);
       createPageModal.value = false;
-      // Optionally refresh the page list or update local state here
+      await fetchChildPages(); // Optionally refresh the page list or update local state here
     } else {
       console.error('Failed to create subpage:', data.message);
     }
@@ -150,7 +149,7 @@ const createSubpage = async (title, parentId) => {
 const openUpdateModal = (child) => {
   updatePageModal.value = true;
   selectedChild.value = child;
-  newPageName.value = child.page_name; // Pre-fill current page name
+  newPageName.value = child.page_name;
 };
 
 const updatePageName = async () => {
@@ -159,18 +158,18 @@ const updatePageName = async () => {
     return;
   }
   if (!selectedChild.value) {
-    console.error('No child selected'); // Correct error handling
+    console.error('No child selected');
     return;
   }
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
+    const response = await fetch(`${API_BASE_URL}/update-page-name`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({
-        page_id: selectedChild.value.id, // Corrected to selectedChild
+        page_id: selectedChild.value.id,
         page_name: newPageName.value
       })
     });
@@ -178,12 +177,11 @@ const updatePageName = async () => {
     const data = await response.json();
     if (data.code === 200) {
       console.log('Page name updated successfully:', data);
-      // Update local state to reflect the new page name
       const childIndex = props.children.findIndex(child => child.id === selectedChild.value.id);
       if (childIndex !== -1) {
         props.children[childIndex].page_name = newPageName.value;
       }
-      updatePageModal.value = false; // Close the modal
+      updatePageModal.value = false;
     } else {
       console.error('Failed to update page name:', data.message);
     }
@@ -194,9 +192,9 @@ const updatePageName = async () => {
 
 const fetchChildPages = async () => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
+    const response = await fetch(`${API_BASE_URL}/list-page`, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       }
     });
     const data = await response.json();
@@ -214,6 +212,10 @@ const onDragEnd = (event) => {
   emit('drag-end', event);
 };
 
+onMounted(async () => {
+  await authStore.initializeStore();
+  await fetchChildPages();
+});
 </script>
 
 <style scoped>
