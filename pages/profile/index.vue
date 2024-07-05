@@ -52,8 +52,7 @@
     <span class="username text-[32px] text-[#172947] font-bold">{{ user.name }}</span>
     <span class="email text-[#172947]">{{ user.email }}</span>
   </div>
-  <div>
-    <span class="email my-5">{{ user.description }}</span>
+  <div> 
     <div class="role">
       <h2 class="text-[#172947] text-lg font-bold my-5">Role</h2>
       <div class="flex gap-2 mb-5">

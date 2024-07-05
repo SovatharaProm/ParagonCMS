@@ -18,20 +18,21 @@
                 hide-details
                 inset
               ></v-switch>
-
               <!-- Update page name -->
               <button @click="openUpdateModal(child)">
                 <Icon name="tabler:edit" class="text-xl" />
               </button>
-
               <!-- Route to page builder -->
               <NuxtLink :to="`/builder?id=${child.id}`" class="my-auto px-5 py-2 bg-blue-900 text-white rounded-md font-medium">
                 Edit
               </NuxtLink>
-
               <!-- Add sub of subpage if level is less than 3 -->
               <button v-if="child.page_level < 3" @click="openCreatePageModal(true, child.id)">
                 <Icon name="ph:plus-bold"></Icon>
+              </button>
+              <!-- Create Change Request -->
+              <button @click="openCreateChangeRequestModal(child.id)">
+                <Icon name="ph:file-plus-bold"></Icon>
               </button>
             </div>
           </div>
@@ -43,6 +44,7 @@
               @update:children="updateChildren"
               @toggle-child-page="toggleChildPage"
               @open-create-modal="openCreatePageModal"
+              @open-create-change-request="openCreateChangeRequestModal"
             ></NestedChildren>
           </div>
         </div>
@@ -97,7 +99,7 @@ const props = defineProps({
   parentState: Array
 });
 
-const emit = defineEmits(['update:children', 'drag-end']);
+const emit = defineEmits(['update:children', 'drag-end', 'open-create-change-request']);
 
 const updatePageModal = ref(false);
 const createPageModal = ref(false); 
@@ -212,6 +214,10 @@ const onDragEnd = (event) => {
   emit('drag-end', event);
 };
 
+const openCreateChangeRequestModal = (pageId) => {
+  emit('open-create-change-request', pageId);
+};
+
 onMounted(async () => {
   await authStore.initializeStore();
   await fetchChildPages();
@@ -219,5 +225,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Ensure there's no syntax error or unknown word in your CSS */
+@import "/assets/css/style.css";
 </style>

@@ -13,14 +13,12 @@
         class="p-2 m-3 bg-white rounded text-sm justify-between shadow-md cursor-move font-normal">
         <div class="flex justify-between">
           <div class="my-4">
-            <h2 class="font-bold">{{ element.page_name }}</h2>
+            <h2 class="font-bold" @dblclick="enableEditing(element, index)">
+                <input v-if="editablePageId === element.id" v-model="editablePageName" @keyup.enter="updatePageName(element, index)" @blur="updatePageName(element, index)" class="w-full font-bold">
+                <span v-else>{{ element.page_name }}</span>
+              </h2>
           </div>
           <div class="flex gap-5 my-auto">
-
-            <!-- Update page name -->
-            <button @click="openUpdateModal(element)">
-              <Icon name="ph:pencil-simple-duotone" color="gray" />
-            </button>
 
             <!-- Add subpage -->
             <button @click="openCreatePageModal(true)">
@@ -30,7 +28,7 @@
         </div>
 
         <!-- Draggable children pages -->
-        <div v-if="element.children && element.children.length > 0" class="p-2 m-1 font-italic bg-[#F0F7FF] rounded text-sm justify-between items-center shadow-md cursor-move">
+        <div v-if="element.children && element.children.length > 0" class="m-1 font-italic rounded text-sm justify-between items-center cursor-move">
           <MiniNested
             :children="element.children"
             :parent-index="index"
@@ -67,21 +65,6 @@
       </div>
     </div>
   </div>
-
-  <div v-if="updatePageModal" class="fixed mx-auto inset-0 flex justify-center items-center z-10">
-    <div class="absolute inset-0 bg-opacity-25 backdrop-blur-sm"></div>
-    <div class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10">
-      <h2 class="text-2xl font-bold mb-6">Update Page Name</h2>
-      <div class="mb-4">
-        <label for="update-page-title" class="block text-sm font-medium text-gray-700">New Page Title</label>
-        <input v-model="newPageName" id="update-page-title" placeholder="Enter new page title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
-      </div>
-      <div class="flex items-center justify-end">
-        <button @click="updatePageModal = false" class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300">Cancel</button>
-        <button @click="updatePageName(selectedPage)" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">Update</button>
-      </div>
-    </div>
-  </div>
   </aside>
 </template>
 
@@ -99,12 +82,11 @@ const childPages = ref([]);
 const switchStates = ref([]);
 const childSwitchStates = ref([]);
 const createPageModal = ref(false);
-const creatingSubPage = ref(false);
 const newPageTitle = ref('');
 const selectedChildPage = ref(null);
-const updatePageModal = ref(false);
-const newPageName = ref('');
-const selectedPage = ref(null);
+const editablePageId = ref(null);
+const editablePageName = ref('');
+const creatingSubPage = ref(false);
 const token = '1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin';
 
 onMounted(async () => {
@@ -298,21 +280,16 @@ async function togglePage(page, parentIndex, childIndex = null) {
     }
   }
 }
+const enableEditing = (element, index) => {
+  editablePageId.value = element.id;
+  editablePageName.value = element.page_name;
+};
 
-function openUpdateModal(page) {
-  console.log('Opening modal for page:', page); // Add this line to debug
-  updatePageModal.value = true;
-  selectedPage.value = page;
-  newPageName.value = page.page_name; // Pre-fill current page name
-}
 
-async function updatePageName() {
-  if (!newPageName.value) {
+
+const updatePageName = async (element, index) => {
+  if (!editablePageName.value) {
     alert('Page name is required.');
-    return;
-  }
-  if (!selectedPage.value) {
-    console.error('No page selected'); // Add error handling
     return;
   }
   try {
@@ -323,23 +300,23 @@ async function updatePageName() {
         'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
-        page_id: selectedPage.value.id,  // Use selectedPage.value here
-        page_name: newPageName.value
+        page_id: element.id,
+        page_name: editablePageName.value
       })
     });
 
     const data = await response.json();
     if (data.code === 200) {
+      requests.value[index].page_name = editablePageName.value; // Update local state
       console.log('Page name updated successfully:', data);
-      updatePageModal.value = false; // Close the modal
-      await fetchPages(); // Refresh the list of pages
+      editablePageId.value = null; // Close editing mode
     } else {
       console.error('Failed to update page name:', data.message);
     }
   } catch (error) {
     console.error('Error updating page name:', error);
   }
-}
+};
 
 const onDragEnd = async (evt) => {
   console.log('Drag ended', evt);

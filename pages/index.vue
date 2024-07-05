@@ -39,6 +39,9 @@
               <button @click="openCreatePageModal(true, request.id)">
                 <Icon name="ph:plus-bold"></Icon>
               </button>
+              <button @click="openCreateChangeRequestModal(request.id)">
+                <Icon name="ph:file-plus-bold"></Icon>
+              </button>
             </div>
           </div>
 
@@ -53,6 +56,7 @@
               @update:children="updateChildren"
               @toggle-child-page="togglePage"
               @open-create-modal="openCreatePageModal"
+              @open-create-change-request="openCreateChangeRequestModal"
             ></NestedChildren>
           </div>
         </div>
@@ -99,6 +103,42 @@
       </div>
     </div>
   </div>
+
+  <!-- Create Change Request Modal -->
+  <v-dialog v-model="isCreateChangeRequestModalOpen" max-width="600px">
+    <v-card>
+      <v-card-title class="text-h5">Create Change Request</v-card-title>
+      <v-card-text>
+        <form @submit.prevent="createChangeRequest">
+          <div class="mb-4">
+            <label for="request-name" class="block text-gray-700 font-bold mb-2">Request Name</label>
+            <input
+              type="text"
+              v-model="newChangeRequestName"
+              id="request-name"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="notify-approver" class="block text-gray-700 font-bold mb-2">Notify Approver</label>
+            <input
+              type="checkbox"
+              v-model="notifyApprover"
+              id="notify-approver"
+              class="mr-2 leading-tight"
+            />
+            <span class="text-sm text-gray-700">Yes</span>
+          </div>
+        </form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue-darken-4" text @click="closeCreateChangeRequestModal">Cancel</v-btn>
+        <v-btn color="blue-darken-4" text @click="createChangeRequest">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -125,6 +165,11 @@ const editablePageName = ref("");
 let parentPageId = null;
 
 const isAdmin = computed(() => authStore.userRole === 'admin' || authStore.userRole === 'super_admin');
+
+const isCreateChangeRequestModalOpen = ref(false);
+const newChangeRequestName = ref("");
+const notifyApprover = ref(false);
+let currentPageId = null;
 
 onMounted(async () => {
   await authStore.initializeStore();
@@ -383,6 +428,45 @@ const handleUpdateChildren = (newChildren) => {
 
 const handleDragEndFromChildren = (event) => {
   console.log("Drag ended in parent from child:", event);
+};
+
+const openCreateChangeRequestModal = (pageId) => {
+  currentPageId = pageId;
+  isCreateChangeRequestModalOpen.value = true;
+};
+
+const closeCreateChangeRequestModal = () => {
+  isCreateChangeRequestModalOpen.value = false;
+  newChangeRequestName.value = "";
+  notifyApprover.value = false;
+};
+
+const createChangeRequest = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-change-request`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authStore.token}`,
+      },
+      body: JSON.stringify({
+        page_id: currentPageId,
+        request_name: newChangeRequestName.value,
+        notify_approver: notifyApprover.value,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.code === 200) {
+      console.log("Change request created successfully:", data);
+      closeCreateChangeRequestModal();
+      fetchPages();
+    } else {
+      console.error("Failed to create change request:", data.message);
+    }
+  } catch (error) {
+    console.error("Error creating change request:", error);
+  }
 };
 </script>
 
