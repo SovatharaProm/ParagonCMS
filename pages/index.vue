@@ -1,13 +1,7 @@
 <template>
-  <h1 class="text-3xl font-bold text-blue-900 text-center pt-4 pb-6 h-fit">
-    Pages
-  </h1>
+  <h1 class="text-3xl font-bold text-blue-900 text-center pt-4 pb-6 h-fit">Pages</h1>
   <div class="mb-5 flex justify-end">
-    <button
-      v-if="isAdmin"
-      @click="openCreatePageModal(false)"
-      class="my-auto px-5 p-2 bg-blue-900 text-white rounded-md font-medium"
-    >
+    <button v-if="isAdmin" @click="openCreatePageModal(false)" class="my-auto px-5 p-2 bg-blue-900 text-white rounded-md font-medium">
       Create main page
     </button>
   </div>
@@ -15,20 +9,11 @@
   <div class="flex flex-col">
     <draggable v-model="requests" group="pages" itemKey="id" @end="onDragEnd">
       <template #item="{ element: request, index }">
-        <div
-          :key="request.id"
-          class="bg-white p-5 rounded-lg drop-shadow flex flex-col gap-4"
-        >
+        <div :key="request.id" class="bg-white p-5 rounded-lg drop-shadow flex flex-col gap-4">
           <div class="flex justify-between">
             <div class="my-4">
               <h2 class="font-bold" @dblclick="enableEditing(request)">
-                <input
-                  v-if="editablePageId === request.id"
-                  v-model="editablePageName"
-                  @keyup.enter="updatePageName(request, index)"
-                  @blur="updatePageName(request, index)"
-                  class="w-full font-bold italic"
-                />
+                <input v-if="editablePageId === request.id" v-model="editablePageName" @keyup.enter="updatePageName(request, index)" @blur="updatePageName(request, index)" class="w-full font-bold italic" />
                 <span v-else>{{ request.page_name }}</span>
               </h2>
             </div>
@@ -45,15 +30,12 @@
             </div>
           </div>
 
-          <div
-            v-if="request.children && request.children.length > 0"
-            class="pl-8 grid gap-2"
-          >
+          <div v-if="request.children && request.children.length > 0" class="pl-8 grid gap-2">
             <NestedChildren
               :children="request.children"
               :parent-index="index"
-              :parent-state="childSwitchStates[index]"
-              @update:children="updateChildren"
+              :parent-state="childSwitchStates[index] || []"
+              @update:children="updateChildren(index, $event)"
               @toggle-child-page="togglePage"
               @open-create-modal="openCreatePageModal"
               @open-create-change-request="openCreateChangeRequestModal"
@@ -64,42 +46,17 @@
     </draggable>
   </div>
 
-  <div
-    v-if="createPageModal"
-    class="fixed inset-0 flex justify-center items-start"
-  >
+  <div v-if="createPageModal" class="fixed inset-0 flex justify-center items-start">
     <div class="absolute inset-0 bg-opacity-25 backdrop-blur-sm"></div>
-    <div
-      class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10"
-    >
-      <h2 class="text-2xl font-bold mb-6">
-        {{ creatingSubPage ? "Create Subpage" : "Create New Page" }}
-      </h2>
+    <div class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10">
+      <h2 class="text-2xl font-bold mb-6">{{ creatingSubPage ? "Create Subpage" : "Create New Page" }}</h2>
       <div class="mb-4">
-        <label for="page-title" class="block text-sm font-medium text-gray-700"
-          >Page Title</label
-        >
-        <input
-          v-model="newPageTitle"
-          id="page-title"
-          placeholder="Enter page title"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          required
-        />
+        <label for="page-title" class="block text-sm font-medium text-gray-700">Page Title</label>
+        <input v-model="newPageTitle" id="page-title" placeholder="Enter page title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
       <div class="flex items-center justify-end">
-        <button
-          @click="createPageModal = false"
-          class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300"
-        >
-          Cancel
-        </button>
-        <button
-          @click="createPages(newPageTitle)"
-          class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
-        >
-          Create
-        </button>
+        <button @click="createPageModal = false" class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300">Cancel</button>
+        <button @click="createPages(newPageTitle)" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">Create</button>
       </div>
     </div>
   </div>
@@ -143,13 +100,15 @@
 
 <script setup>
 definePageMeta({
-  layout: "usersidebar",
-  middleware: "auth",
+ layout: 'usersidebar',
+ middleware: 'auth'
 });
 import { ref, onMounted, computed } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import NestedChildren from "/components/NestedChildren.vue";
 import draggable from "vuedraggable";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const authStore = useAuthStore();
 
@@ -164,12 +123,12 @@ const editablePageId = ref(null);
 const editablePageName = ref("");
 let parentPageId = null;
 
-const isAdmin = computed(() => authStore.userRole === 'admin' || authStore.userRole === 'super_admin');
-
 const isCreateChangeRequestModalOpen = ref(false);
 const newChangeRequestName = ref("");
 const notifyApprover = ref(false);
 let currentPageId = null;
+
+const isAdmin = computed(() => authStore.userRole === 'admin' || authStore.userRole === 'super_admin');
 
 onMounted(async () => {
   await authStore.initializeStore();
@@ -184,7 +143,7 @@ const enableEditing = (page) => {
 
 const fetchPages = async () => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
+    const response = await fetch(`${API_BASE_URL}/list-page`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`,
       },
@@ -228,7 +187,7 @@ const collectAllPages = (pages) => {
 
 const fetchChildPages = async () => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
+    const response = await fetch(`${API_BASE_URL}/list-page`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`,
       },
@@ -257,7 +216,7 @@ async function createPages(pageName) {
   }
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-page`, {
+    const response = await fetch(`${API_BASE_URL}/create-page`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -272,10 +231,19 @@ async function createPages(pageName) {
     const data = await response.json();
     if (data.code === 200) {
       console.log("Page created successfully:", data);
+      // Add the new page to the local state
+      if (creatingSubPage.value) {
+        const parentPage = findPageById(parentPageId, requests.value);
+        if (parentPage) {
+          parentPage.children = parentPage.children || [];
+          parentPage.children.push(data.data);
+        }
+      } else {
+        requests.value.push(data.data);
+      }
       createPageModal.value = false;
       newPageTitle.value = "";
       parentPageId = null;
-      await fetchPages();
     } else {
       console.error("Failed to create page:", data.message);
     }
@@ -303,7 +271,7 @@ async function togglePage(page, parentIndex, childIndex = null) {
   };
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/toggle-page`, {
+    const response = await fetch(`${API_BASE_URL}/toggle-page`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${authStore.token}`,
@@ -349,7 +317,7 @@ const updatePageName = async (page, index) => {
     return;
   }
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
+    const response = await fetch(`${API_BASE_URL}/update-page-name`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -398,7 +366,7 @@ const onDragEnd = async (event) => {
   console.log("Payload being sent:", JSON.stringify(payload, null, 2));
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/change-page-order`, {
+    const response = await fetch(`${API_BASE_URL}/change-page-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -418,16 +386,8 @@ const onDragEnd = async (event) => {
   }
 };
 
-const updateChildren = (newChildren, index) => {
+const updateChildren = (index, newChildren) => {
   requests.value[index].children = newChildren;
-};
-
-const handleUpdateChildren = (newChildren) => {
-  children.value = newChildren;
-};
-
-const handleDragEndFromChildren = (event) => {
-  console.log("Drag ended in parent from child:", event);
 };
 
 const openCreateChangeRequestModal = (pageId) => {
@@ -443,7 +403,7 @@ const closeCreateChangeRequestModal = () => {
 
 const createChangeRequest = async () => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-change-request`, {
+    const response = await fetch(`${API_BASE_URL}/create-change-request`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -467,6 +427,17 @@ const createChangeRequest = async () => {
   } catch (error) {
     console.error("Error creating change request:", error);
   }
+};
+
+const findPageById = (id, pages) => {
+  for (let page of pages) {
+    if (page.id === id) return page;
+    if (page.children) {
+      const found = findPageById(id, page.children);
+      if (found) return found;
+    }
+  }
+  return null;
 };
 </script>
 

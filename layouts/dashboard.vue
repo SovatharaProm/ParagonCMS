@@ -1,6 +1,6 @@
 <template>
   <div class="h-screen overflow-hidden">
-    <Header class="drop-shadow-md w-full" />
+    <Header class="drop-shadow-md w-full"/>
     <div class="flex h-[89vh]">
       <!-- Sidebar -->
       <div

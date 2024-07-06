@@ -21,6 +21,17 @@
             </NuxtLink>
           </div>
         </div>
+        <div v-if="element.children && element.children.length > 0" class="pl-8">
+          <SubOfSub
+            :children="element.children"
+            :parent-index="index"
+            :parent-state="parentState[index]?.children || []"
+            @update:children="updateChildren(index, $event)"
+            @toggle-child-page="toggleChildPage"
+            @open-create-modal="openCreatePageModal"
+            @open-create-change-request="openCreateChangeRequestModal"
+          ></SubOfSub>
+        </div>
       </div>
     </template>
   </draggable>
@@ -29,6 +40,8 @@
 <script setup>
 import { ref, defineProps, defineEmits } from "vue";
 import draggable from "vuedraggable";
+import SubOfSub from './SubOfSub.vue';
+import { useAuthStore } from "~/stores/auth";
 
 const props = defineProps({
   children: Array,
@@ -36,14 +49,11 @@ const props = defineProps({
   parentState: Array,
 });
 
-const emit = defineEmits(["update:children", "drag-end", "toggle-child-page"]);
+const emit = defineEmits(["update:children", "drag-end", "toggle-child-page", "open-create-modal", "open-create-change-request"]);
+const authStore = useAuthStore();
+
 const editablePageId = ref(null);
 const editablePageName = ref("");
-const token = "1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin";
-
-const toggleChildPage = (child, parentIndex, childIndex) => {
-  emit("toggle-child-page", child, parentIndex, childIndex);
-};
 
 const enableEditing = (element, index) => {
   editablePageId.value = element.id;
@@ -56,11 +66,11 @@ const updatePageName = async (element, index) => {
     return;
   }
   try {
-    const response = await fetch("http://157.230.37.48/api/update-page-name", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${authStore.token}`,
       },
       body: JSON.stringify({
         page_id: element.id,
@@ -71,6 +81,7 @@ const updatePageName = async (element, index) => {
     const data = await response.json();
     if (data.code === 200) {
       props.children[index].page_name = editablePageName.value; // Update local state
+      emit('update:children', [...props.children]); // Emit updated children
       console.log("Page name updated successfully:", data);
       editablePageId.value = null; // Exit editing mode
     } else {
@@ -88,7 +99,7 @@ const buildNestedPayload = (pages, level = 1) => {
     page_name: page.page_name,
     page_order: index + 1,
     page_level: level,
-    children: page.children ? buildNestedPayload(page.children, page.id, level + 1) : [],
+    children: page.children ? buildNestedPayload(page.children, level + 1) : [],
   }));
 };
 
@@ -102,11 +113,11 @@ const onDragEnd = async (event) => {
   console.log("Payload being sent:", JSON.stringify(payload, null, 2));
 
   try {
-    const response = await fetch("http://157.230.37.48/api/change-page-order", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/change-page-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${authStore.token}`,
       },
       body: JSON.stringify(payload),
     });
@@ -114,11 +125,19 @@ const onDragEnd = async (event) => {
     const data = await response.json();
     if (data.code === 200) {
       console.log("Page order updated successfully:", data);
+      emit('update:children', [...props.children]); // Emit updated children
     } else {
       console.error("Failed to update page order:", data.message);
     }
   } catch (error) {
     console.error("Error updating page order:", error);
+  }
+};
+
+const updateChildren = (childIndex, newChildren) => {
+  if (props.children[childIndex]) {
+    props.children[childIndex].children = newChildren;
+    emit('update:children', [...props.children]);
   }
 };
 </script>

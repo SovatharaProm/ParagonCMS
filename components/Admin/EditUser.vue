@@ -28,7 +28,7 @@
           <thead>
             <tr>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Pages</th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">View</th>
+              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Create</th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Edit</th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Publish</th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Delete</th>

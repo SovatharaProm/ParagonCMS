@@ -114,7 +114,7 @@
   const route = useRoute();
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const pages = ref([]);
-  const permissionTypes = ["View", "Edit", "Publish", "Delete"];
+  const permissionTypes = ["Create", "Edit", "Publish", "Delete"];
   const rolePermissions = ref({});
   
   const fetchPages = async () => {

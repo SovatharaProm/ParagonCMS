@@ -15,9 +15,13 @@
               <Icon name="ph:house-bold" class="icon" />
               <span>Websites</span>
             </NuxtLink>
+            <NuxtLink to="/my-change-request" class="flex gap-3 sidebar-link" @click="closeDrawer">
+              <Icon name="ph:git-pull-request-bold" class="icon" />
+              <span>My Change Requests</span>
+            </NuxtLink>
             <NuxtLink to="/view-change-request" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:git-pull-request-bold" class="icon" />
-              <span>View Requests</span>
+              <span>All Change Requests</span>
             </NuxtLink>
             <NuxtLink to="/profile" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:user-bold" class="icon" />
