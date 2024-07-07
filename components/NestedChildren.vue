@@ -29,7 +29,7 @@
             </div>
           </div>
           <div v-if="child.children && child.children.length > 0" class="pl-8">
-            <NestedChildren
+            <SubOfSub
               :children="child.children"
               :parent-index="childIndex"
               :parent-state="parentState[childIndex]?.children || []"
@@ -37,7 +37,7 @@
               @toggle-child-page="toggleChildPage"
               @open-create-modal="openCreatePageModal"
               @open-create-change-request="openCreateChangeRequestModal"
-            ></NestedChildren>
+            ></SubOfSub>
           </div>
         </div>
       </template>
@@ -92,19 +92,18 @@
 <script setup>
 import { ref, defineProps, defineEmits, onMounted } from 'vue';
 import draggable from 'vuedraggable';
-import NestedChildren from './NestedChildren.vue';
-import { useAuthStore } from '@/stores/auth';
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-const authStore = useAuthStore();
+import SubOfSub from './SubOfSub.vue';
+import { useAuthStore } from '~/stores/auth';
 
 const props = defineProps({
   children: Array,
   parentIndex: Number,
-  parentState: Array
+  parentState: Array,
 });
 
 const emit = defineEmits(['update:children', 'drag-end', 'toggle-child-page', 'open-create-modal', 'open-create-change-request']);
+
+const authStore = useAuthStore();
 
 const createPageModal = ref(false);
 const createChangeRequestModal = ref(false);
@@ -132,7 +131,7 @@ const updatePageName = async (child, childIndex) => {
     return;
   }
   try {
-    const response = await fetch(`${API_BASE_URL}/update-page-name`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -161,7 +160,7 @@ const updatePageName = async (child, childIndex) => {
 
 const fetchChildPages = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/list-page`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
       headers: {
         'Authorization': `Bearer ${authStore.token}`
       }
@@ -194,7 +193,7 @@ const createSubpage = async (title) => {
     return;
   }
   try {
-    const response = await fetch(`${API_BASE_URL}/create-page`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-page`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -214,8 +213,10 @@ const createSubpage = async (title) => {
         parent.children = parent.children || [];
         parent.children.push(data.data);
         emit('update:children', [...props.children]); // Emit updated children
+      } else {
+        console.error('Parent page not found');
       }
-      createPageModal.value = false;
+      createPageModal.value = false; // Close the modal after creation
       newSubpageTitle.value = ''; // Clear the input field
     } else {
       console.error('Failed to create subpage:', data.message);
@@ -231,7 +232,7 @@ const createChangeRequest = async (title) => {
     return;
   }
   try {
-    const response = await fetch(`${API_BASE_URL}/create-change-request`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-change-request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -287,7 +288,7 @@ const onDragEnd = async (event) => {
   console.log('Payload being sent:', JSON.stringify(payload, null, 2));
 
   try {
-    const response = await fetch(`${API_BASE_URL}/change-page-order`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/change-page-order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -310,8 +311,14 @@ const onDragEnd = async (event) => {
 
 const updateChildren = (childIndex, newChildren) => {
   if (props.children[childIndex]) {
-    props.children[childIndex].children = newChildren;
+    if (props.children[childIndex].children) {
+      props.children[childIndex].children = newChildren;
+    } else {
+      props.children[childIndex] = { ...props.children[childIndex], children: newChildren };
+    }
     emit('update:children', [...props.children]);
+  } else {
+    console.error(`Child at index ${childIndex} not found`);
   }
 };
 </script>

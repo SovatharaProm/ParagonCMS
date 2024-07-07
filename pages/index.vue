@@ -24,9 +24,6 @@
               <button @click="openCreatePageModal(true, request.id)">
                 <Icon name="ph:plus-bold"></Icon>
               </button>
-              <button @click="openCreateChangeRequestModal(request.id)">
-                <Icon name="ph:file-plus-bold"></Icon>
-              </button>
             </div>
           </div>
 
@@ -34,8 +31,8 @@
             <NestedChildren
               :children="request.children"
               :parent-index="index"
-              :parent-state="childSwitchStates[index] || []"
-              @update:children="updateChildren(index, $event)"
+              :parent-state="childSwitchStates[index]"
+              @update:children="updateChildren"
               @toggle-child-page="togglePage"
               @open-create-modal="openCreatePageModal"
               @open-create-change-request="openCreateChangeRequestModal"
@@ -60,49 +57,14 @@
       </div>
     </div>
   </div>
-
-  <!-- Create Change Request Modal -->
-  <v-dialog v-model="isCreateChangeRequestModalOpen" max-width="600px">
-    <v-card>
-      <v-card-title class="text-h5">Create Change Request</v-card-title>
-      <v-card-text>
-        <form @submit.prevent="createChangeRequest">
-          <div class="mb-4">
-            <label for="request-name" class="block text-gray-700 font-bold mb-2">Request Name</label>
-            <input
-              type="text"
-              v-model="newChangeRequestName"
-              id="request-name"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label for="notify-approver" class="block text-gray-700 font-bold mb-2">Notify Approver</label>
-            <input
-              type="checkbox"
-              v-model="notifyApprover"
-              id="notify-approver"
-              class="mr-2 leading-tight"
-            />
-            <span class="text-sm text-gray-700">Yes</span>
-          </div>
-        </form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue-darken-4" text @click="closeCreateChangeRequestModal">Cancel</v-btn>
-        <v-btn color="blue-darken-4" text @click="createChangeRequest">Save</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
 </template>
 
 <script setup>
 definePageMeta({
- layout: 'usersidebar',
- middleware: 'auth'
+  layout: "usersidebar",
+  middleware: "auth",
 });
+
 import { ref, onMounted, computed } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import NestedChildren from "/components/NestedChildren.vue";
@@ -122,11 +84,6 @@ const newPageTitle = ref("");
 const editablePageId = ref(null);
 const editablePageName = ref("");
 let parentPageId = null;
-
-const isCreateChangeRequestModalOpen = ref(false);
-const newChangeRequestName = ref("");
-const notifyApprover = ref(false);
-let currentPageId = null;
 
 const isAdmin = computed(() => authStore.userRole === 'admin' || authStore.userRole === 'super_admin');
 
@@ -231,19 +188,10 @@ async function createPages(pageName) {
     const data = await response.json();
     if (data.code === 200) {
       console.log("Page created successfully:", data);
-      // Add the new page to the local state
-      if (creatingSubPage.value) {
-        const parentPage = findPageById(parentPageId, requests.value);
-        if (parentPage) {
-          parentPage.children = parentPage.children || [];
-          parentPage.children.push(data.data);
-        }
-      } else {
-        requests.value.push(data.data);
-      }
       createPageModal.value = false;
       newPageTitle.value = "";
       parentPageId = null;
+      await fetchPages();
     } else {
       console.error("Failed to create page:", data.message);
     }
@@ -386,58 +334,16 @@ const onDragEnd = async (event) => {
   }
 };
 
-const updateChildren = (index, newChildren) => {
+const updateChildren = (newChildren, index) => {
   requests.value[index].children = newChildren;
 };
 
-const openCreateChangeRequestModal = (pageId) => {
-  currentPageId = pageId;
-  isCreateChangeRequestModalOpen.value = true;
+const handleUpdateChildren = (newChildren) => {
+  children.value = newChildren;
 };
 
-const closeCreateChangeRequestModal = () => {
-  isCreateChangeRequestModalOpen.value = false;
-  newChangeRequestName.value = "";
-  notifyApprover.value = false;
-};
-
-const createChangeRequest = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/create-change-request`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authStore.token}`,
-      },
-      body: JSON.stringify({
-        page_id: currentPageId,
-        request_name: newChangeRequestName.value,
-        notify_approver: notifyApprover.value,
-      }),
-    });
-
-    const data = await response.json();
-    if (data.code === 200) {
-      console.log("Change request created successfully:", data);
-      closeCreateChangeRequestModal();
-      fetchPages();
-    } else {
-      console.error("Failed to create change request:", data.message);
-    }
-  } catch (error) {
-    console.error("Error creating change request:", error);
-  }
-};
-
-const findPageById = (id, pages) => {
-  for (let page of pages) {
-    if (page.id === id) return page;
-    if (page.children) {
-      const found = findPageById(id, page.children);
-      if (found) return found;
-    }
-  }
-  return null;
+const handleDragEndFromChildren = (event) => {
+  console.log("Drag ended in parent from child:", event);
 };
 </script>
 
