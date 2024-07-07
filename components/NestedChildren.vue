@@ -276,9 +276,11 @@ const togglePublish = async (page, parentState, childIndex) => {
     });
     const data = await response.json();
     if (data.code === 200 || data.code === 201) {
-      toast.success(`Page ${data.data.status === 'On' ? 'published' : 'unpublished'} successfully.`);
+      toast.success(`ChildPage ${data.data.status === 'On' ? 'published' : 'unpublished'} successfully.`);
       page.is_published = data.data.status === 'On';
       emit('update:children', [...props.children]);
+    } else if (data.code === 400) {
+      toast.error("Parent Page must be published first");
     } else {
       console.error('Failed to toggle publish state:', data.message);
       toast.error('Failed to toggle publish state.');
