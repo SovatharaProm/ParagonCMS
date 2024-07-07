@@ -8,7 +8,7 @@
         class="w-full bg-white rounded-md flex flex-col justify-between py-8 drop-shadow-lg lg:relative lg:translate-x-0 lg:w-[300px] right-0 lg:right-auto"
       >
         <div class="font-lato flex flex-col gap-4 mt-8 lg:mt-0">
-          <NuxtLink to="/admin/" class="flex gap-2 sidebar-link" @click="closeDrawer">
+          <NuxtLink to="/admin/website" class="flex gap-2 sidebar-link" @click="closeDrawer">
             <Icon
               name="material-symbols:home-rounded"
               class="icon text-grey-200"

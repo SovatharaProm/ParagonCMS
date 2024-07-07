@@ -3,7 +3,7 @@
     <draggable :list="children" @end="onDragEnd" itemKey="id">
       <template #item="{ element: child, index: childIndex }">
         <div :key="child.id" class="flex flex-col">
-          <div class="flex justify-between m-1 p-2 px-5 shadow items-center rounded bg-red-50">
+          <div class="flex justify-between m-1 p-2 px-5 shadow-md items-center rounded bg-white-50">
             <div class="my-2">
               <h3 class="font-medium" @dblclick="enableEditing(child)">
                 <input
