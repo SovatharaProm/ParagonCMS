@@ -1,6 +1,6 @@
 <template>
   <div>
-    <draggable :list="children" group="pages" @end="onDragEnd" itemKey="id">
+    <draggable :list="children" @end="onDragEnd" itemKey="id">
       <template #item="{ element: child, index: childIndex }">
         <div :key="child.id" class="flex flex-col">
           <div class="flex justify-between m-1 p-2 px-5 shadow items-center rounded bg-red-50">
@@ -43,6 +43,8 @@
           </div>
           <div v-if="child.children && child.children.length > 0" class="pl-8">
             <NestedChildren
+              :level="Number(props.level) + 1"
+              :parentId="child.id"
               :children="child.children"
               :parent-index="childIndex"
               :parent-state="parentState[childIndex]?.children || []"
@@ -82,6 +84,8 @@ import { useToast } from 'vue-toast-notification';
 const toast = useToast();
 const props = defineProps({
   children: Array,
+  parentId: Number,
+  level: Number,
   parentIndex: Number,
   parentState: Array,
 });
@@ -180,22 +184,22 @@ const createChangeRequest = async (title) => {
   }
 };
 
-const buildNestedPayload = (pages, parentId = null, level = 1) => {
+const buildNestedPayload = (pages, parentId = null, level = props.level) => {
   return pages.map((page, index) => ({
     id: page.id,
     page_name: page.page_name,
     page_order: index + 1,
     page_level: level,
-    parent_id: parentId,
+    is_under_page: parentId,
     children: page.children ? buildNestedPayload(page.children, page.id, level + 1) : []
   }));
 };
 
 const onDragEnd = async (event) => {
   console.log('Drag end event:', event);
-
+  
   const payload = {
-    Pages: buildNestedPayload(props.children)
+    Pages: buildNestedPayload(props.children, props.parentId)
   };
 
   console.log('Payload being sent:', JSON.stringify(payload, null, 2));
