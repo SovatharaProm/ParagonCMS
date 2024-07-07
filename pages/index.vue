@@ -35,7 +35,7 @@
                   <v-list-item @click="togglePublish(request, null, index)">
                     <v-list-item-title>{{ request.is_published ? 'Unpublish' : 'Publish' }}</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="deletePage(request)">
+                  <v-list-item @click="deletePage(request, index)">
                     <v-list-item-title>Delete</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -48,10 +48,11 @@
               :children="request.children"
               :parent-index="index"
               :parent-state="childSwitchStates[index]"
-              @update:children="updateChildren"
+              @update:children="updateChildren(index, $event)"
               @toggle-child-page="togglePublish"
               @open-create-modal="openCreatePageModal"
               @open-create-change-request="openCreateChangeRequestModal"
+              @delete-page="deletePage"
             ></NestedChildren>
           </div>
         </div>
@@ -276,65 +277,6 @@ async function createChangeRequest(title) {
   }
 }
 
-async function togglePage(page, parentIndex, childIndex = null) {
-  let originalState;
-  let newState;
-
-  if (childIndex !== null) {
-    originalState = childSwitchStates.value[parentIndex][childIndex].is_active;
-    newState = !originalState;
-    childSwitchStates.value[parentIndex][childIndex].is_active = newState;
-  } else {
-    originalState = switchStates.value[parentIndex];
-    newState = !originalState;
-    switchStates.value[parentIndex] = newState;
-  }
-
-  const payload = {
-    page_id: page.id,
-  };
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/toggle-page`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${authStore.token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    if (data.code === 200 || data.code === 201) {
-      if (childIndex !== null) {
-        childSwitchStates.value[parentIndex][childIndex].is_active =
-          data.new_state;
-      } else {
-        switchStates.value[parentIndex] = data.new_state;
-      }
-    } else {
-      if (childIndex !== null) {
-        childSwitchStates.value[parentIndex][childIndex].is_active =
-          originalState;
-      } else {
-        switchStates.value[parentIndex] = originalState;
-      }
-    }
-  } catch (error) {
-    if (childIndex !== null) {
-      childSwitchStates.value[parentIndex][childIndex].is_active =
-        originalState;
-    } else {
-      switchStates.value[parentIndex] = originalState;
-    }
-    console.error("Error toggling page:", error);
-  }
-}
-
 const updatePageName = async (page, index) => {
   if (!editablePageName.value) {
     alert("Page name is required.");
@@ -410,19 +352,14 @@ const onDragEnd = async (event) => {
   }
 };
 
-const updateChildren = (newChildren, index) => {
-  requests.value[index].children = newChildren;
+const updateChildren = (index, newChildren) => {
+  if (requests.value[index]) {
+    requests.value[index].children = newChildren;
+    requests.value = [...requests.value]; // Trigger reactivity
+  }
 };
 
-const handleUpdateChildren = (newChildren) => {
-  children.value = newChildren;
-};
-
-const handleDragEndFromChildren = (event) => {
-  console.log("Drag ended in parent from child:", event);
-};
-
-const deletePage = async (page) => {
+const deletePage = async (page, parentIndex) => {
   try {
     const response = await fetch(`${API_BASE_URL}/delete-page`, {
       method: 'POST',
@@ -436,7 +373,17 @@ const deletePage = async (page) => {
     if (data.code === 200) {
       toast.success('Page deleted successfully.');
       // Remove the deleted page from the local state
-      requests.value = requests.value.filter(p => p.id !== page.id);
+      if (parentIndex !== null && parentIndex !== undefined) {
+        // It's a parent page
+        requests.value = requests.value.filter(p => p.id !== page.id);
+      } else {
+        // It's a child page
+        const parentPage = requests.value.find(r => r.children.some(c => c.id === page.id));
+        if (parentPage) {
+          parentPage.children = parentPage.children.filter(c => c.id !== page.id);
+        }
+      }
+      requests.value = [...requests.value]; // Trigger reactivity
     } else {
       console.error('Failed to delete page:', data.message);
       toast.error('Failed to delete page.');
@@ -467,6 +414,8 @@ const togglePublish = async (page, parentState, childIndex) => {
       toast.success(`Page ${data.data.status === 'On' ? 'published' : 'unpublished'} successfully.`);
       page.is_published = data.data.status === 'On';
       requests.value = [...requests.value];
+    } else if (data.code === 400) {
+      toast.error('Parent Page must be published first');
     } else {
       console.error('Failed to toggle publish state:', data.message);
       toast.error('Failed to toggle publish state.');

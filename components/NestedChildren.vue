@@ -34,7 +34,7 @@
                   <v-list-item @click="togglePublish(child, parentState, childIndex)">
                     <v-list-item-title>{{ child.is_published ? 'Unpublish' : 'Publish' }}</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="deletePage(child)">
+                  <v-list-item @click="deletePage(child, parentIndex, childIndex)">
                     <v-list-item-title>Delete</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -229,7 +229,7 @@ const updateChildren = (childIndex, newChildren) => {
   }
 };
 
-const deletePage = async (page) => {
+const deletePage = async (page, parentIndex, childIndex) => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/delete-page`, {
       method: 'POST',
@@ -242,9 +242,18 @@ const deletePage = async (page) => {
     const data = await response.json();
     if (data.code === 200) {
       toast.success('Page deleted successfully.');
-      // Remove the deleted page from the local state
-      props.children = props.children.filter(p => p.id !== page.id);
-      emit('update:children', [...props.children]); // Emit updated children
+
+      function removePageAndChildren(pages, pageId) {
+        return pages
+          .filter(p => p.id !== pageId)
+          .map(p => ({
+            ...p,
+            children: p.children ? removePageAndChildren(p.children, pageId) : []
+          }));
+      }
+
+      const updatedChildren = removePageAndChildren([...props.children], page.id);
+      emit('update:children', updatedChildren);
     } else {
       console.error('Failed to delete page:', data.message);
       toast.error('Failed to delete page.');
@@ -266,9 +275,7 @@ const togglePublish = async (page, parentState, childIndex) => {
       body: JSON.stringify({ page_id: page.id })
     });
     const data = await response.json();
-    if (data.code === 400) {
-      toast.error(data.message);
-    } else if (data.code === 200 || data.code === 201) {
+    if (data.code === 200 || data.code === 201) {
       toast.success(`Page ${data.data.status === 'On' ? 'published' : 'unpublished'} successfully.`);
       page.is_published = data.data.status === 'On';
       emit('update:children', [...props.children]);
@@ -284,5 +291,5 @@ const togglePublish = async (page, parentState, childIndex) => {
 </script>
 
 <style scoped>
-@import "/assets/css/style.css";
+@import "@/assets/css/style.css";
 </style>
