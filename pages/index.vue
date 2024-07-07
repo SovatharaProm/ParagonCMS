@@ -13,73 +13,17 @@
   </div>
 
   <div class="flex flex-col">
-    <draggable v-model="requests" group="pages" itemKey="id" @end="onDragEnd">
-      <template #item="{ element: request, index }">
-        <div
-          :key="request.id"
-          class="bg-white p-5 rounded-lg drop-shadow flex flex-col gap-4"
-        >
-          <div class="flex justify-between">
-            <div class="my-4">
-              <h2 class="font-bold" @dblclick="enableEditing(request)">
-                <input
-                  v-if="editablePageId === request.id"
-                  v-model="editablePageName"
-                  @keyup.enter="updatePageName(request, index)"
-                  @blur="updatePageName(request, index)"
-                  class="w-full font-bold italic"
-                />
-                <span v-else>{{ request.page_name }}</span>
-              </h2>
-            </div>
-            <div class="flex gap-5 my-auto">
-              <NuxtLink :to="`/builder?id=${request.id}`" class="my-auto">
-                <Icon name="ph:note-pencil-bold"></Icon>
-              </NuxtLink>
-              <v-menu>
-                <template v-slot:activator="{ props }">
-                  <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    @click="openCreateChangeRequestModal(request.id)"
-                  >
-                    <v-list-item-title>Create Change Request</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="openCreatePageModal(true, request.id)">
-                    <v-list-item-title>Create Subpage</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="togglePublish(request, index)">
-                    <v-list-item-title>{{
-                      request.is_published ? "Unpublish" : "Publish"
-                    }}</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="deletePage(request, index)">
-                    <v-list-item-title>Delete</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-
-          <div
-            v-if="request.children && request.children.length > 0"
-            class="pl-8 grid gap-2"
-          >
-            <NestedChildren
-              :children="request.children"
-              :parent-index="index"
-              :parent-state="childSwitchStates[index]"
-              @update:children="updateChildren(index, $event)"
-              @toggle-child-page="togglePublish"
-              @open-create-modal="openCreatePageModal"
-              @open-create-change-request="openCreateChangeRequestModal"
-              @delete-page="deletePage"
-            ></NestedChildren>
-          </div>
-        </div>
-      </template>
-    </draggable>
+    <NestedChildren
+      level="1"
+      :children="requests"
+      :parent-index="null"
+      :parent-state="switchStates"
+      @update:children="handleUpdateChildren"
+      @toggle-child-page="togglePublish"
+      @open-create-modal="openCreatePageModal"
+      @open-create-change-request="openCreateChangeRequestModal"
+      @delete-page="deletePage"
+    ></NestedChildren>
   </div>
 
   <v-dialog v-model="createPageModal" max-width="500px">
@@ -88,18 +32,12 @@
         creatingSubPage ? "Create Subpage" : "Create New Page"
       }}</v-card-title>
       <v-card-text>
-        <v-text-field
-          v-model="newPageTitle"
-          label="Page Title"
-          required
-        ></v-text-field>
+        <v-text-field v-model="newPageTitle" label="Page Title" required></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="createPageModal = false">Cancel</v-btn>
-        <v-btn color="blue darken-1" @click="createPages(newPageTitle)"
-          >Create</v-btn
-        >
+        <v-btn color="blue darken-1" @click="createPages(newPageTitle)">Create</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -108,24 +46,13 @@
     <v-card>
       <v-card-title>Create Change Request</v-card-title>
       <v-card-text>
-        <v-text-field
-          v-model="newChangeRequestTitle"
-          label="Change Request Title"
-          required
-        ></v-text-field>
-        <v-checkbox
-          v-model="notifyApprover"
-          label="Notify Approver"
-        ></v-checkbox>
+        <v-text-field v-model="newChangeRequestTitle" label="Change Request Title" required></v-text-field>
+        <v-checkbox v-model="notifyApprover" label="Notify Approver"></v-checkbox>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="createChangeRequestModal = false">Cancel</v-btn>
-        <v-btn
-          color="blue darken-1"
-          @click="createChangeRequest(newChangeRequestTitle)"
-          >Create</v-btn
-        >
+        <v-btn color="blue darken-1" @click="createChangeRequest(newChangeRequestTitle)">Create</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -149,9 +76,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const authStore = useAuthStore();
 
 const requests = ref([]);
-const childPages = ref([]);
 const switchStates = ref([]);
-const childSwitchStates = ref([]);
 const createPageModal = ref(false);
 const creatingSubPage = ref(false);
 const newPageTitle = ref("");
@@ -163,14 +88,11 @@ const createChangeRequestModal = ref(false);
 const selectedChildPageId = ref(null);
 let parentPageId = null;
 
-const isAdmin = computed(
-  () => authStore.userRole === "admin" || authStore.userRole === "super_admin"
-);
+const isAdmin = computed(() => authStore.userRole === "admin" || authStore.userRole === "super_admin");
 
 onMounted(async () => {
   await authStore.initializeStore();
   await fetchPages();
-  await fetchChildPages();
 });
 
 const enableEditing = (page) => {
@@ -188,55 +110,15 @@ const fetchPages = async () => {
     const data = await response.json();
     if (data.code === 200) {
       requests.value = data.data.Pages;
+      requests.value.forEach(page => {
+        page.is_published = page.is_published || (page.status === 'On');
+      });
       switchStates.value = data.data.Pages.map((page) => page.is_active);
-      childSwitchStates.value = data.data.Pages.map((page) =>
-        initializeChildStates(page.children)
-      );
     } else {
       console.error("Error fetching data:", data.message);
     }
   } catch (error) {
     console.error("Error fetching data:", error);
-  }
-};
-
-const initializeChildStates = (children) => {
-  if (!children || children.length === 0) return [];
-  return children.map((child) => ({
-    is_active: child.is_active,
-    children: initializeChildStates(child.children),
-  }));
-};
-
-const collectAllPages = (pages) => {
-  const allPages = [];
-  const traverse = (pages) => {
-    for (const page of pages) {
-      allPages.push(page);
-      if (page.children && page.children.length > 0) {
-        traverse(page.children);
-      }
-    }
-  };
-  traverse(pages);
-  return allPages;
-};
-
-const fetchChildPages = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/list-page`, {
-      headers: {
-        Authorization: `Bearer ${authStore.token}`,
-      },
-    });
-    const data = await response.json();
-    if (data.code === 200) {
-      childPages.value = collectAllPages(data.data.Pages);
-    } else {
-      console.error("Error fetching child pages:", data.message);
-    }
-  } catch (error) {
-    console.error("Error fetching child pages:", error);
   }
 };
 
@@ -395,14 +277,15 @@ const onDragEnd = async (event) => {
   }
 };
 
-const updateChildren = (index, newChildren) => {
-  if (requests.value[index]) {
-    requests.value[index].children = newChildren;
-    requests.value = [...requests.value]; // Trigger reactivity
-  }
+const handleUpdateChildren = (newChildren) => {
+  requests.value = newChildren;
 };
 
-const deletePage = async (page, parentIndex) => {
+const handleDragEndFromChildren = (event) => {
+  console.log("Drag ended in parent from child:", event);
+};
+
+const deletePage = async (page) => {
   try {
     const response = await fetch(`${API_BASE_URL}/delete-page`, {
       method: "POST",
@@ -416,21 +299,7 @@ const deletePage = async (page, parentIndex) => {
     if (data.code === 200) {
       toast.success("Page deleted successfully.");
       // Remove the deleted page from the local state
-      if (parentIndex !== null && parentIndex !== undefined) {
-        // It's a parent page
-        requests.value = requests.value.filter((p) => p.id !== page.id);
-      } else {
-        // It's a child page
-        const parentPage = requests.value.find((r) =>
-          r.children.some((c) => c.id === page.id)
-        );
-        if (parentPage) {
-          parentPage.children = parentPage.children.filter(
-            (c) => c.id !== page.id
-          );
-        }
-      }
-      requests.value = [...requests.value]; // Trigger reactivity
+      requests.value = requests.value.filter((p) => p.id !== page.id);
     } else {
       console.error("Failed to delete page:", data.message);
       toast.error("Failed to delete page.");
@@ -442,6 +311,11 @@ const deletePage = async (page, parentIndex) => {
 };
 
 const togglePublish = async (page, parentState, childIndex) => {
+  if (parentState && !parentState[childIndex]?.is_published) {
+    toast.error("Parent Page must be published first");
+    return;
+  }
+
   try {
     const response = await fetch(`${API_BASE_URL}/toggle-page`, {
       method: "POST",

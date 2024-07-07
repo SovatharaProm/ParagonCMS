@@ -1,6 +1,6 @@
 <template>
   <div>
-    <draggable :list="children" group="pages" @end="onDragEnd" itemKey="id">
+    <draggable :list="children" @end="onDragEnd" itemKey="id">
       <template #item="{ element: child, index: childIndex }">
         <div :key="child.id" class="flex flex-col">
           <div class="flex justify-between m-1 p-2 px-5 shadow items-center rounded bg-red-50">
@@ -31,10 +31,16 @@
                   <v-list-item @click="openCreatePageModal(true, child.id)">
                     <v-list-item-title>Create Subpage</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="togglePublish(child, parentState, childIndex)">
-                    <v-list-item-title>{{ child.is_published ? 'Unpublish' : 'Publish' }}</v-list-item-title>
+                  <v-list-item>
+                    <v-list-item-title>
+                      <v-switch
+                        v-model="child.is_published"
+                        @change="togglePublish(child, parentState, childIndex)"
+                        :label="child.is_published ? 'Unpublish' : 'Publish'"
+                      ></v-switch>
+                    </v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="deletePage(child, parentIndex, childIndex)">
+                  <v-list-item @click="deletePage(child)">
                     <v-list-item-title>Delete</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -43,6 +49,8 @@
           </div>
           <div v-if="child.children && child.children.length > 0" class="pl-8">
             <NestedChildren
+              :level="Number(props.level) + 1"
+              :parentId="child.id"
               :children="child.children"
               :parent-index="childIndex"
               :parent-state="parentState[childIndex]?.children || []"
@@ -82,6 +90,8 @@ import { useToast } from 'vue-toast-notification';
 const toast = useToast();
 const props = defineProps({
   children: Array,
+  parentId: Number,
+  level: Number,
   parentIndex: Number,
   parentState: Array,
 });
@@ -180,22 +190,22 @@ const createChangeRequest = async (title) => {
   }
 };
 
-const buildNestedPayload = (pages, parentId = null, level = 1) => {
+const buildNestedPayload = (pages, parentId = null, level = props.level) => {
   return pages.map((page, index) => ({
     id: page.id,
     page_name: page.page_name,
     page_order: index + 1,
     page_level: level,
-    parent_id: parentId,
+    is_under_page: parentId,
     children: page.children ? buildNestedPayload(page.children, page.id, level + 1) : []
   }));
 };
 
 const onDragEnd = async (event) => {
   console.log('Drag end event:', event);
-
+  
   const payload = {
-    Pages: buildNestedPayload(props.children)
+    Pages: buildNestedPayload(props.children, props.parentId)
   };
 
   console.log('Payload being sent:', JSON.stringify(payload, null, 2));
@@ -229,7 +239,7 @@ const updateChildren = (childIndex, newChildren) => {
   }
 };
 
-const deletePage = async (page, parentIndex, childIndex) => {
+const deletePage = async (page) => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/delete-page`, {
       method: 'POST',
@@ -242,18 +252,9 @@ const deletePage = async (page, parentIndex, childIndex) => {
     const data = await response.json();
     if (data.code === 200) {
       toast.success('Page deleted successfully.');
-
-      function removePageAndChildren(pages, pageId) {
-        return pages
-          .filter(p => p.id !== pageId)
-          .map(p => ({
-            ...p,
-            children: p.children ? removePageAndChildren(p.children, pageId) : []
-          }));
-      }
-
-      const updatedChildren = removePageAndChildren([...props.children], page.id);
-      emit('update:children', updatedChildren);
+      // Remove the deleted page from the local state
+      props.children = props.children.filter(p => p.id !== page.id);
+      emit('update:children', [...props.children]); // Emit updated children
     } else {
       console.error('Failed to delete page:', data.message);
       toast.error('Failed to delete page.');
@@ -275,12 +276,12 @@ const togglePublish = async (page, parentState, childIndex) => {
       body: JSON.stringify({ page_id: page.id })
     });
     const data = await response.json();
-    if (data.code === 200 || data.code === 201) {
-      toast.success(`ChildPage ${data.data.status === 'On' ? 'published' : 'unpublished'} successfully.`);
+    if (data.code === 400) {
+      toast.error(data.message);
+    } else if (data.code === 200 || data.code === 201) {
+      toast.success(`Page ${data.data.status === 'On' ? 'published' : 'unpublished'} successfully.`);
       page.is_published = data.data.status === 'On';
       emit('update:children', [...props.children]);
-    } else if (data.code === 400) {
-      toast.error("Parent Page must be published first");
     } else {
       console.error('Failed to toggle publish state:', data.message);
       toast.error('Failed to toggle publish state.');
@@ -293,5 +294,5 @@ const togglePublish = async (page, parentState, childIndex) => {
 </script>
 
 <style scoped>
-@import "@/assets/css/style.css";
+@import "/assets/css/style.css";
 </style>
