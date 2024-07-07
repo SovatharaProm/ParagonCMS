@@ -21,9 +21,25 @@
               <NuxtLink :to="`/builder?id=${request.id}`" class="my-auto">
                 <Icon name="ph:note-pencil-bold"></Icon>
               </NuxtLink>
-              <button @click="openCreatePageModal(true, request.id)">
-                <Icon name="ph:plus-bold"></Icon>
-              </button>
+              <v-menu>
+                <template v-slot:activator="{ props }">
+                  <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="openCreateChangeRequestModal(request.id)">
+                    <v-list-item-title>Create Change Request</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="openCreatePageModal(true, request.id)">
+                    <v-list-item-title>Create Subpage</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="togglePublish(request, null, index)">
+                    <v-list-item-title>{{ request.is_published ? 'Unpublish' : 'Publish' }}</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="deletePage(request)">
+                    <v-list-item-title>Delete</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </div>
           </div>
 
@@ -33,7 +49,7 @@
               :parent-index="index"
               :parent-state="childSwitchStates[index]"
               @update:children="updateChildren"
-              @toggle-child-page="togglePage"
+              @toggle-child-page="togglePublish"
               @open-create-modal="openCreatePageModal"
               @open-create-change-request="openCreateChangeRequestModal"
             ></NestedChildren>
@@ -43,20 +59,34 @@
     </draggable>
   </div>
 
-  <div v-if="createPageModal" class="fixed inset-0 flex justify-center items-start">
-    <div class="absolute inset-0 bg-opacity-25 backdrop-blur-sm"></div>
-    <div class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10">
-      <h2 class="text-2xl font-bold mb-6">{{ creatingSubPage ? "Create Subpage" : "Create New Page" }}</h2>
-      <div class="mb-4">
-        <label for="page-title" class="block text-sm font-medium text-gray-700">Page Title</label>
-        <input v-model="newPageTitle" id="page-title" placeholder="Enter page title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required />
-      </div>
-      <div class="flex items-center justify-end">
-        <button @click="createPageModal = false" class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300">Cancel</button>
-        <button @click="createPages(newPageTitle)" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">Create</button>
-      </div>
-    </div>
-  </div>
+  <v-dialog v-model="createPageModal" max-width="500px">
+    <v-card>
+      <v-card-title>{{ creatingSubPage ? "Create Subpage" : "Create New Page" }}</v-card-title>
+      <v-card-text>
+        <v-text-field v-model="newPageTitle" label="Page Title" required></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click="createPageModal = false">Cancel</v-btn>
+        <v-btn color="blue darken-1" @click="createPages(newPageTitle)">Create</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="createChangeRequestModal" max-width="500px">
+    <v-card>
+      <v-card-title>Create Change Request</v-card-title>
+      <v-card-text>
+        <v-text-field v-model="newChangeRequestTitle" label="Change Request Title" required></v-text-field>
+        <v-checkbox v-model="notifyApprover" label="Notify Approver"></v-checkbox>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click="createChangeRequestModal = false">Cancel</v-btn>
+        <v-btn color="blue darken-1" @click="createChangeRequest(newChangeRequestTitle)">Create</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -69,7 +99,9 @@ import { ref, onMounted, computed } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import NestedChildren from "/components/NestedChildren.vue";
 import draggable from "vuedraggable";
+import { useToast } from 'vue-toast-notification';
 
+const toast = useToast();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const authStore = useAuthStore();
@@ -81,8 +113,12 @@ const childSwitchStates = ref([]);
 const createPageModal = ref(false);
 const creatingSubPage = ref(false);
 const newPageTitle = ref("");
+const newChangeRequestTitle = ref("");
+const notifyApprover = ref(false);
 const editablePageId = ref(null);
 const editablePageName = ref("");
+const createChangeRequestModal = ref(false);
+const selectedChildPageId = ref(null);
 let parentPageId = null;
 
 const isAdmin = computed(() => authStore.userRole === 'admin' || authStore.userRole === 'super_admin');
@@ -166,6 +202,11 @@ function openCreatePageModal(isSubPage, parentId = null) {
   parentPageId = parentId;
 }
 
+function openCreateChangeRequestModal(pageId) {
+  selectedChildPageId.value = pageId;
+  createChangeRequestModal.value = true;
+}
+
 async function createPages(pageName) {
   if (!pageName) {
     alert("Title is required.");
@@ -197,6 +238,41 @@ async function createPages(pageName) {
     }
   } catch (error) {
     console.error("Error creating page:", error);
+  }
+}
+
+async function createChangeRequest(title) {
+  if (!title.trim()) {
+    alert('Change request title is required.');
+    return;
+  }
+  try {
+    const response = await fetch(`${API_BASE_URL}/create-change-request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      },
+      body: JSON.stringify({
+        page_id: selectedChildPageId.value,
+        request_name: title,
+        notify_approver: notifyApprover.value
+      })
+    });
+    const data = await response.json();
+    if (data.code === 200) {
+      console.log('Change request created successfully:', data);
+      toast.success('Change request created successfully.');
+      createChangeRequestModal.value = false;
+      newChangeRequestTitle.value = ''; // Clear the input field
+      notifyApprover.value = false; // Reset the checkbox
+    } else {
+      console.error('Failed to create change request:', data.message);
+      toast.error('Failed to create change request.');
+    }
+  } catch (error) {
+    console.error('Error creating change request:', error);
+    toast.error('Error creating change request.');
   }
 }
 
@@ -344,6 +420,61 @@ const handleUpdateChildren = (newChildren) => {
 
 const handleDragEndFromChildren = (event) => {
   console.log("Drag ended in parent from child:", event);
+};
+
+const deletePage = async (page) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/delete-page`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      },
+      body: JSON.stringify({ page_id: page.id })
+    });
+    const data = await response.json();
+    if (data.code === 200) {
+      toast.success('Page deleted successfully.');
+      // Remove the deleted page from the local state
+      requests.value = requests.value.filter(p => p.id !== page.id);
+    } else {
+      console.error('Failed to delete page:', data.message);
+      toast.error('Failed to delete page.');
+    }
+  } catch (error) {
+    console.error('Error deleting page:', error);
+    toast.error('Error deleting page.');
+  }
+};
+
+const togglePublish = async (page, parentState, childIndex) => {
+  if (parentState && !parentState[childIndex]?.is_published) {
+    toast.error('Parent Page must be published first');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/toggle-page`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      },
+      body: JSON.stringify({ page_id: page.id })
+    });
+    const data = await response.json();
+    if (data.code === 200 || data.code === 201) {
+      toast.success(`Page ${data.data.status === 'On' ? 'published' : 'unpublished'} successfully.`);
+      page.is_published = data.data.status === 'On';
+      requests.value = [...requests.value];
+    } else {
+      console.error('Failed to toggle publish state:', data.message);
+      toast.error('Failed to toggle publish state.');
+    }
+  } catch (error) {
+    console.error('Error toggling publish state:', error);
+    toast.error('Error toggling publish state.');
+  }
 };
 </script>
 
