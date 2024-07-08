@@ -17,12 +17,12 @@ import { useRoute, useRouter } from 'vue-router';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
 import plugin from 'grapesjs-tailwind';
-import { useAuthStore } from '@/stores/auth'; // Import the auth store
+import { useAuthStore } from '@/stores/auth';
 
 const grapesjsEditor = ref(null);
 const route = useRoute();
 const router = useRouter();
-const authStore = useAuthStore(); // Use the auth store
+const authStore = useAuthStore();
 let editor;
 
 const saveContent = async () => {
@@ -33,7 +33,7 @@ const saveContent = async () => {
 
   const html = editor.getHtml();
   const css = editor.getCss();
-  const pageId = route.query.id; // Get the page ID from the route query
+  const pageId = route.query.id;
 
   const data = {
     page_id: pageId,
@@ -42,11 +42,11 @@ const saveContent = async () => {
   };
 
   try {
-    const response = await fetch('http://157.230.37.48/api/update-page-content', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-content`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.token}`, // Use token from auth store
+        'Authorization': `Bearer ${authStore.token}`,
       },
       body: JSON.stringify(data),
     });
@@ -64,10 +64,10 @@ const saveContent = async () => {
 
 const fetchPageContent = async (pageId) => {
   try {
-    const response = await fetch(`http://157.230.37.48/api/edit-page-content?page_id=${pageId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/edit-page-content?page_id=${pageId}`, {
       headers: {
-        'Authorization': `Bearer ${authStore.token}` // Use token from auth store
-      }
+        'Authorization': `Bearer ${authStore.token}`,
+      },
     });
     const data = await response.json();
     if (data.code === 200) {
@@ -82,14 +82,14 @@ const fetchPageContent = async (pageId) => {
   }
 };
 
-const customElementsPlugin = editor => {
+const customElementsPlugin = (editor) => {
   editor.Blocks.add('1-column', {
     label: '1 Column',
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    attributes: { class: 'fa fa-columns' },
   });
 
   editor.Blocks.add('2-columns', {
@@ -99,18 +99,18 @@ const customElementsPlugin = editor => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    attributes: { class: 'fa fa-columns' },
   });
 
   editor.Blocks.add('2-columns-2-3', {
-      label: '2 Columns 2/3',
-      content: `<div style="display:flex;">
-                  <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                  <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                </div>`,
-      category: 'Column',
-      attributes: { class: 'fa fa-columns' }
-    });
+    label: '2 Columns 2/3',
+    content: `<div style="display:flex;">
+                <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' },
+  });
 
   editor.Blocks.add('2-columns-3-7', {
     label: '2 Columns 3/7',
@@ -119,7 +119,7 @@ const customElementsPlugin = editor => {
                 <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    attributes: { class: 'fa fa-columns' },
   });
 
   editor.Blocks.add('2-columns-7-3', {
@@ -129,7 +129,7 @@ const customElementsPlugin = editor => {
                 <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    attributes: { class: 'fa fa-columns' },
   });
 
   editor.Blocks.add('3-columns', {
@@ -140,7 +140,7 @@ const customElementsPlugin = editor => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    attributes: { class: 'fa fa-columns' },
   });
 
   editor.Blocks.add('4-columns', {
@@ -152,21 +152,21 @@ const customElementsPlugin = editor => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    attributes: { class: 'fa fa-columns' },
   });
 
   editor.Blocks.add('text-block', {
     label: 'Text',
     content: '<div data-gjs-type="text">Insert your text here</div>',
     category: 'Basic',
-    attributes: { class: 'fa fa-text-height' }
+    attributes: { class: 'fa fa-text-height' },
   });
 
   editor.Blocks.add('image-block', {
     label: 'Image',
     content: '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
     category: 'Basic',
-    attributes: { class: 'fa fa-image' }
+    attributes: { class: 'fa fa-image' },
   });
 
   editor.Blocks.add('image-slideshow-block', {
@@ -183,28 +183,28 @@ const customElementsPlugin = editor => {
         </div>
     `,
     category: 'Advanced',
-    attributes: { class: 'fa fa-images' }
+    attributes: { class: 'fa fa-images' },
   });
 
   editor.Blocks.add('video-block', {
     label: 'Video',
     content: '<video controls><source src="path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
     category: 'Basic',
-    attributes: { class: 'fa fa-video-camera' }
+    attributes: { class: 'fa fa-video-camera' },
   });
 
-   editor.Blocks.add('link-block', {
+  editor.Blocks.add('link-block', {
     label: 'Link',
     content: '<a href="#" class="custom-link">Click here</a>',
     category: 'Basic',
-    attributes: { class: 'fa fa-link' }
+    attributes: { class: 'fa fa-link' },
   });
 
   editor.Blocks.add('map-block', {
     label: 'Map',
     content: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019879094116!2d144.96305831531678!3d-37.81410797975133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5777529bb4d3bd5!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1614114372457!5m2!1sen!2sau" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`,
     category: 'Basic',
-    attributes: { class: 'fa fa-map' }
+    attributes: { class: 'fa fa-map' },
   });
 
   editor.Blocks.add('text-section-block', {
@@ -214,14 +214,14 @@ const customElementsPlugin = editor => {
                 <p>This is a text section. Add your content here.</p>
               </div>`,
     category: 'Basic',
-    attributes: { class: 'fa fa-font' }
+    attributes: { class: 'fa fa-font' },
   });
 
   editor.Blocks.add('link-block', {
     label: 'Link',
     content: '<a href="#" class="custom-link">Click here</a>',
     category: 'Basic',
-    attributes: { class: 'fa fa-link' }
+    attributes: { class: 'fa fa-link' },
   });
 
   editor.Blocks.add('testimonial-block', {
@@ -231,7 +231,7 @@ const customElementsPlugin = editor => {
                 <cite>- Jane Doe</cite>
               </div>`,
     category: 'Basic',
-    attributes: { class: 'fa fa-quote-right' }
+    attributes: { class: 'fa fa-quote-right' },
   });
 
   editor.Blocks.add('form-block', {
@@ -241,7 +241,7 @@ const customElementsPlugin = editor => {
                 <textarea name="message" placeholder="Your Message"></textarea>
                 <select name="options">
                   <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
+                  <option value="option2">Option 2"></option>
                 </select>
                 <div>
                   <label><input type="checkbox" name="subscribe"/> Subscribe to newsletter</label>
@@ -253,7 +253,7 @@ const customElementsPlugin = editor => {
                 <button type="submit">Submit</button>
               </form>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-wpforms' }
+    attributes: { class: 'fa fa-wpforms' },
   });
 
   editor.Blocks.add('contact-form-block', {
@@ -268,38 +268,38 @@ const customElementsPlugin = editor => {
                 <button type="submit">Send</button>
               </form>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-envelope' }
+    attributes: { class: 'fa fa-envelope' },
   });
 
   editor.Blocks.add('input-block', {
     label: 'Input',
     content: '<input type="text" name="name" placeholder="Your Name" class="custom-input"/>',
     category: 'Forms',
-    attributes: { class: 'fa fa-pencil' }
+    attributes: { class: 'fa fa-pencil' },
   });
 
   editor.Blocks.add('textarea-block', {
     label: 'Textarea',
     content: '<textarea name="message" placeholder="Your Message" class="custom-textarea"></textarea>',
     category: 'Forms',
-    attributes: { class: 'fa fa-align-left' }
+    attributes: { class: 'fa fa-align-left' },
   });
 
   editor.Blocks.add('select-block', {
     label: 'Select',
     content: `<select name="options" class="custom-select">
                 <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
+                <option value="option2">Option 2"></option>
               </select>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-caret-down' }
+    attributes: { class: 'fa fa-caret-down' },
   });
 
   editor.Blocks.add('checkbox-block', {
     label: 'Checkbox',
     content: '<label><input type="checkbox" name="subscribe" class="custom-checkbox"/> Subscribe to newsletter</label>',
     category: 'Forms',
-    attributes: { class: 'fa fa-check-square' }
+    attributes: { class: 'fa fa-check-square' },
   });
 
   editor.Blocks.add('radio-block', {
@@ -309,7 +309,7 @@ const customElementsPlugin = editor => {
                 <label><input type="radio" name="gender" value="female" class="custom-radio"/> Female</label>
               </div>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-dot-circle-o' }
+    attributes: { class: 'fa fa-dot-circle-o' },
   });
 
   editor.Blocks.add('button-block', {
@@ -326,7 +326,7 @@ const customElementsPlugin = editor => {
     border-radius: 3px !important;
     height: auto !important;">Click Me</button>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-minus-square-o' }
+    attributes: { class: 'fa fa-minus-square-o' },
   });
 
   editor.Blocks.add('navbar-block', {
@@ -343,7 +343,7 @@ const customElementsPlugin = editor => {
                 <a href="#contact">Contact</a>
               </nav>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-bars' }
+    attributes: { class: 'fa fa-bars' },
   });
 
   editor.Blocks.add('feature-list-block', {
@@ -354,7 +354,7 @@ const customElementsPlugin = editor => {
                 <li>Feature 3</li>
               </ul>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-list' }
+    attributes: { class: 'fa fa-list' },
   });
 
   editor.Blocks.add('footer-block', {
@@ -364,7 +364,7 @@ const customElementsPlugin = editor => {
                 <p>&copy; 2023 Company Name</p>
               </footer>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-file-text-o' } 
+    attributes: { class: 'fa fa-file-text-o' },
   });
 
   editor.Blocks.add('faq-block', {
@@ -381,7 +381,7 @@ const customElementsPlugin = editor => {
                 </div>
               </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-question-circle' }
+    attributes: { class: 'fa fa-question-circle' },
   });
 
   editor.Blocks.add('team-section-block', {
@@ -400,7 +400,7 @@ const customElementsPlugin = editor => {
                 </div>
               </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-users' }
+    attributes: { class: 'fa fa-users' },
   });
 
   editor.Blocks.add('cta-block', {
@@ -411,7 +411,7 @@ const customElementsPlugin = editor => {
                 <button class="btn-cta">Take Action</button>
               </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-bullhorn' }
+    attributes: { class: 'fa fa-bullhorn' },
   });
 
   editor.Blocks.add('curriculum-table', {
@@ -437,7 +437,7 @@ const customElementsPlugin = editor => {
                 </div>
             </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-table' }
+    attributes: { class: 'fa fa-table' },
   });
 
   editor.DomComponents.addType('fixed-content', {
@@ -474,7 +474,7 @@ const customElementsPlugin = editor => {
 
     <main class="mx-20 my-auto py-3 border-b-2 ">
         <div class="flex items-center justify-between">
-            <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+            <img src="assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
             <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
                 <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
                 <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
@@ -487,15 +487,11 @@ const customElementsPlugin = editor => {
                 </svg>
             </div>
         </div>
-    </main>`,
-     category: 'Layout',
-     attributes: { class: 'fa fa-lock' }
-   });
-   
+    </main>`
+    });
 };
 
 const uploadFileToSpace = async (file) => {
-  // Fetch the pre-signed URL from the backend
   const response = await fetch(`http://157.230.37.48/generate-url?filename=${file.name}`);
   if (!response.ok) {
     throw new Error('Failed to generate pre-signed URL');
@@ -506,7 +502,6 @@ const uploadFileToSpace = async (file) => {
     throw new Error('Failed to generate pre-signed URL');
   }
 
-  // Upload the file to DigitalOcean Spaces using the pre-signed URL
   const uploadResponse = await fetch(data.uploadUrl, {
     method: 'PUT',
     body: file,
@@ -524,6 +519,8 @@ const uploadFileToSpace = async (file) => {
 };
 
 onMounted(async () => {
+  await authStore.initializeStore(); // Ensure the store is initialized and token is available
+
   const pageId = route.query.id;
   if (!pageId) {
     console.error('Page ID is missing');
@@ -537,7 +534,7 @@ onMounted(async () => {
     height: '100vh',
     width: '100%',
     assetManager: {
-      upload: false, // Disable default upload
+      upload: false,
       uploadFile: async (e) => {
         const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
         const images = [];
@@ -564,7 +561,6 @@ onMounted(async () => {
     editor.setComponents(pageContent.html);
     editor.setStyle(pageContent.css);
   } else {
-    // Immediately load the fixed content into the editor on mount if no existing content
     editor.BlockManager.get('fixed-content-block').set({ active: true });
     editor.runCommand('core:canvas-clear');
     editor.addComponents(
@@ -601,7 +597,6 @@ onMounted(async () => {
     );
   }
 
-  // Register the custom elements plugin
   customElementsPlugin(editor);
 });
 </script>
