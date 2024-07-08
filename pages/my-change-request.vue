@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto p-4">
-    <h1 class="text-3xl font-bold text-blue-900 text-center py-4">
+    <h1 class="text-2xl font-bold text-blue-900 text-start py-4">
       My Change Requests
     </h1>
     <div class="relative w-full md:w-1/3 mb-4">

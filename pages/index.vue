@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-3xl font-bold text-blue-900 text-center pt-4 pb-6 h-fit">
+  <h1 class="text-2xl font-bold text-blue-900 text-start pt-4 pb-6 h-fit">
     Pages
   </h1>
   <div class="mb-5 flex justify-end">
