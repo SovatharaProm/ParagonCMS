@@ -1,9 +1,12 @@
 <template>
   <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-900 text-start py-4">
-      Request Assign to Me
+    <h1 class="text-3xl font-bold text-blue-900 text-center py-4">
+      Requests Assign to Me
     </h1>
-    <div class="flex flex-col gap-5">
+    <div v-if="!hasAccess || !requests.length" class="text-center text-gray-500">
+      No data available
+    </div>
+    <div v-else class="flex flex-col gap-5">
       <div class="relative w-full md:w-1/3 mb-4">
         <input
           type="text"
@@ -94,6 +97,7 @@ const searchQuery = ref("");
 const statusFilter = ref("");
 const showRejectModal = ref(false);
 const changeRequestId = ref(null);
+const hasAccess = ref(true);  // Flag to check if user has access
 
 const fetchRequests = async () => {
   try {
@@ -108,6 +112,7 @@ const fetchRequests = async () => {
 
     if (!response.ok) {
       if (response.status === 401) {
+        hasAccess.value = false;  // User is unauthorized
         throw new Error("Unauthorized: Please log in again.");
       }
       const errorData = await response.json();
@@ -116,6 +121,9 @@ const fetchRequests = async () => {
 
     const data = await response.json();
     requests.value = data.data.requests_assign_to_me; // Fetch requests assigned to the user
+    if (!requests.value.length) {
+      hasAccess.value = false;  // No data available
+    }
   } catch (error) {
     console.error("Error fetching requests:", error.message);
     toast.error(error.message || "An unexpected error occurred", {
