@@ -241,7 +241,7 @@ const customElementsPlugin = (editor) => {
                 <textarea name="message" placeholder="Your Message"></textarea>
                 <select name="options">
                   <option value="option1">Option 1</option>
-                  <option value="option2">Option 2"></option>
+                  <option value="option2">Option 2</option>
                 </select>
                 <div>
                   <label><input type="checkbox" name="subscribe"/> Subscribe to newsletter</label>
