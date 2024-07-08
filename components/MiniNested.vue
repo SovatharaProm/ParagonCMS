@@ -11,7 +11,6 @@
             </h3>
             </div>
             <div class="flex gap-5 my-auto">
-
               <!-- Add sub of subpage -->
               <button @click="openCreatePageModal(true)">
                 <Icon name="ph:plus-bold"></Icon>
@@ -58,14 +57,12 @@
     </div>
   </div>
 </template>
-  
+
 <script setup>
 import { ref, defineProps, defineEmits, onMounted } from 'vue';
 import draggable from 'vuedraggable';
-
-onMounted(async () => {
-  await fetchChildPages();
-});
+import { useAuthStore } from '@/stores/auth';
+import { useToast } from 'vue-toast-notification';
 
 const props = defineProps({
   children: Array,
@@ -81,8 +78,13 @@ const newSubpageTitle = ref('');
 const selectedChildPageId = ref(null);
 const editablePageId = ref(null);
 const editablePageName = ref('');
-const token = '1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin';
+const toast = useToast();
+const authStore = useAuthStore();
 
+onMounted(async () => {
+  await authStore.initializeStore();
+  await fetchChildPages();
+});
 
 const toggleChildPage = (child, parentIndex, childIndex) => {
   emit('toggle-child-page', child, parentIndex, childIndex);
@@ -95,93 +97,92 @@ const openCreatePageModal = (childId) => {
 
 const createSubpage = async (title, parentId) => {
   if (!title.trim()) {
-    alert('Subpage title is required.');
+    toast.error('Subpage title is required.');
     return;
   }
   try {
-    const response = await fetch('http://157.230.37.48/api/create-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-page`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({
-        page_name: title, // Changed from title to page_name to match likely API expectations
+        page_name: title,
         parent_id: parentId
       })
     });
     const data = await response.json();
-    if (data.code === 200) { // Check the actual successful response code or property
-      console.log('Subpage created successfully:', data);
+    if (data.code === 200) {
+      toast.success('Subpage created successfully');
       createPageModal.value = false;
-      // Optionally refresh the page list or update local state here
+      await fetchChildPages();
     } else {
-      console.error('Failed to create subpage:', data.message);
+      toast.error('Failed to create subpage: ' + data.message);
     }
   } catch (error) {
-    console.error('Error creating subpage:', error);
+    toast.error('Error creating subpage: ' + error.message);
   }
 };
 
 const enableEditing = (child) => {
-editablePageId.value = child.id;
-editablePageName.value = child.page_name;
+  editablePageId.value = child.id;
+  editablePageName.value = child.page_name;
 };
 
 const updatePageName = async (child, childIndex) => {
-if (!editablePageName.value.trim()) {
-  alert('Page name is required.');
-  return;
-}
-try {
-  const response = await fetch('http://157.230.37.48/api/update-page-name', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      page_id: child.id,
-      page_name: editablePageName.value
-    })
-  });
-
-  const data = await response.json();
-  if (data.code === 200) {
-    props.children[childIndex].page_name = editablePageName.value; // Correctly update local state
-    console.log('Page name updated successfully:', data);
-    editablePageId.value = null; // Exit editing mode
-  } else {
-    console.error('Failed to update page name:', data.message);
+  if (!editablePageName.value.trim()) {
+    toast.error('Page name is required.');
+    return;
   }
-} catch (error) {
-  console.error('Error updating page name:', error);
-  editablePageId.value = null; // Ensure to exit editing mode in case of error
-}
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      },
+      body: JSON.stringify({
+        page_id: child.id,
+        page_name: editablePageName.value
+      })
+    });
+
+    const data = await response.json();
+    if (data.code === 200) {
+      props.children[childIndex].page_name = editablePageName.value;
+      toast.success('Page name updated successfully');
+      editablePageId.value = null;
+    } else {
+      toast.error('Failed to update page name: ' + data.message);
+    }
+  } catch (error) {
+    toast.error('Error updating page name: ' + error.message);
+    editablePageId.value = null;
+  }
 };
 
 const fetchChildPages = async () => {
   try {
-    const response = await fetch('http://157.230.37.48/api/list-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       }
     });
     const data = await response.json();
     if (data.code === 200) {
       childPages.value = data.data.Pages;
     } else {
-      console.error('Error fetching child pages:', data.message);
+      toast.error('Error fetching child pages: ' + data.message);
     }
   } catch (error) {
-    console.error('Error fetching child pages:', error);
+    toast.error('Error fetching child pages: ' + error.message);
   }
 };
 
 const onDragEnd = (event) => {
   emit('drag-end', event);
 };
-
 </script>
 
 <style scoped>

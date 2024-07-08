@@ -80,7 +80,7 @@ const updatePageName = async (element, index) => {
     return;
   }
   try {
-    const response = await fetch('http://157.230.37.48/api/update-page-name', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ const buildNestedPayload = (pages, level = 1) => {
     page_name: page.page_name,
     page_order: index + 1,
     page_level: level,
-    children: page.children ? buildNestedPayload(page.children, page.id, level + 1) : [],
+    children: page.children ? buildNestedPayload(page.children, level + 1) : [],
   }));
 };
 
@@ -126,7 +126,7 @@ const onDragEnd = async (event) => {
   console.log("Payload being sent:", JSON.stringify(payload, null, 2));
 
   try {
-    const response = await fetch("http://157.230.37.48/api/change-page-order", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/change-page-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
