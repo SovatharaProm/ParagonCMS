@@ -121,7 +121,7 @@
         </div>
         <div>
           <h3 class="text-white text-lg font-semibold mb-4">Paragon International University</h3>
-          <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+
           <div class="h-96">
             <iframe
               width="100%"
@@ -233,7 +233,7 @@
   
       <main class="mx-20 my-auto py-3 border-b-2 ">
           <div class="flex items-center justify-between">
-              <img src="assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+
               <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
                   <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
                   <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>

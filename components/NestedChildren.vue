@@ -16,15 +16,16 @@
                 <span v-else>{{ child.page_name }}</span>
               </h3>
             </div>
-            <div class="flex gap-5 my-auto">
-              <NuxtLink :to="`/builder?id=${child.id}`" class="my-auto">
+            <div class="flex gap-5 my-auto items-center">
+              <NuxtLink :to="`/builder?id=${child.id}`" class="my-auto text-blue-900 text-lg flex items-center">
                 <Icon name="ph:note-pencil-bold"></Icon>
               </NuxtLink>
+              <Icon name="carbon:link" @click="copyUrl(child.page_link)" class="cursor-pointer text-blue-900 text-lg flex items-center"></Icon>
               <v-menu>
                 <template v-slot:activator="{ props }">
-                  <v-btn icon v-bind="props">
+                  <button icon v-bind="props" class="text-blue-900 text-lg flex items-center">
                     <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
+                  </button>
                 </template>
                 <v-list>
                   <v-list-item @click="openCreateChangeRequestModal(child.id)">
@@ -58,6 +59,7 @@
               @open-create-modal="openCreatePageModal"
               @open-create-change-request="openCreateChangeRequestModal"
               @toggle-page-in-nav="togglePageInNav"
+              @copy-url="copyUrl"
             ></NestedChildren>
           </div>
         </div>
@@ -96,7 +98,7 @@ const props = defineProps({
   parentState: Array,
 });
 
-const emit = defineEmits(['update:children', 'drag-end', 'toggle-child-page', 'open-create-modal', 'open-create-change-request', 'toggle-page-in-nav']);
+const emit = defineEmits(['update:children', 'drag-end', 'toggle-child-page', 'open-create-modal', 'open-create-change-request', 'toggle-page-in-nav', 'copy-url']);
 
 const authStore = useAuthStore();
 
@@ -114,7 +116,7 @@ const enableEditing = (child) => {
 
 const updatePageName = async (child, childIndex) => {
   if (!editablePageName.value.trim()) {
-    alert('Page name is required.');
+    alert("Page name is required.");
     return;
   }
   try {
@@ -316,12 +318,21 @@ const togglePageInNav = async (page, parentState, childIndex) => {
   }
 };
 
+const copyUrl = (url) => {
+  navigator.clipboard.writeText(url).then(() => {
+    toast.success('URL copied to clipboard.');
+  }).catch(err => {
+    console.error('Could not copy text: ', err);
+    toast.error('Failed to copy URL.');
+  });
+};
+
 const getItemClass = (level) => {
   switch (level) {
     case 1:
       return "bg-white";
     case 2:
-      return "bg-red-100";
+      return "bg-red-50";
     case 3:
       return "bg-blue-100";
     default:

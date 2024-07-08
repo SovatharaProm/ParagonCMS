@@ -18,11 +18,14 @@ import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
 import plugin from 'grapesjs-tailwind';
 import { useAuthStore } from '@/stores/auth';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const grapesjsEditor = ref(null);
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
+const toast = useToast();
 let editor;
 
 const saveContent = async () => {
@@ -52,13 +55,13 @@ const saveContent = async () => {
     });
     const result = await response.json();
     if (result.code === 200) {
-      alert('Content saved successfully!');
+      toast.success('Content saved successfully!');
       router.push('/');
     } else {
-      alert('Error: ' + result.message);
+      toast.error('Error: ' + result.message);
     }
   } catch (error) {
-    alert('Error: ' + error.message);
+    toast.error('Error: ' + error.message);
   }
 };
 
@@ -164,7 +167,7 @@ const customElementsPlugin = (editor) => {
 
   editor.Blocks.add('image-block', {
     label: 'Image',
-    content: '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
+    content: '<img data-gjs-type="image" src="assets/images/Logo.png" alt="Placeholder image"/>',
     category: 'Basic',
     attributes: { class: 'fa fa-image' },
   });
@@ -174,9 +177,9 @@ const customElementsPlugin = (editor) => {
     content: `
         <div class="image-slideshow">
             <div class="slides">
-                <div class="slide"><img src="path/to/image1.jpg" alt="Image 1"></div>
-                <div class="slide"><img src="path/to/image2.jpg" alt="Image 2"></div>
-                <div class="slide"><img src="path/to/image3.jpg" alt="Image 3"></div>
+                <div class="slide"><img src="assets/images/Logo.png" alt="Image 1"></div>
+                <div class="slide"><img src="assets/images/Logo.png" alt="Image 2"></div>
+                <div class="slide"><img src="assets/images/Logo.png" alt="Image 3"></div>
             </div>
             <a class="prev">&#10094;</a>
             <a class="next">&#10095;</a>
@@ -188,7 +191,7 @@ const customElementsPlugin = (editor) => {
 
   editor.Blocks.add('video-block', {
     label: 'Video',
-    content: '<video controls><source src="path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
+    content: '<video controls></video>',
     category: 'Basic',
     attributes: { class: 'fa fa-video-camera' },
   });
@@ -289,7 +292,7 @@ const customElementsPlugin = (editor) => {
     label: 'Select',
     content: `<select name="options" class="custom-select">
                 <option value="option1">Option 1</option>
-                <option value="option2">Option 2"></option>
+                <option value="option2"></option>
               </select>`,
     category: 'Forms',
     attributes: { class: 'fa fa-caret-down' },
@@ -389,12 +392,12 @@ const customElementsPlugin = (editor) => {
     content: `<div class="team-section">
                 <h2>Our Team</h2>
                 <div class="team-member">
-                  <img src="path-to-image.jpg" alt="Team Member">
+                  <img src="assets/images/Logo.png" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
                 <div class="team-member">
-                  <img src="path-to-image.jpg" alt="Team Member">
+                  <img src="assets/images/Logo.png" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
@@ -474,7 +477,6 @@ const customElementsPlugin = (editor) => {
 
     <main class="mx-20 my-auto py-3 border-b-2 ">
         <div class="flex items-center justify-between">
-            <img src="assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
             <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
                 <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
                 <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
@@ -492,7 +494,7 @@ const customElementsPlugin = (editor) => {
 };
 
 const uploadFileToSpace = async (file) => {
-  const response = await fetch(`http://157.230.37.48/generate-url?filename=${file.name}`);
+  const response = await fetch(`http://localhost:3001/generate-url?filename=${file.name}`);
   if (!response.ok) {
     throw new Error('Failed to generate pre-signed URL');
   }
@@ -580,7 +582,6 @@ onMounted(async () => {
 
     <main class="mx-20 my-auto py-3 border-b-2 ">
         <div class="flex items-center justify-between">
-            <img src="assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
             <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
                 <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
                 <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>

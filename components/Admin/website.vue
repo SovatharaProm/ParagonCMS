@@ -28,7 +28,7 @@
   
     <v-dialog v-model="createPageModal" max-width="500px">
       <v-card>
-        <v-card-title>{{
+        <v-card-title  class="font-bold text-blue-900">{{
           creatingSubPage ? "Create Subpage" : "Create New Page"
         }}</v-card-title>
         <v-card-text>

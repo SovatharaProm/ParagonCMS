@@ -24,12 +24,13 @@
       @open-create-change-request="openCreateChangeRequestModal"
       @delete-page="deletePage"
       @toggle-page-in-nav="togglePageInNav"
+      @copy-url="copyUrl"
     ></NestedChildren>
   </div>
 
-  <v-dialog v-model="createPageModal" max-width="500px">
+  <v-dialog v-model="createPageModal" max-width="500px" >
     <v-card>
-      <v-card-title>{{
+      <v-card-title  class="font-bold text-blue-900">{{
         creatingSubPage ? "Create Subpage" : "Create New Page"
       }}</v-card-title>
       <v-card-text>
@@ -352,37 +353,39 @@ const togglePublish = async (page, parentState, childIndex) => {
 
 const togglePageInNav = async (page) => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/toggle-page-in-nav`, {
-      method: 'POST',
+    const response = await fetch(`${API_BASE_URL}/toggle-page-in-nav`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authStore.token}`,
       },
-      body: JSON.stringify({ page_id: page.id })
+      body: JSON.stringify({ page_id: page.id }),
     });
 
     const data = await response.json();
     if (data.code === 200 || data.code === 201) {
-      let newStatus = 'Off';
-      if (data.message.includes('On')) {
-        newStatus = 'On';
-      } else if (data.message.includes('Off')) {
-        newStatus = 'Off';
-      }
-      toast.success(`Page navigation visibility ${newStatus === 'On' ? 'enabled' : 'disabled'} successfully.`);
-      page.is_in_nav = newStatus === 'On';
-      emit('update:children', [...props.children]);
+      toast.success(data.message);
+      page.is_in_nav = data.code === 200;
+      requests.value = [...requests.value];
     } else {
-      console.error('Failed to toggle page navigation visibility:', data.message);
-      toast.error('Failed to toggle page navigation visibility.');
+      console.error("Failed to toggle page navigation visibility:", data.message);
+      toast.error("Failed to toggle page navigation visibility.");
     }
   } catch (error) {
-    console.error('Error toggling page navigation visibility:', error);
-    toast.error('Error toggling page navigation visibility.');
+    console.error("Error toggling page navigation visibility:", error);
+    toast.error("Error toggling page navigation visibility.");
   }
 };
 
-
+const copyUrl = (id) => {
+  const url = `${window.location.origin}/builder?id=${id}`;
+  navigator.clipboard.writeText(url).then(() => {
+    toast.success('URL copied to clipboard.');
+  }).catch(err => {
+    console.error('Could not copy text: ', err);
+    toast.error('Failed to copy URL.');
+  });
+};
 </script>
 
 <style scoped>

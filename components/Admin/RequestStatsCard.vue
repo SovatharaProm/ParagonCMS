@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-4">
-    <h1 class="text-3xl font-bold text-blue-900 text-center py-4">
-      Update Request
+    <h1 class="text-2xl font-bold text-blue-900 text-start py-4">
+      Request Management
     </h1>
     <div class="flex flex-col gap-5">
       <div class="relative w-full md:w-1/3 mb-4">
@@ -52,14 +52,13 @@
           >
             <Icon name="lets-icons:view" class="text-2xl" />
           </NuxtLink>
-          <NuxtLink
-            :href="'/admin/review/review?id=' + request.id"
-            target="_blank"
-            class="text-blue-900 hover:text-blue-600 flex items-center"
+          <a
+            @click.prevent="openPreviewUrl(request.id)"
+            class="text-blue-900 hover:text-blue-600 flex items-center cursor-pointer"
             title="View Request"
           >
             <Icon name="carbon:new-tab" class="text-2xl"></Icon>
-          </NuxtLink>
+          </a>
         </div>
       </div>
     </div>
@@ -173,9 +172,32 @@ const handleRejectSubmit = async (comment) => {
     }
 
     toast.success('Change request rejected successfully');
-    router.push('/admin/request/request'); // Navigate to the review list page after rejection
+    fetchRequests(); // Refresh the list after rejection
+    closeRejectModal(); // Close the rejection modal
   } catch (error) {
     toast.error(error.message || 'There was an error rejecting the change request');
+  }
+};
+
+const openPreviewUrl = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/view-change-request?change_request_id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch change request details');
+    }
+
+    const data = await response.json();
+    const previewUrl = data.data.change_request.preview_url;
+    window.open(previewUrl, '_blank');
+  } catch (error) {
+    console.error('Error fetching change request details:', error);
+    toast.error('Failed to fetch change request details');
   }
 };
 

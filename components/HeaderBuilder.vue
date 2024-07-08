@@ -100,7 +100,7 @@
         </header>
     <main class="mx-20 my-auto border-b-2">
       <div class="flex items-center justify-between">
-        <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+
         <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
           <div class="relative group">
             <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
@@ -179,7 +179,7 @@
         label: 'Header 2',
         content: `<main class="mx-20 my-auto py-3 border-b-2">
       <div class="flex items-center justify-between">
-        <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+
         <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
           <div class="relative group">
             <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
@@ -324,7 +324,7 @@
   
       <main class="mx-20 my-auto py-3 border-b-2 ">
           <div class="flex items-center justify-between">
-              <img src="assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+
               <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
                   <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
                   <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>

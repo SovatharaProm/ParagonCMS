@@ -58,14 +58,13 @@
           >
             <Icon name="lets-icons:view" class="text-2xl" />
           </NuxtLink>
-          <NuxtLink
-            :href="'/reviewrequest?id=' + request.id"
-            target="_blank"
-            class="text-blue-900 hover:text-blue-600 flex items-center"
+          <a
+            @click.prevent="openPreviewUrl(request.id)"
+            class="text-blue-900 hover:text-blue-600 flex items-center cursor-pointer"
             title="View Request"
           >
             <Icon name="carbon:new-tab" class="text-2xl"></Icon>
-          </NuxtLink>
+          </a>
         </div>
       </div>
     </div>
@@ -152,6 +151,7 @@ const filteredRequests = computed(() => {
     return matchesSearch && matchesStatus;
   });
 });
+
 const closeRejectModal = () => {
   showRejectModal.value = false;
 };
@@ -188,6 +188,28 @@ const handleRejectSubmit = async (comment) => {
     toast.error(
       error.message || "There was an error rejecting the change request"
     );
+  }
+};
+
+const openPreviewUrl = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/view-change-request?change_request_id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch change request details');
+    }
+
+    const data = await response.json();
+    const previewUrl = data.data.change_request.preview_url;
+    window.open(previewUrl, '_blank');
+  } catch (error) {
+    console.error('Error fetching change request details:', error);
+    toast.error('Failed to fetch change request details');
   }
 };
 

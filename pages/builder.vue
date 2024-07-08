@@ -11,8 +11,7 @@
   
 <script setup>
 import GrapesEditor from '/components/GrapesEditor.vue';
-
-  definePageMeta({
+definePageMeta({
   layout: 'custom'
 })
 </script>

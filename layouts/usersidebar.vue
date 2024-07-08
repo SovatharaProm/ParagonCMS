@@ -21,8 +21,8 @@
             </NuxtLink>
             <NuxtLink to="/view-change-request" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:git-pull-request-bold" class="icon" />
-              <span>All Change Requests</span>
-            </NuxtLink>
+              <span>Requests Assign to me</span>
+            </NuxtLink> 
             <NuxtLink to="/profile" class="flex gap-3 sidebar-link" @click="closeDrawer">
               <Icon name="ph:user-bold" class="icon" />
               <span>Profile</span>
