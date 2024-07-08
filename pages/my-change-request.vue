@@ -1,15 +1,51 @@
 <template>
-    <h1 class="text-3xl font-bold text-blue-900 text-center pt-4 pb-6 h-fit">
-      My Requests
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold text-blue-900 text-center py-4">
+      Update Request
     </h1>
+    <div class="relative w-full md:w-1/3 mb-4">
+      <input
+        type="text"
+        placeholder="Search"
+        v-model="searchQuery"
+        class="border border-gray-300 rounded py-2 pl-10 pr-4 w-full"
+      />
+      <svg
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </div>
+    <div class="relative w-full md:w-1/3 mb-4">
+      <select
+        v-model="statusFilter"
+        class="border border-gray-300 rounded py-2 px-4"
+      >
+        <option value="">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+    </div>
+
     <div class="flex flex-col gap-5">
       <div
-        v-for="request in requests"
+        v-for="request in filteredRequests"
         :key="request.id"
-        class="bg-white p-5 rounded-lg shadow flex justify-between"
+        class="bg-white p-5 rounded-lg shadow-lg flex justify-between"
       >
-        <div class="my-2">
+        <div>
           <h2 class="font-bold">{{ request.request_name }}</h2>
+          <p :class="statusClass(request.status)">{{ request.status }}</p>
         </div>
         <div class="flex gap-5 my-auto">
           <v-btn icon @click="openResubmitDialog(request)">
@@ -21,7 +57,7 @@
         </div>
       </div>
     </div>
-  
+
     <v-dialog v-model="isResubmitDialogOpen" max-width="600px">
       <v-card>
         <v-card-title class="text-h5">Resubmit Change Request</v-card-title>
@@ -45,7 +81,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  
+
     <v-dialog v-model="isViewDialogOpen" max-width="600px">
       <v-card>
         <v-card-title class="text-xl text-blue-900">View Change Request</v-card-title>
@@ -59,11 +95,6 @@
               <p class="font-semibold">Status:</p>
               <p :class="statusClass(viewRequestDetails.status)">{{ viewRequestDetails.status }}</p>
             </div>
-          </div>
-        </v-card-text>
-        <v-card-title class="text-xl font-bold text-blue-900">Comments</v-card-title>
-        <v-card-text>
-          <div v-if="viewRequestDetails" class="space-y-4">
             <div>
               <p class="font-semibold">Comment:</p>
               <p v-if="viewRequestDetails.comments && viewRequestDetails.comments.length > 0">{{ viewRequestDetails.comments[0].comments }}</p>
@@ -82,184 +113,198 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  
-    <div class="my-10 text-end">
-      <NuxtLink to="/">
-        <v-btn class="text-none ms-4 px-8" color="blue-darken-4" variant="outlined">Cancel</v-btn>
-      </NuxtLink>
-      <NuxtLink to="/">
-        <v-btn class="text-none ms-4 text-white px-8" color="blue-darken-4" variant="flat">Publish</v-btn>
-      </NuxtLink>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted } from "vue";
-  import { useToast } from "vue-toast-notification";
-  import { useAuthStore } from "~/stores/auth";
-  
-  definePageMeta({
-    layout: "usersidebar",
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useAuthStore } from "~/stores/auth";
+import { useToast } from "vue-toast-notification";
+
+definePageMeta({
+  layout: "usersidebar",
+  middleware: "auth",
+});
+
+const authStore = useAuthStore();
+const toast = useToast();
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const requests = ref([]);
+const searchQuery = ref("");
+const statusFilter = ref("");
+const isResubmitDialogOpen = ref(false);
+const isViewDialogOpen = ref(false);
+const currentRequest = ref({
+  id: null,
+  request_name: "",
+  notify_approver: false,
+});
+const viewRequestDetails = ref(null);
+const resubmitComments = ref("");
+
+const fetchRequests = async () => {
+  try {
+    const token = authStore.token;
+    const response = await fetch(`${API_BASE_URL}/list-change-request`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error("Unauthorized: Please log in again.");
+      }
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch requests");
+    }
+
+    const data = await response.json();
+    requests.value = data.data.my_change_requests; // Fetch requests assigned to the user
+  } catch (error) {
+    console.error("Error fetching requests:", error.message);
+    toast.error(error.message || "An unexpected error occurred", {
+      timeout: 3000,
+    });
+  }
+};
+
+const statusClass = (status) => {
+  switch (status) {
+    case "Approved":
+      return "text-green-500";
+    case "Pending":
+      return "text-orange-500";
+    case "Rejected":
+      return "text-red-500";
+    default:
+      return "";
+  }
+};
+
+const filteredRequests = computed(() => {
+  return requests.value.filter((request) => {
+    const matchesSearch =
+      searchQuery.value.trim() === "" ||
+      request.request_name
+        .toLowerCase()
+        .includes(searchQuery.value.toLowerCase());
+    const matchesStatus =
+      statusFilter.value === "" ||
+      request.status.toLowerCase() === statusFilter.value.toLowerCase();
+
+    return matchesSearch && matchesStatus;
   });
-  
-  const toast = useToast();
-  const authStore = useAuthStore();
-  
-  const requests = ref([]);
-  const isResubmitDialogOpen = ref(false);
-  const isViewDialogOpen = ref(false);
-  const currentRequest = ref({
+});
+
+const openResubmitDialog = (request) => {
+  currentRequest.value = { ...request };
+  isResubmitDialogOpen.value = true;
+};
+
+const closeResubmitDialog = () => {
+  isResubmitDialogOpen.value = false;
+  currentRequest.value = {
     id: null,
     request_name: "",
     notify_approver: false,
-  });
-  const viewRequestDetails = ref(null);
-  const resubmitComments = ref("");
-  
-  const fetchRequests = async () => {
-    if (!authStore.token) {
-      toast.error("Authentication token is missing");
-      return;
-    }
-  
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-change-request`, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to fetch change requests");
-      }
-  
-      const data = await response.json();
-      if (data.data && data.data.my_change_requests) {
-        requests.value = data.data.my_change_requests;
-      } else {
-        toast.error("Unexpected response structure");
-      }
-    } catch (error) {
-      console.error("Error fetching change requests:", error);
-      toast.error("Failed to fetch change requests");
-    }
   };
-  
-  const openResubmitDialog = (request) => {
-    currentRequest.value = { ...request };
-    isResubmitDialogOpen.value = true;
-  };
-  
-  const closeResubmitDialog = () => {
-    isResubmitDialogOpen.value = false;
-    currentRequest.value = {
-      id: null,
-      request_name: "",
-      notify_approver: false,
-    };
-    resubmitComments.value = "";
-  };
-  
-  const openViewDialog = () => {
-    isViewDialogOpen.value = true;
-  };
-  
-  const closeViewDialog = () => {
-    isViewDialogOpen.value = false;
-  };
-  
-  const viewRequest = async (id) => {
-    if (!authStore.token) {
-      toast.error("Authentication token is missing");
-      return;
-    }
-  
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/view-change-request?change_request_id=${id}`, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to fetch change request details");
-      }
-  
-      const data = await response.json();
-      viewRequestDetails.value = data.data.change_request;
-      openViewDialog();
-    } catch (error) {
-      console.error("Error fetching change request details:", error);
-      toast.error("Failed to fetch change request details");
-    }
-  };
-  
-  const resubmitChangeRequest = async () => {
-    if (!authStore.token) {
-      toast.error("Authentication token is missing");
-      return;
-    }
-  
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/resubmit-change-request`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authStore.token}`,
-        },
-        body: JSON.stringify({
-          change_request_id: currentRequest.value.id,
-          comments: resubmitComments.value,
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to resubmit change request");
-      }
-  
-      const result = await response.json();
-      toast.success("Change request resubmitted successfully");
-      closeResubmitDialog();
-      fetchRequests(); // Refresh the list
-    } catch (error) {
-      console.error("Error resubmitting change request:", error);
-      toast.error("Failed to resubmit change request");
-    }
-  };
-  
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return "No date";
-    }
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
-  };
-  
-  const statusClass = (status) => {
-    switch (status) {
-      case "Approved":
-        return "text-green-500";
-      case "Pending":
-        return "text-orange-500";
-      case "Rejected":
-        return "text-red-500";
-      default:
-        return "";
-    }
-  };
-  
-  onMounted(() => {
-    authStore.initializeStore().then(() => {
-      fetchRequests();
-    });
-  });
-  </script>
-  
-  <style scoped>
-  @import "@/assets/css/style.css";
-  
-  .v-card-text p {
-    margin-bottom: 8px;
+  resubmitComments.value = "";
+};
+
+const openViewDialog = () => {
+  isViewDialogOpen.value = true;
+};
+
+const closeViewDialog = () => {
+  isViewDialogOpen.value = false;
+};
+
+const viewRequest = async (id) => {
+  if (!authStore.token) {
+    toast.error("Authentication token is missing");
+    return;
   }
-  </style>
-  
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/view-change-request?change_request_id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch change request details");
+    }
+
+    const data = await response.json();
+    viewRequestDetails.value = data.data.change_request;
+    openViewDialog();
+  } catch (error) {
+    console.error("Error fetching change request details:", error);
+    toast.error("Failed to fetch change request details");
+  }
+};
+
+const resubmitChangeRequest = async () => {
+  if (!authStore.token) {
+    toast.error("Authentication token is missing");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/resubmit-change-request`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authStore.token}`,
+      },
+      body: JSON.stringify({
+        change_request_id: currentRequest.value.id,
+        comments: resubmitComments.value,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to resubmit change request");
+    }
+
+    const result = await response.json();
+    toast.success("Change request resubmitted successfully");
+    closeResubmitDialog();
+    fetchRequests(); // Refresh the list
+  } catch (error) {
+    console.error("Error resubmitting change request:", error);
+    toast.error("Failed to resubmit change request");
+  }
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    return "No date";
+  }
+  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+};
+
+onMounted(() => {
+  authStore.initializeStore().then(() => {
+    fetchRequests();
+  });
+});
+</script>
+
+<style scoped>
+@import "@/assets/css/style.css";
+.text-green-500 {
+  color: green;
+}
+.text-orange-500 {
+  color: orange;
+}
+.text-red-500 {
+  color: red;
+}
+</style>

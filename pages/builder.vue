@@ -1,6 +1,5 @@
 <template>
   <div class="flex">
-    <BuilderSidebar />
     <div class="flex-grow h-auto bg-white">
       <client-only>
         <GrapesEditor />

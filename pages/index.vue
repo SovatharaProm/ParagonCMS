@@ -23,6 +23,7 @@
       @open-create-modal="openCreatePageModal"
       @open-create-change-request="openCreateChangeRequestModal"
       @delete-page="deletePage"
+      @toggle-page-in-nav="togglePageInNav"
     ></NestedChildren>
   </div>
 
@@ -155,15 +156,18 @@ async function createPages(pageName) {
     const data = await response.json();
     if (data.code === 200) {
       console.log("Page created successfully:", data);
+      toast.success("Main page created successfully.");
       createPageModal.value = false;
       newPageTitle.value = "";
       parentPageId = null;
       await fetchPages();
     } else {
       console.error("Failed to create page:", data.message);
+      toast.error(`Failed to create main page: ${data.message}`);
     }
   } catch (error) {
     console.error("Error creating page:", error);
+    toast.error("Error creating main page.");
   }
 }
 
@@ -345,6 +349,40 @@ const togglePublish = async (page, parentState, childIndex) => {
     toast.error("Error toggling publish state.");
   }
 };
+
+const togglePageInNav = async (page) => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/toggle-page-in-nav`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ page_id: page.id })
+    });
+
+    const data = await response.json();
+    if (data.code === 200 || data.code === 201) {
+      let newStatus = 'Off';
+      if (data.message.includes('On')) {
+        newStatus = 'On';
+      } else if (data.message.includes('Off')) {
+        newStatus = 'Off';
+      }
+      toast.success(`Page navigation visibility ${newStatus === 'On' ? 'enabled' : 'disabled'} successfully.`);
+      page.is_in_nav = newStatus === 'On';
+      emit('update:children', [...props.children]);
+    } else {
+      console.error('Failed to toggle page navigation visibility:', data.message);
+      toast.error('Failed to toggle page navigation visibility.');
+    }
+  } catch (error) {
+    console.error('Error toggling page navigation visibility:', error);
+    toast.error('Error toggling page navigation visibility.');
+  }
+};
+
+
 </script>
 
 <style scoped>

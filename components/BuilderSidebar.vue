@@ -5,77 +5,71 @@
       <Icon name="ph:plus-bold" color="white" @click="openCreatePageModal(false)" />
     </div>
 
-   <!-- Draggable main pages -->
-  <draggable v-model="requests" item-key="id" @end="onDragEnd">
-    <template #item="{ element, index }">
-      <div
-        :key="element.id"
-        class="p-2 m-3 bg-white rounded text-sm justify-between shadow-md cursor-move font-normal">
-        <div class="flex justify-between">
-          <div class="my-4">
-            <h2 class="font-bold" @dblclick="enableEditing(element, index)">
+    <!-- Draggable main pages -->
+    <draggable v-model="requests" item-key="id" @end="onDragEnd">
+      <template #item="{ element, index }">
+        <div
+          :key="element.id"
+          class="p-2 m-3 rounded text-sm justify-between shadow-md cursor-move font-normal"
+          :class="getItemClass(element.page_level)">
+          <div class="flex justify-between">
+            <div class="my-4">
+              <h2 class="font-bold" @dblclick="enableEditing(element, index)">
                 <input v-if="editablePageId === element.id" v-model="editablePageName" @keyup.enter="updatePageName(element, index)" @blur="updatePageName(element, index)" class="w-full font-bold">
                 <span v-else>{{ element.page_name }}</span>
               </h2>
+            </div>
+            <div class="flex gap-5 my-auto">
+              <!-- Add subpage -->
+              <button @click="openCreatePageModal(true)">
+                <Icon name="ph:plus-bold"></Icon>
+              </button>
+            </div>
           </div>
-          <div class="flex gap-5 my-auto">
 
-            <!-- Add subpage -->
-            <button @click="openCreatePageModal(true)">
-              <Icon name="ph:plus-bold"></Icon>
-            </button>
-          </div>
         </div>
-
-        <!-- Draggable children pages -->
-        <div v-if="element.children && element.children.length > 0" class="m-1 font-italic rounded text-sm justify-between items-center cursor-move">
-          <MiniNested
-            :children="element.children"
-            :parent-index="index"
-            :parent-state="childSwitchStates[index]"
-            @toggle-child-page="togglePage"
-          ></MiniNested>
-        </div>
-      </div>
-    </template>
-  </draggable>
+      </template>
+    </draggable>
 
     <!-- Dialogs for creating and updating pages -->
-  <div v-if="createPageModal" class="fixed inset-0 flex justify-center items-center z-10">
-    <div class="absolute inset-0 bg-opacity-25 backdrop-blur-sm"></div>
-    <div class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10">
-      <h2 class="text-2xl font-bold mb-6">Create New Page</h2>
-      <div class="mb-4">
-        <label for="page-title" class="block text-sm font-medium text-gray-700">Page Title</label>
-        <input v-model="newPageTitle" id="page-title" placeholder="Enter page title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
-      </div>
-      <div class="mb-6">
-        <label for="page-child" class="block text-sm font-medium text-gray-700">Child Page</label>
-        <select v-model="selectedChildPage" id="page-child" class="block w-full mt-1 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          <option disabled value="">Please select one</option>
-          <option value="">None</option>
-          <option v-for="page in childPages" :key="page.id" :value="page.id">
-            {{ page.page_name }}
-          </option>
-        </select>
-      </div>
-      <div class="flex items-center justify-end">
-        <button @click="createPageModal = false" class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300">Cancel</button>
-        <button @click="createPages(newPageTitle)" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">Create</button>
+    <div v-if="createPageModal" class="fixed inset-0 flex justify-center items-center z-10">
+      <div class="absolute inset-0 bg-opacity-25 backdrop-blur-sm"></div>
+      <div class="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full z-10">
+        <h2 class="text-2xl font-bold mb-6">Create New Page</h2>
+        <div class="mb-4">
+          <label for="page-title" class="block text-sm font-medium text-gray-700">Page Title</label>
+          <input v-model="newPageTitle" id="page-title" placeholder="Enter page title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+        </div>
+        <div class="mb-6">
+          <label for="page-child" class="block text-sm font-medium text-gray-700">Child Page</label>
+          <select v-model="selectedChildPage" id="page-child" class="block w-full mt-1 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <option disabled value="">Please select one</option>
+            <option value="">None</option>
+            <option v-for="page in childPages" :key="page.id" :value="page.id">
+              {{ page.page_name }}
+            </option>
+          </select>
+        </div>
+        <div class="flex items-center justify-end">
+          <button @click="createPageModal = false" class="bg-gray-200 text-black rounded-md px-4 py-2 mr-2 hover:bg-gray-300">Cancel</button>
+          <button @click="createPages(newPageTitle)" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">Create</button>
+        </div>
       </div>
     </div>
-  </div>
   </aside>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import MiniNested from '/components/MiniNested.vue';
+
 import draggable from 'vuedraggable';
+import { useAuthStore } from '~/stores/auth';
 
 definePageMeta({
   layout: 'usersidebar'
 });
+
+const authStore = useAuthStore();
 
 const requests = ref([]);
 const childPages = ref([]);
@@ -87,18 +81,18 @@ const selectedChildPage = ref(null);
 const editablePageId = ref(null);
 const editablePageName = ref('');
 const creatingSubPage = ref(false);
-const token = '1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin';
 
 onMounted(async () => {
+  await authStore.initializeStore();
   await fetchPages();
   await fetchChildPages();
 });
 
 const fetchPages = async () => {
   try {
-    const response = await fetch('http://157.230.37.48/api/list-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       }
     });
     const data = await response.json();
@@ -140,9 +134,9 @@ const collectAllPages = (pages) => {
 
 const fetchChildPages = async () => {
   try {
-    const response = await fetch('http://157.230.37.48/api/list-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-page`, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       }
     });
     const data = await response.json();
@@ -192,11 +186,11 @@ async function createPages(pageName) {
     return;
   }
   try {
-    const response = await fetch('http://157.230.37.48/api/create-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/create-page`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({
         page_name: pageName,
@@ -240,10 +234,10 @@ async function togglePage(page, parentIndex, childIndex = null) {
   console.log('Request payload:', payload);
 
   try {
-    const response = await fetch('http://157.230.37.48/api/toggle-page', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/toggle-page`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${authStore.token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
@@ -280,12 +274,11 @@ async function togglePage(page, parentIndex, childIndex = null) {
     }
   }
 }
+
 const enableEditing = (element, index) => {
   editablePageId.value = element.id;
   editablePageName.value = element.page_name;
 };
-
-
 
 const updatePageName = async (element, index) => {
   if (!editablePageName.value) {
@@ -293,11 +286,11 @@ const updatePageName = async (element, index) => {
     return;
   }
   try {
-    const response = await fetch('http://157.230.37.48/api/update-page-name', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-name`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({
         page_id: element.id,
@@ -339,11 +332,11 @@ const onDragEnd = async (evt) => {
 
   // Call the API to update the page order on the backend
   try {
-    const response = await fetch('http://157.230.37.48/api/change-page-order', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/change-page-order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // ensure you replace 'token' with your actual token
+        'Authorization': `Bearer ${authStore.token}` // ensure you replace 'token' with your actual token
       },
       body: JSON.stringify(payload)
     });
@@ -359,8 +352,29 @@ const onDragEnd = async (evt) => {
   }
 };
 
+const getItemClass = (level) => {
+  switch (level) {
+    case 1:
+      return "bg-white";
+    case 2:
+      return "bg-red-100";
+    case 3:
+      return "bg-blue-100";
+    default:
+      return "bg-white";
+  }
+};
 </script>
 
 <style scoped>
-@import "/assets/css/style.css";
+@import "@/assets/css/style.css";
+.text-green-500 {
+  color: green;
+}
+.text-orange-500 {
+  color: orange;
+}
+.text-red-500 {
+  color: red;
+}
 </style>

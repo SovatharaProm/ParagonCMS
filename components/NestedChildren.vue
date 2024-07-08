@@ -3,7 +3,7 @@
     <draggable :list="children" @end="onDragEnd" itemKey="id">
       <template #item="{ element: child, index: childIndex }">
         <div :key="child.id" class="flex flex-col">
-          <div class="flex justify-between m-1 p-2 px-5 shadow-md items-center rounded bg-white-50">
+          <div :class="getItemClass(level)" class="flex justify-between m-1 p-2 px-5 shadow items-center rounded">
             <div class="my-2">
               <h3 class="font-medium" @dblclick="enableEditing(child)">
                 <input
@@ -22,7 +22,9 @@
               </NuxtLink>
               <v-menu>
                 <template v-slot:activator="{ props }">
-                  <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+                  <v-btn icon v-bind="props">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
                 </template>
                 <v-list>
                   <v-list-item @click="openCreateChangeRequestModal(child.id)">
@@ -31,17 +33,14 @@
                   <v-list-item @click="openCreatePageModal(true, child.id)">
                     <v-list-item-title>Create Subpage</v-list-item-title>
                   </v-list-item>
-                  <v-list-item>
-                    <v-list-item-title>
-                      <v-switch
-                        v-model="child.is_published"
-                        @change="togglePublish(child, parentState, childIndex)"
-                        :label="child.is_published ? 'Unpublish' : 'Publish'"
-                      ></v-switch>
-                    </v-list-item-title>
-                  </v-list-item>
                   <v-list-item @click="deletePage(child)">
                     <v-list-item-title>Delete</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="togglePublish(child, parentState, childIndex)">
+                    <v-list-item-title>{{ child.is_published ? 'Unpublish' : 'Publish' }}</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="togglePageInNav(child, parentState, childIndex)">
+                    <v-list-item-title>{{ child.is_in_nav ? 'Remove from Nav' : 'Add to Nav' }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -49,7 +48,7 @@
           </div>
           <div v-if="child.children && child.children.length > 0" class="pl-8">
             <NestedChildren
-              :level="Number(props.level) + 1"
+              :level="Number(level) + 1"
               :parentId="child.id"
               :children="child.children"
               :parent-index="childIndex"
@@ -58,6 +57,7 @@
               @toggle-child-page="togglePublish"
               @open-create-modal="openCreatePageModal"
               @open-create-change-request="openCreateChangeRequestModal"
+              @toggle-page-in-nav="togglePageInNav"
             ></NestedChildren>
           </div>
         </div>
@@ -96,7 +96,7 @@ const props = defineProps({
   parentState: Array,
 });
 
-const emit = defineEmits(['update:children', 'drag-end', 'toggle-child-page', 'open-create-modal', 'open-create-change-request']);
+const emit = defineEmits(['update:children', 'drag-end', 'toggle-child-page', 'open-create-modal', 'open-create-change-request', 'toggle-page-in-nav']);
 
 const authStore = useAuthStore();
 
@@ -106,7 +106,6 @@ const notifyApprover = ref(false);
 const selectedChildPageId = ref(null);
 const editablePageId = ref(null);
 const editablePageName = ref('');
-const token = authStore.token;
 
 const enableEditing = (child) => {
   editablePageId.value = child.id;
@@ -123,7 +122,7 @@ const updatePageName = async (child, childIndex) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({
         page_id: child.id,
@@ -165,7 +164,7 @@ const createChangeRequest = async (title) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({
         page_id: selectedChildPageId.value,
@@ -215,7 +214,7 @@ const onDragEnd = async (event) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify(payload)
     });
@@ -245,7 +244,7 @@ const deletePage = async (page) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({ page_id: page.id })
     });
@@ -271,7 +270,7 @@ const togglePublish = async (page, parentState, childIndex) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}`
       },
       body: JSON.stringify({ page_id: page.id })
     });
@@ -288,11 +287,58 @@ const togglePublish = async (page, parentState, childIndex) => {
     }
   } catch (error) {
     console.error('Error toggling publish state:', error);
-    toast.error('Error toggling publish state.');
+  }
+};
+
+const togglePageInNav = async (page, parentState, childIndex) => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/toggle-page-in-nav`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authStore.token}`,
+      },
+      body: JSON.stringify({ page_id: page.id }),
+    });
+
+    const data = await response.json();
+    if (data.code === 200 || data.code === 201) {
+      toast.success(data.message);
+      page.is_in_nav = data.code === 200;
+      emit('update:children', [...props.children]);
+    } else {
+      console.error("Failed to toggle page navigation visibility:", data.message);
+      toast.error("Failed to toggle page navigation visibility.");
+    }
+  } catch (error) {
+    console.error("Error toggling page navigation visibility:", error);
+    toast.error("Error toggling page navigation visibility.");
+  }
+};
+
+const getItemClass = (level) => {
+  switch (level) {
+    case 1:
+      return "bg-white";
+    case 2:
+      return "bg-red-100";
+    case 3:
+      return "bg-blue-100";
+    default:
+      return "bg-white";
   }
 };
 </script>
 
 <style scoped>
-@import "/assets/css/style.css";
+@import "@/assets/css/style.css";
+.text-green-500 {
+  color: green;
+}
+.text-orange-500 {
+  color: orange;
+}
+.text-red-500 {
+  color: red;
+}
 </style>

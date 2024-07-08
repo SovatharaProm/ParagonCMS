@@ -17,11 +17,12 @@ import { useRoute, useRouter } from 'vue-router';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
 import plugin from 'grapesjs-tailwind';
+import { useAuthStore } from '@/stores/auth'; // Import the auth store
 
 const grapesjsEditor = ref(null);
 const route = useRoute();
 const router = useRouter();
-const token = '1094|UKAYk5Noen0Xy3IZ8Jr48ehZHHDtpm18pBHRHv4af74b8b7b:::admin'; // Replace this with your actual token
+const authStore = useAuthStore(); // Use the auth store
 let editor;
 
 const saveContent = async () => {
@@ -45,7 +46,7 @@ const saveContent = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${authStore.token}`, // Use token from auth store
       },
       body: JSON.stringify(data),
     });
@@ -65,7 +66,7 @@ const fetchPageContent = async (pageId) => {
   try {
     const response = await fetch(`http://157.230.37.48/api/edit-page-content?page_id=${pageId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${authStore.token}` // Use token from auth store
       }
     });
     const data = await response.json();
