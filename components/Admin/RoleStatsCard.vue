@@ -320,7 +320,7 @@ const fetchRoles = async () => {
     const result = await response.json();
     roles.value = result.data.roles;
   } catch (error) {
-    console.error("Error fetching roles:", error.message);
+  
     toast.error(error.message || "An unexpected error occurred", {
       timeout: 3000,
     });
@@ -377,7 +377,7 @@ const fetchUsers = async () => {
       });
     }
   } catch (error) {
-    console.error("Error fetching users:", error.message);
+
     toast.error(error.message || "An unexpected error occurred", {
       timeout: 3000,
     });
@@ -424,7 +424,7 @@ const deleteRole = async () => {
     deleteDialog.value = false;
     toast.success("Role deleted successfully", { timeout: 3000 });
   } catch (error) {
-    console.error("Error deleting role:", error.message);
+
     toast.error(error.message || "An unexpected error occurred", {
       timeout: 3000,
     });
@@ -473,7 +473,6 @@ const createRole = async () => {
     errorMessage.value = "";
     toast.success("Role created successfully", { timeout: 3000 });
   } catch (error) {
-    console.error("Error creating role:", error); // Log the error for debugging
     errorMessage.value = error.message || "An unexpected error occurred";
     toast.error(errorMessage.value, { timeout: 3000 });
   }
@@ -502,7 +501,7 @@ const executeSaveRoleChanges = async () => {
     confirmDialog.value = false;
     toast.success("Role changes saved successfully", { timeout: 3000 });
   } catch (error) {
-    console.error("Error saving role changes:", error.message);
+
     toast.error(error.message || "An unexpected error occurred", {
       timeout: 3000,
     });
@@ -537,8 +536,7 @@ const updateRoles = async (userIds, action) => {
 onMounted(() => {
   authStore.initializeStore();
   fetchRoles();
-  // console.log("Auth Token:", authStore.token); // Ensure this is properly set
-  // console.log("User Role:", authStore.userRole); // Ensure this is properly set
+
 });
 </script>
 

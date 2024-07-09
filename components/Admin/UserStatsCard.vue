@@ -160,7 +160,6 @@ const fetchUsers = async () => {
       suspended: user.status === 'deactivated', // Adjust to match backend's "deactivate" status
     }));
   } catch (error) {
-    console.error('Error fetching users:', error);
     toast.error('Error fetching users');
   }
 };
@@ -203,7 +202,7 @@ const toggleSuspendUser = async (user) => {
       toast.success('User unsuspended successfully');
     }
   } catch (error) {
-    console.error('Error suspending user:', error.message);
+
     toast.error(error.message || 'There was an error suspending the user');
   }
 };

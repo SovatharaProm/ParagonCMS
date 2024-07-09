@@ -100,7 +100,16 @@
 
       <div class="flex justify-end mt-6">
         <button class="bg-gray-500 text-white font-bold px-4 py-2 rounded-lg mr-4" @click="cancel">Cancel</button>
-        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="updateUserDetails">Save</button>
+        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="updateUserDetails" :disabled="isLoading">
+          <span v-if="isLoading" class="flex items-center">
+            <svg class="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            Saving...
+          </span>
+          <span v-else>Save</span>
+        </button>
       </div>
     </v-container>
   </div>
@@ -128,6 +137,7 @@ const permissionTypes = ['View', 'Edit', 'Publish', 'Delete'];
 const rolePermissions = ref({});
 
 const userRole = computed(() => authStore.userRole);
+const isLoading = ref(false); // Add isLoading state
 
 const fetchPages = async () => {
   try {
@@ -280,6 +290,7 @@ const fetchUserDetails = async () => {
 };
 
 const updateUserDetails = async () => {
+  isLoading.value = true; // Set loading state to true
   try {
     await updateRole();
     await updatePermissions();
@@ -287,6 +298,8 @@ const updateUserDetails = async () => {
   } catch (error) {
     console.error('Error updating user details:', error.message);
     toast.error('Error updating user details.');
+  } finally {
+    isLoading.value = false; // Set loading state to false
   }
   router.push('/admin/users/usermanagement');
 };
