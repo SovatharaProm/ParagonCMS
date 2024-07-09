@@ -30,7 +30,7 @@ let editor = null;
 
 const discardRoute = computed(() => {
   if (authStore.userRole === 'admin' || authStore.userRole === 'super_admin') {
-    return '/admin';
+    return '/website';
   }
   return '/';
 });
