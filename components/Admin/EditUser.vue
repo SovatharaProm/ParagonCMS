@@ -4,7 +4,7 @@
     <v-container>
       <h2 class="font-bold text-blue-900 text-xl mt-6 mb-4">User Level</h2>
       <v-row class="flex-wrap mb-6">
-        <v-col v-for="level in availableUserLevels" :key="level" class="w-1/2 md:w-1/3 lg:w-1/4 mb-4">
+        <v-col v-for="level in filteredUserLevels" :key="level" class="w-1/2 md:w-1/3 lg:w-1/4 mb-4">
           <label class="flex items-center cursor-pointer custom-checkbox">
             <input type="radio" v-model="selectedUserLevel" :value="level.toLowerCase()" class="mr-2" />
             <span class="font-bold text-sm">{{ level }}</span>
@@ -138,6 +138,13 @@ const rolePermissions = ref({});
 
 const userRole = computed(() => authStore.userRole);
 const isLoading = ref(false); // Add isLoading state
+
+const filteredUserLevels = computed(() => {
+  if (userRole.value === 'admin') {
+    return availableUserLevels.filter(level => level !== 'Admin');
+  }
+  return availableUserLevels;
+});
 
 const fetchPages = async () => {
   try {
@@ -282,7 +289,7 @@ const fetchUserDetails = async () => {
         }
       });
     } else {
-      console.warn('No pages found in the response');
+    
     }
   } catch (error) {
     console.error('Error fetching user details:', error.message);
