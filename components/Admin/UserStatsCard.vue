@@ -200,7 +200,7 @@ const toggleSuspendUser = async (user) => {
     }
 
     // If the suspended user is the current user, log them out and redirect to login
-    if (authStore.userId === user.id && user.suspended) {
+    if (authStore.token && user.id === authStore.userId && user.suspended) {
       await authStore.logout();
       router.push('/auth/login?message=Your account has been suspended.');
     }

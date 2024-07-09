@@ -91,6 +91,7 @@ export const useAuthStore = defineStore('auth', {
         this.nullToken();
       } catch (error) {
         console.error('Error logging out:', error);
+        this.nullToken(); // Ensure token is nullified even if the logout request fails
       }
     },
   },
