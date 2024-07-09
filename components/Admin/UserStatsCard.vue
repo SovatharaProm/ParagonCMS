@@ -45,7 +45,7 @@
       </select>
     </div>
 
-    <div class="overflow-x-auto mb-20">
+    <div class="overflow-x-auto">
       <table class="min-w-full leading-normal">
         <thead>
           <tr>
@@ -93,15 +93,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="sticky-footer flex justify-end gap-4 mt-4 p-4 bg-white border-t border-gray-200">
-      <button @click="cancel" class="bg-gray-500 hover:bg-gray-400 text-white py-2 px-4 rounded">
-        Cancel
-      </button>
-      <button @click="saveChanges" class="bg-blue-900 hover:bg-blue-600 text-white py-2 px-4 rounded">
-        Save
-      </button>
     </div>
   </div>
 </template>
@@ -211,9 +202,12 @@ const toggleSuspendUser = async (user) => {
       toast.success('User unsuspended successfully');
     }
   } catch (error) {
+
     toast.error(error.message || 'There was an error suspending the user');
   }
 };
+
+
 
 function getRoleClass(role) {
   switch (role) {
@@ -235,15 +229,6 @@ const cancel = () => {
 
 const isAdmin = computed(() => authStore.userRole === "admin");
 
-const saveChanges = async () => {
-  try {
-    // Add your save logic here
-    toast.success('Changes saved successfully');
-  } catch (error) {
-    toast.error('Error saving changes');
-  }
-};
-
 onMounted(fetchUsers);
 </script>
 
@@ -256,12 +241,5 @@ onMounted(fetchUsers);
 
 .Admin {
   color: red;
-}
-
-.sticky-footer {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 </style>
