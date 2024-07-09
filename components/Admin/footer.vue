@@ -3,7 +3,7 @@
       <h1 class="text-2xl font-bold text-blue-900 text-start pt-4 pb-6 h-fit w-1/2">
         Footer
       </h1>
-      <div class="flex gap-5 my-auto w-3/4 flex-col">
+      <div v-if="footer !== null" class="flex gap-5 my-auto w-3/4 flex-col">
         <div class="flex justify-between m-1 p-2 px-5 shadow items-center rounded">
           <div class="my-2">
             <h3 class="font-medium">Footer</h3>
@@ -20,7 +20,7 @@
               </template>
               <v-list>
                 <v-list-item @click="toggleFooter">
-                  <v-list-item-title>{{ footer?.isActive ? 'Unpublish' : 'Publish' }}</v-list-item-title>
+                  <v-list-item-title>{{ footer.isActive ? 'Unpublish' : 'Publish' }}</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="publishFooter">
                   <v-list-item-title>Apply Draft</v-list-item-title>
@@ -72,7 +72,7 @@
               ...data.data.footer,
               isActive: data.data.footer.is_published, // Assuming 'is_published' indicates if the footer is active
             }
-          : { isActive: false }; // Handle null case
+          : null; // Set to null if no footer is returned
         console.log('footer fetched:', footer.value);
       } else {
         console.error('Error fetching footer:', data.message);
