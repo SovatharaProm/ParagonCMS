@@ -317,7 +317,7 @@ const togglePublish = async (page, parentState, childIndex) => {
       emit('update:children', [...props.children]);
     } else {
       console.error('Failed to toggle publish state:', data.message);
-      toast.error('Failed to toggle publish state.');
+      toast.error(data.message);
     }
   } catch (error) {
     console.error('Error toggling publish state:', error);
