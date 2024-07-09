@@ -15,10 +15,7 @@ export const useAuthStore = defineStore('auth', {
 
       if (this.token) {
         await this.fetchUserRole();
-      } 
-      // else {
-      //   console.error('No token found');
-      // }
+      }
     },
 
     setToken(token) {
@@ -75,7 +72,7 @@ export const useAuthStore = defineStore('auth', {
       this.userName = null;
     },
 
-    async logout(router) {
+    async logout() {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/log-out`, {
           method: 'POST',
@@ -92,11 +89,9 @@ export const useAuthStore = defineStore('auth', {
         }
 
         this.nullToken();
-        router.push('/auth/login');
       } catch (error) {
         console.error('Error logging out:', error);
       }
     },
   },
 });
-  

@@ -167,11 +167,6 @@ const fetchUsers = async () => {
 
 const toggleSuspendUser = async (user) => {
   try {
-    console.log('User object:', user); // Debug log to check the user object
-    if (!user || !user.id) {
-      throw new Error('Invalid user object');
-    }
-
     const response = await fetch(`${API_BASE_URL}/ban-user`, {
       method: 'POST',
       headers: {
@@ -200,22 +195,20 @@ const toggleSuspendUser = async (user) => {
     // Show a toast notification
     if (user.suspended) {
       toast.success('User suspended successfully');
-      // Terminate the session for the suspended user
-      if (user.id === authStore.user.id) {
-        await authStore.logout();
-        router.push('/auth/login');
-      }
     } else {
       toast.success('User unsuspended successfully');
+    }
+
+    // If the suspended user is the current user, log them out and redirect to login
+    if (authStore.userId === user.id && user.suspended) {
+      await authStore.logout();
+      router.push('/auth/login?message=Your account has been suspended.');
     }
   } catch (error) {
     console.error('Error suspending user:', error.message);
     toast.error(error.message || 'There was an error suspending the user');
   }
 };
-
-
-
 
 function getRoleClass(role) {
   switch (role) {

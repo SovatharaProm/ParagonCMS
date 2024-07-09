@@ -107,14 +107,14 @@ const fetchPageContent = async (pageId) => {
   }
 };
 
-const customElementsPlugin = (editor) => {
+const customElementsPlugin = editor => {
   editor.Blocks.add('1-column', {
     label: '1 Column',
     content: `<div style="display:flex;">
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color:#fffff"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' },
+    attributes: { class: 'fa fa-columns' }
   });
 
   editor.Blocks.add('2-columns', {
@@ -124,18 +124,18 @@ const customElementsPlugin = (editor) => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' },
+    attributes: { class: 'fa fa-columns' }
   });
 
   editor.Blocks.add('2-columns-2-3', {
-    label: '2 Columns 2/3',
-    content: `<div style="display:flex;">
-                <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-              </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' },
-  });
+      label: '2 Columns 2/3',
+      content: `<div style="display:flex;">
+                  <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                  <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                </div>`,
+      category: 'Column',
+      attributes: { class: 'fa fa-columns' }
+    });
 
   editor.Blocks.add('2-columns-3-7', {
     label: '2 Columns 3/7',
@@ -144,7 +144,7 @@ const customElementsPlugin = (editor) => {
                 <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' },
+    attributes: { class: 'fa fa-columns' }
   });
 
   editor.Blocks.add('2-columns-7-3', {
@@ -154,7 +154,7 @@ const customElementsPlugin = (editor) => {
                 <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' },
+    attributes: { class: 'fa fa-columns' }
   });
 
   editor.Blocks.add('3-columns', {
@@ -165,7 +165,18 @@ const customElementsPlugin = (editor) => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' },
+    attributes: { class: 'fa fa-columns' }
+  });
+  
+  editor.Blocks.add('3-columns', {
+    label: '3 Columns',
+    content: `<div style="display:flex;">
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
   });
 
   editor.Blocks.add('4-columns', {
@@ -177,59 +188,165 @@ const customElementsPlugin = (editor) => {
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
     category: 'Column',
-    attributes: { class: 'fa fa-columns' },
+    attributes: { class: 'fa fa-columns' }
   });
 
   editor.Blocks.add('text-block', {
     label: 'Text',
     content: '<div data-gjs-type="text">Insert your text here</div>',
     category: 'Basic',
-    attributes: { class: 'fa fa-text-height' },
+    attributes: { class: 'fa fa-text-height' }
   });
 
   editor.Blocks.add('image-block', {
     label: 'Image',
-    content: '<img data-gjs-type="image" src="" alt="Placeholder image"/>',
+    content: '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
     category: 'Basic',
-    attributes: { class: 'fa fa-image' },
+    attributes: { class: 'fa fa-image' }
   });
 
-  editor.Blocks.add('image-slideshow-block', {
-    label: 'Image Slideshow',
+editor.Blocks.add('icon-bar-block', {
+    label: 'Icon Bar',
     content: `
-        <div class="image-slideshow">
-            <div class="slides">
-                <div class="slide"><img src="" alt="Image 1"></div>
-                <div class="slide"><img src="" alt="Image 2"></div>
-                <div class="slide"><img src="" alt="Image 3"></div>
-            </div>
-            <a class="prev">&#10094;</a>
-            <a class="next">&#10095;</a>
+        <div class="container mx-auto" style="display: flex; justify-content: space-around; align-items: center; padding: 10px; background-color: #f4f4f4;">
+        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
+            <img src="apple-icon.png" style="width: 50px; height: 50px; float: left" alt="Student Clubs">
+            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Student Clubs</p>
+            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
         </div>
-    `,
+        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
+            <img src="graduate-icon.png" style="width: 50px; height: 50px; float: left" alt="Partner Universities">
+            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Partner Universities</p>
+            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
+        </div>
+        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
+            <img src="scholarship-icon.png" style="width: 50px; height: 50px; float: left" alt="Active Scholarships">
+            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Active Scholarships</p>
+            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
+        </div>
+        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
+            <img src="gallery-icon.png" style="width: 50px; height: 50px; float: left" alt="Gallery">
+            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Gallery</p>
+            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">View ...</a>
+        </div>
+    </div>`,
     category: 'Advanced',
-    attributes: { class: 'fa fa-images' },
-  });
+    attributes: { class: 'fa fa-cog' }
+});
+
+editor.Blocks.add('page-detail-block', {
+    label: 'Page Detail',
+    content: `
+        <div class="container" style="width: 300px; margin: 20px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
+        <div class="header" style="background-color: #f1f1f1; padding: 20px; text-align: center; border-bottom: 1px solid #ddd;">
+            <h2 style="margin: 0; font-size: 1.5em; color: #333; text-align: left;">Computer Science</h2>
+        </div>
+        <div class="content" style="padding: 20px;">
+            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">Academic Staff</a>
+            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">Department FB Page</a>
+            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">FAQ</a>
+            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">Apply for Admission</a>
+        </div>
+    </div>`,
+    category: 'Advanced',
+    attributes: { class: 'fa fa-list-ul' }
+});
+
+editor.Blocks.add('dep-contact-block', {
+    label: 'Department Contact',
+    content: `
+    <body style="font-family: Arial, sans-serif;
+            background-color: #1d274b;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200vh;
+            margin: 0;">
+        <div class="container" style="background-color: #273264;
+            padding: 20px;
+            width: 300px;
+            text-align: left;">
+        <h2 style="color: #ffffff;
+            margin-bottom: 20px;">Department Contact Info</h2>
+        <div class="info" style="margin-bottom: 20px;">
+            <h3 style="color: #fbbd05;
+            margin-top: 0;">Department of Computer Science</h3>
+            <p style="color: #ffffff"><span class="icon">📍</span> Paragon International University</p>
+            <p style="color: #ffffff"><span class="icon">⏰</span> Monday – Friday ➡️ 08:00 – 17:00</p>
+            <p style="color: #ffffff"><span class="icon">✉️</span> ict@paragoniu.edu.kh</p>
+        </div>
+        <div class="social">
+            <h2 style="style="color: #ffffff;
+            margin-bottom: 20px;">Social Info</h2>
+            <p style="color: #ffffff"><a href="#">Facebook</a></p>
+        </div>
+    </div>
+    </body>`,
+    category: 'Advanced',
+    attributes: { class: 'fa fa-list-ul' }
+});
+
+editor.Blocks.add('faculty-departments-block', {
+    label: 'Faculty Departments',
+    content: `
+    <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+        <table style="width: 100%; border-collapse: collapse; margin: 0 auto; background-color: #ffffff;">
+            <thead>
+                <tr>
+                    <th style="background-color: #fbbd05; color: white; padding: 10px; text-align: left; font-size: 1.2em;">Faculty</th>
+                    <th style="background-color: #fbbd05; color: white; padding: 10px; text-align: left; font-size: 1.2em;">Departments</th>
+                    <th style="background-color: #fbbd05; color: white; padding: 10px; text-align: left; font-size: 1.2em;">Fee/Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">Faculty of Engineering</td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;">Architecture<br>Civil Engineering<br>Industrial Engineering</td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">2,250 USD</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">Faculty of Information and Computer Technologies</td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;">Computer Science<br>Management of Information Systems</td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">1,750 USD</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">Economics and Administrative Sciences</td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;">Banking and Finance<br>Business Administration<br>International Trade and Logistics<br>International Relations</td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">1,500 USD</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">English Preparatory School</td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;"></td>
+                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">1,250 USD</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>`,
+    category: 'Advanced',
+    attributes: { class: 'fa fa-table' }
+});
+
 
   editor.Blocks.add('video-block', {
     label: 'Video',
-    content: '<video controls></video>',
+    content: '<video controls><source src="path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
     category: 'Basic',
-    attributes: { class: 'fa fa-video-camera' },
+    attributes: { class: 'fa fa-video-camera' }
   });
 
-  editor.Blocks.add('link-block', {
+   editor.Blocks.add('link-block', {
     label: 'Link',
     content: '<a href="#" class="custom-link">Click here</a>',
     category: 'Basic',
-    attributes: { class: 'fa fa-link' },
+    attributes: { class: 'fa fa-link' }
   });
 
   editor.Blocks.add('map-block', {
     label: 'Map',
     content: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019879094116!2d144.96305831531678!3d-37.81410797975133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5777529bb4d3bd5!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1614114372457!5m2!1sen!2sau" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`,
     category: 'Basic',
-    attributes: { class: 'fa fa-map' },
+    attributes: { class: 'fa fa-map' }
   });
 
   editor.Blocks.add('text-section-block', {
@@ -239,14 +356,14 @@ const customElementsPlugin = (editor) => {
                 <p>This is a text section. Add your content here.</p>
               </div>`,
     category: 'Basic',
-    attributes: { class: 'fa fa-font' },
+    attributes: { class: 'fa fa-font' }
   });
 
   editor.Blocks.add('link-block', {
     label: 'Link',
     content: '<a href="#" class="custom-link">Click here</a>',
     category: 'Basic',
-    attributes: { class: 'fa fa-link' },
+    attributes: { class: 'fa fa-link' }
   });
 
   editor.Blocks.add('testimonial-block', {
@@ -256,18 +373,16 @@ const customElementsPlugin = (editor) => {
                 <cite>- Jane Doe</cite>
               </div>`,
     category: 'Basic',
-    attributes: { class: 'fa fa-quote-right' },
+    attributes: { class: 'fa fa-quote-right' }
   });
 
   editor.Blocks.add('form-block', {
     label: 'Form',
-    content: `<form class="custom-form">
-                <input type="text" name="name" placeholder="Your Name"/>
-                <textarea name="message" placeholder="Your Message"></textarea>
-                <select name="options">
-                  <option value="option1">Option 1</option>
-                  <option value="option2"></option>
-                </select>
+    content: `<form class="custom-form" style=" max-width: 400px; margin: 0 auto; padding: 20px; background: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="name" placeholder="Your Name"/>
+                <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="phonenumber" placeholder="Phone Number"/>
+                <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="email" placeholder="Email"/>
+                <textarea style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical; height: 100px;" name="message" placeholder="Your Message"></textarea>
                 <div>
                   <label><input type="checkbox" name="subscribe"/> Subscribe to newsletter</label>
                 </div>
@@ -275,10 +390,10 @@ const customElementsPlugin = (editor) => {
                   <label><input type="radio" name="gender" value="male"/> Male</label>
                   <label><input type="radio" name="gender" value="female"/> Female</label>
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit" style="width: 100%; padding: 10px; background: #007bff; border: none; border-radius: 4px; color: #fff; font-size: 16px; cursor: pointer;">Submit</button>
               </form>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-wpforms' },
+    attributes: { class: 'fa fa-wpforms' }
   });
 
   editor.Blocks.add('contact-form-block', {
@@ -293,38 +408,38 @@ const customElementsPlugin = (editor) => {
                 <button type="submit">Send</button>
               </form>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-envelope' },
+    attributes: { class: 'fa fa-envelope' }
   });
 
   editor.Blocks.add('input-block', {
     label: 'Input',
     content: '<input type="text" name="name" placeholder="Your Name" class="custom-input"/>',
     category: 'Forms',
-    attributes: { class: 'fa fa-pencil' },
+    attributes: { class: 'fa fa-pencil' }
   });
 
   editor.Blocks.add('textarea-block', {
     label: 'Textarea',
     content: '<textarea name="message" placeholder="Your Message" class="custom-textarea"></textarea>',
     category: 'Forms',
-    attributes: { class: 'fa fa-align-left' },
+    attributes: { class: 'fa fa-align-left' }
   });
 
   editor.Blocks.add('select-block', {
     label: 'Select',
     content: `<select name="options" class="custom-select">
                 <option value="option1">Option 1</option>
-                <option value="option2"></option>
+                <option value="option2">Option 2</option>
               </select>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-caret-down' },
+    attributes: { class: 'fa fa-caret-down' }
   });
 
   editor.Blocks.add('checkbox-block', {
     label: 'Checkbox',
     content: '<label><input type="checkbox" name="subscribe" class="custom-checkbox"/> Subscribe to newsletter</label>',
     category: 'Forms',
-    attributes: { class: 'fa fa-check-square' },
+    attributes: { class: 'fa fa-check-square' }
   });
 
   editor.Blocks.add('radio-block', {
@@ -334,41 +449,18 @@ const customElementsPlugin = (editor) => {
                 <label><input type="radio" name="gender" value="female" class="custom-radio"/> Female</label>
               </div>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-dot-circle-o' },
+    attributes: { class: 'fa fa-dot-circle-o' }
   });
 
   editor.Blocks.add('button-block', {
     label: 'Button',
-    content: `<button class="btn-primary" style="
-    font-size: .92em !important;
-    padding: 15px 35px !important;
-    background: #2a3037 !important;
-    color: #ffffff !important;
-    letter-spacing: 1px;
-    font-weight: bold !important;
+    content: `<button class="btn-primary" style="font-size: .92em !important; padding: 15px 35px !important; background: #ffae00 !important; color: #ffffff !important; letter-spacing: 1px; font-weight: bold !important;
     text-transform: uppercase;
     border: none !important;
     border-radius: 3px !important;
     height: auto !important;">Click Me</button>`,
     category: 'Forms',
-    attributes: { class: 'fa fa-minus-square-o' },
-  });
-
-  editor.Blocks.add('navbar-block', {
-    label: 'Navigation Bar',
-    content: `<nav class="navbar" 
-    style="background-color: #fff;
-    color: white;
-    padding: 10px 0;">
-                <a href="#home">Home</a>
-                <a href="#services">Services</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
-              </nav>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-bars' },
+    attributes: { class: 'fa fa-minus-square-o' }
   });
 
   editor.Blocks.add('feature-list-block', {
@@ -379,17 +471,66 @@ const customElementsPlugin = (editor) => {
                 <li>Feature 3</li>
               </ul>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-list' },
+    attributes: { class: 'fa fa-list' }
   });
 
   editor.Blocks.add('footer-block', {
     label: 'Footer',
-    content: `<footer>
-                <p>Contact Us: email@example.com</p>
-                <p>&copy; 2023 Company Name</p>
-              </footer>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-file-text-o' },
+    content: `<footer class="bg-stone-900 text-gray-300 py-10">
+      <div class="container mx-auto grid grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="my-10">
+            <li><a href="#" class="hover:text-gray-100">Home</a></li>
+            <li><a href="#" class="hover:text-gray-100">Library</a></li>
+            <li><a href="#" class="hover:text-gray-100">Undergraduate Majors</a></li>
+            <li><a href="#" class="hover:text-gray-100">Postgraduate Programs</a></li>
+            <li><a href="#" class="hover:text-gray-100">Jobs@Paragon</a></li>
+            <li><a href="#" class="hover:text-gray-100">My.Paragon.U</a></li>
+            <li><a href="#" class="hover:text-gray-100">Tuition and Fees</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Recent Posts</h3>
+          <ul class="my-10">
+            <li><a href="#" class="hover:text-gray-100">USDP Cohort 5 Grand Finale and Awards Ceremony</a></li>
+            <li><a href="#" class="hover:text-gray-100">National Exam Grade-Based Scholarship</a></li>
+            <li><a href="#" class="hover:text-gray-100">Scholarship Exam 2023 Awards</a></li>
+            <li><a href="#" class="hover:text-gray-100">Hengsopheavan Sam, MIS Alumnus, and his Startups "Kong Vong"</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Find Us</h3>
+          <div class="my-10">
+            <p>Paragon International University</p>
+            <p>No. 8, St. 315, Boeng Kak 1, Tuol Kork, Phnom Penh, Cambodia, 12151</p>
+            <p>+855 23 996 111</p>
+            <p>+855 17 996 111</p>
+            <p>+855 15 996 111</p>
+            <p>info@paragoniu.edu.kh</p>
+            </div>
+        </div>
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Paragon International University</h3>
+          <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+          <div class="h-96">
+            <iframe
+              width="100%"
+              height="100%"
+              frameborder="0"
+              style="border:0"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019879094116!2d144.96305831531678!3d-37.81410797975133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5777529bb4d3bd5!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1614114372457!5m2!1sen!2sau"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-gray-800 pt-4 text-center text-sm">
+        <p>Copyright © All Rights Reserved. 2022, PARAGON International University</p>
+      </div>
+    </footer>`,
+    category: 'Layout',
+    attributes: { class: 'fa fa-file-text-o' } 
   });
 
   editor.Blocks.add('faq-block', {
@@ -406,7 +547,7 @@ const customElementsPlugin = (editor) => {
                 </div>
               </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-question-circle' },
+    attributes: { class: 'fa fa-question-circle' }
   });
 
   editor.Blocks.add('team-section-block', {
@@ -414,18 +555,18 @@ const customElementsPlugin = (editor) => {
     content: `<div class="team-section">
                 <h2>Our Team</h2>
                 <div class="team-member">
-                  <img src="" alt="Team Member">
+                  <img src="path-to-image.jpg" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
                 <div class="team-member">
-                  <img src="" alt="Team Member">
+                  <img src="path-to-image.jpg" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
               </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-users' },
+    attributes: { class: 'fa fa-users' }
   });
 
   editor.Blocks.add('cta-block', {
@@ -436,7 +577,7 @@ const customElementsPlugin = (editor) => {
                 <button class="btn-cta">Take Action</button>
               </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-bullhorn' },
+    attributes: { class: 'fa fa-bullhorn' }
   });
 
   editor.Blocks.add('curriculum-table', {
@@ -462,7 +603,7 @@ const customElementsPlugin = (editor) => {
                 </div>
             </div>`,
     category: 'Extra',
-    attributes: { class: 'fa fa-table' },
+    attributes: { class: 'fa fa-table' }
   });
 
   editor.DomComponents.addType('fixed-content', {
@@ -483,36 +624,75 @@ const customElementsPlugin = (editor) => {
    // Now, add this new fixed content block to the canvas
    editor.BlockManager.add('fixed-content-block', {
      label: 'NavBar',
-     content: `<header class="bg-blue-950 py-2 my-auto">
-        <div class="container mx-auto flex items-center justify-between">
-            <nav class="flex space-x-8">
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto bg-yellow-300 p-2">My.Paragon.U</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="mx-20 my-auto py-3 border-b-2 ">
-        <div class="flex items-center justify-between">
-            <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+     content: `<header style="background-color: rgb(23 37 84); padding: 0.5rem;">
+            <div style="container mx-auto display: flex; align-items: flex-end; ">
+                <nav style="display: flex; margin-left: 500px;  justify-content: flex-end;">
+                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-top: 10px; margin-bottom: 10px;">Rector's Scholarship</a>
+                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Covid-19 Info</a>
+                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Alumni</a>
+                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Calendar</a>
+                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">FAQ</a>
+                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Jobs@Paragon.U</a>
+                    <a href="#" style="margin-left: 1.25rem; padding: 0.5rem; color: #ffffff; background-color: #F59E0B; :hover {color: #D1D5DB;}py-full">My.Paragon.U</a>
+                </nav>
             </div>
+        </header>
+    <main style="margin-left: 5rem; margin-right: 5rem; border-bottom-width: 2px; ">
+      <div style="display: flex; justify-content: space-between; align-items: center; ">
+        <img src="/assets/images/Logo.png" alt="Paragon University Logo" style="height: 5rem; ">
+        <div style="display: flex; margin-left: 2rem; font-weight: 600; ">
+          <div style="position: relative; ">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">About</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Our History</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Mission & Vision</a>
+            </div>
+          </div>
+          <div style="position: relative; ">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Paragon Students</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Current Students</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Student Life</a>
+            </div>
+          </div>
+          <div style="position: relative; ">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Prospective Students</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Admissions</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Programs</a>
+            </div>
+          </div>
+          <div style="position: relative; ">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Academics</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Departments</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Research</a>
+            </div>
+          </div>
+          <div style="position: relative; ">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Admissions</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Apply Now</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Financial Aid</a>
+            </div>
+          </div>
+          <div style="position: relative; >
+            <a href="#" style="font-weight: 500; font-size: 1rem; olor: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Partnerships</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Collaborations</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Corporate Partners</a>
+            </div>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" style="width: 1.5rem; height: 1.5rem; margin-left: 36px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
-    </main>`
-    });
+      </div>
+    </main>`,
+     category: 'Layout',
+     attributes: { class: 'fa fa-lock' }
+   });
+   
 };
 
 const uploadFileToSpace = async (file) => {
