@@ -77,21 +77,22 @@
           </table>
         </div>
       </template>
-
-      <div class="flex justify-end mt-6">
-        <button class="bg-gray-500 text-white font-bold px-4 py-2 rounded-lg mr-4" @click="cancel">Cancel</button>
-        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="sendInvite" :disabled="isLoading">
-          <span v-if="isLoading" class="flex items-center">
-            <svg class="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-            </svg>
-            Sending...
-          </span>
-          <span v-else>Send Invite</span>
-        </button>
-      </div>
     </v-container>
+
+    <!-- Sticky Footer Buttons -->
+    <div class="sticky-footer flex justify-end p-4 bg-white border-t border-gray-200">
+      <button class="bg-gray-500 text-white font-bold px-4 py-2 rounded-lg mr-4" @click="cancel">Cancel</button>
+      <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="sendInvite" :disabled="isLoading">
+        <span v-if="isLoading" class="flex items-center">
+          <svg class="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          Sending...
+        </span>
+        <span v-else>Send Invite</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -321,5 +322,12 @@ function debounce(fn, delay) {
 
 .child-permission td {
   background-color: #f9f9f9; /* Light gray for children */
+}
+
+.sticky-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>

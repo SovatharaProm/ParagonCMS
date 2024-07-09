@@ -342,7 +342,7 @@ const togglePageInNav = async (page, parentState, childIndex) => {
       emit('update:children', [...props.children]);
     } else {
       console.error("Failed to toggle page navigation visibility:", data.message);
-      toast.error("Failed to toggle page navigation visibility.");
+      toast.error(data.message);
     }
   } catch (error) {
     console.error("Error toggling page navigation visibility:", error);
