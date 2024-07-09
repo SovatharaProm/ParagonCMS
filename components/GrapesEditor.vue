@@ -189,7 +189,7 @@ const customElementsPlugin = (editor) => {
 
   editor.Blocks.add('image-block', {
     label: 'Image',
-    content: '<img data-gjs-type="image" src="assets/images/Logo.png" alt="Placeholder image"/>',
+    content: '<img data-gjs-type="image" src="" alt="Placeholder image"/>',
     category: 'Basic',
     attributes: { class: 'fa fa-image' },
   });
@@ -199,9 +199,9 @@ const customElementsPlugin = (editor) => {
     content: `
         <div class="image-slideshow">
             <div class="slides">
-                <div class="slide"><img src="assets/images/Logo.png" alt="Image 1"></div>
-                <div class="slide"><img src="assets/images/Logo.png" alt="Image 2"></div>
-                <div class="slide"><img src="assets/images/Logo.png" alt="Image 3"></div>
+                <div class="slide"><img src="" alt="Image 1"></div>
+                <div class="slide"><img src="" alt="Image 2"></div>
+                <div class="slide"><img src="" alt="Image 3"></div>
             </div>
             <a class="prev">&#10094;</a>
             <a class="next">&#10095;</a>
@@ -414,12 +414,12 @@ const customElementsPlugin = (editor) => {
     content: `<div class="team-section">
                 <h2>Our Team</h2>
                 <div class="team-member">
-                  <img src="assets/images/Logo.png" alt="Team Member">
+                  <img src="" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
                 <div class="team-member">
-                  <img src="assets/images/Logo.png" alt="Team Member">
+                  <img src="" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
