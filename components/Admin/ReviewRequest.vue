@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="flex justify-end mt-96 gap-4">
+    <div class="sticky-buttons-container">
       <button
         @click="openRejectModal"
         class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
@@ -211,16 +211,15 @@ onMounted(async () => {
 
 <style scoped>
 @import "@/assets/css/style.css";
-.creator .avatar {
-  font-size: 0.75rem; /* Adjust size as needed */
-}
 
-textarea {
-  border: none;
-  resize: none;
-}
-
-.actions button {
-  width: 100px; /* Fixed width for buttons */
+.sticky-buttons-container {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 </style>
