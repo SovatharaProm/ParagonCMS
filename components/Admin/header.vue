@@ -76,13 +76,12 @@ const fetchHeaders = async () => {
       },
     });
     const data = await response.json();
-    console.log("API response:", data);
     if (data.code === 200) {
       headers.value = data.data.headers.map((header) => ({
         ...header,
         isActive: header.is_published, // Assuming 'is_published' indicates if the header is active
       }));
-      console.log("Headers fetched:", headers.value);
+      
     } else {
       console.error("Error fetching headers:", data.message);
     }

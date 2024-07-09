@@ -70,6 +70,7 @@
                 class="flex flex-col md:flex-row justify-end space-y-2 md:space-y-0 md:space-x-2"
               >
                 <NuxtLink
+                  v-if="!isAdmin"
                   :to="{
                     path: '/admin/permission/rolepermission',
                     query: { role_id: role.id },
@@ -80,6 +81,7 @@
                   <Icon name="lucide:edit" class="text-2xl"></Icon>
                 </NuxtLink>
                 <button
+                  v-if="!isAdmin"
                   @click="editRole(role)"
                   class="hover:text-green-500 text-green-700"
                   title="Assign Role to User"
@@ -87,6 +89,7 @@
                   <Icon name="clarity:assign-user-line" class="text-2xl"></Icon>
                 </button>
                 <button
+                  v-if="!isAdmin"
                   @click="openDeleteDialog(role)"
                   class="hover:text-red-700 text-red-500"
                   title="Delete Role"

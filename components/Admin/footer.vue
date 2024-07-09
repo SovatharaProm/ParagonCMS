@@ -65,7 +65,7 @@
       },
     });
     const data = await response.json();
-    console.log('API response:', data);
+
     if (data.code === 200) {
       footer.value = data.data && data.data.footer
         ? {
@@ -73,7 +73,6 @@
             isActive: data.data.footer.is_published, // Assuming 'is_published' indicates if the footer is active
           }
         : null; // Set to null if no footer is returned
-      console.log('footer fetched:', footer.value);
     } else {
       console.error('Error fetching footer:', data.message);
       throw new Error(data.message);
