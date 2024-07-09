@@ -91,6 +91,7 @@ import { ref, onMounted } from "vue";
 import { useToast } from "vue-toast-notification";
 import { useAuthStore } from "../stores/auth";
 import { useRouter, useRoute } from "vue-router";
+import AdminRejectCommentDialog from './AdminRejectCommentDialog.vue';
 
 const toast = useToast();
 const router = useRouter();
@@ -192,7 +193,6 @@ const handleRejectSubmit = async (comment) => {
     );
   }
 };
-
 const statusClass = (status) => {
   switch (status) {
     case "Approved":
