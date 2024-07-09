@@ -244,7 +244,7 @@ const sendInvite = async () => {
     pages: pagesPayload,
   };
 
-  console.log('Sending payload:', JSON.stringify(payload, null, 2));
+
 
   try {
     const response = await fetch(`${API_BASE_URL}/register`, {
@@ -257,18 +257,18 @@ const sendInvite = async () => {
     });
 
     const responseData = await response.json();
-    console.log('Server response:', responseData);
+
 
     if (!response.ok) {
       console.error('Server response error:', responseData);
       throw new Error(responseData.message || 'Invalid request');
     }
 
-    console.log('Invite sent successfully:', responseData);
+
     toast.success('Invite sent successfully!');
     router.push('/admin/users/usermanagement'); // Navigate to user management after successful invite
   } catch (error) {
-    console.error('There was an error sending the invite:', error);
+
     toast.error('There was an error sending the invite.');
   } finally {
     isLoading.value = false; // Set loading state to false

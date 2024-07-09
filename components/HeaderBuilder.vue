@@ -12,14 +12,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed} from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRoute, useRouter } from 'vue-router';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
 import plugin from 'grapesjs-tailwind';
 import 'tailwindcss/tailwind.css';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
+const toast = useToast();
 const isAdmin = computed(() => authStore.userRole === "admin" || authStore.userRole === "super_admin");
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const authStore = useAuthStore();
@@ -29,41 +32,41 @@ const router = useRouter();
 let editor;
 
 const saveContent = async () => {
-if (!editor) {
-  console.error('Editor is not initialized');
-  return;
-}
-
-const html = editor.getHtml();
-const css = editor.getCss();
-const headerId = route.query.id; // Get the header ID from the route query
-
-const data = {
-  header_id: headerId,
-  html: html,
-  css: css,
-};
-
-try {
-  const response = await fetch(`${API_BASE_URL}/update-header`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authStore.token}`,
-    },
-    body: JSON.stringify(data),
-  });
-  const result = await response.json();
-  if (result.code === 200) {
-    console.log('Saved content for header:', headerId); // Debug log
-    alert('Content saved successfully!');
-    router.push('/admin/website');
-  } else {
-    alert('Error: ' + result.message);
+  if (!editor) {
+    console.error('Editor is not initialized');
+    return;
   }
-} catch (error) {
-  alert('Error: ' + error.message);
-}
+
+  const html = editor.getHtml();
+  const css = editor.getCss();
+  const headerId = route.query.id; // Get the header ID from the route query
+
+  const data = {
+    header_id: headerId,
+    html: html,
+    css: css,
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/update-header`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authStore.token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (result.code === 200) {
+      console.log('Saved content for header:', headerId); // Debug log
+      toast.success('Content saved successfully!');
+      router.push('/admin/website');
+    } else {
+      toast.error('Error: ' + result.message);
+    }
+  } catch (error) {
+    toast.error('Error: ' + error.message);
+  }
 };
 
 
@@ -240,10 +243,7 @@ console.log('Editing header with ID:', headerId); // Debug log
 
   editor = grapesjs.init({
     container: grapesjsEditor.value,
-    plugins: [customElementsPlugin,
-    plugin
-    ],
-    
+    plugins: [customElementsPlugin, plugin],
     fromElement: true,
     height: '100vh',
     width: '100%',

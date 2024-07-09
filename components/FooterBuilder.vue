@@ -30,7 +30,10 @@ import grapesjs from "grapesjs";
 import "grapesjs/dist/css/grapes.min.css";
 import plugin from "grapesjs-tailwind";
 import "tailwindcss/tailwind.css";
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
+const toast = useToast();
 const isAdmin = computed(
   () => authStore.userRole === "admin" || authStore.userRole === "super_admin"
 );
@@ -66,14 +69,13 @@ const saveContent = async () => {
     });
     const result = await response.json();
     if (result.code === 200) {
-      console.log("Saved footer content"); // Debug log
-      alert("Content saved successfully!");
+      toast.success("Content saved successfully!");
       router.push("/admin/website");
     } else {
-      alert("Error: " + result.message);
+      toast.error("Error: " + result.message);
     }
   } catch (error) {
-    alert("Error: " + error.message);
+    toast.error("Error: " + error.message);
   }
 };
 

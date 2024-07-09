@@ -149,7 +149,7 @@
   
       const data = await response.json();
       if (data.code === 200) {
-        console.log("Page created successfully:", data);
+
         createPageModal.value = false;
         newPageTitle.value = "";
         parentPageId = null;
@@ -182,7 +182,7 @@
       });
       const data = await response.json();
       if (data.code === 200) {
-        console.log("Change request created successfully:", data);
+
         toast.success("Change request created successfully.");
         createChangeRequestModal.value = false;
         newChangeRequestTitle.value = ""; // Clear the input field
@@ -218,7 +218,7 @@
       const data = await response.json();
       if (data.code === 200) {
         requests.value[index].page_name = editablePageName.value;
-        console.log("Page name updated successfully:", data);
+
       } else {
         console.error("Failed to update page name:", data.message);
       }
@@ -243,13 +243,11 @@
   };
   
   const onDragEnd = async (event) => {
-    console.log("Drag end event:", event);
   
     const payload = {
       Pages: buildNestedPayload(requests.value),
     };
   
-    console.log("Payload being sent:", JSON.stringify(payload, null, 2));
   
     try {
       const response = await fetch(`${API_BASE_URL}/change-page-order`, {
@@ -263,7 +261,7 @@
   
       const data = await response.json();
       if (data.code === 200) {
-        console.log("Page order updated successfully:", data);
+
       } else {
         console.error("Failed to update page order:", data.message);
       }
@@ -276,9 +274,6 @@
     requests.value = newChildren;
   };
   
-  const handleDragEndFromChildren = (event) => {
-    console.log("Drag ended in parent from child:", event);
-  };
   
   const deletePage = async (page) => {
     try {
