@@ -63,7 +63,7 @@
     </div>
 
     <!-- Sticky Footer -->
-    <div class="sticky-footer flex justify-end p-4 bg-gray-100 border-t border-gray-200">
+    <div class="sticky-footer flex justify-end p-4 bg-white border-t border-gray-200">
       <button
         @click="openRejectModal"
         class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
@@ -92,6 +92,7 @@ import { useToast } from "vue-toast-notification";
 import { useAuthStore } from "../stores/auth";
 import { useRouter, useRoute } from "vue-router";
 
+
 const toast = useToast();
 const router = useRouter();
 const route = useRoute();
@@ -104,12 +105,10 @@ const changeRequest = ref(null);
 
 const openRejectModal = () => {
   showRejectModal.value = true;
-  document.body.style.overflow = 'hidden'; // Prevent background scrolling when modal is open
 };
 
 const closeRejectModal = () => {
   showRejectModal.value = false;
-  document.body.style.overflow = 'auto'; // Restore background scrolling
 };
 
 const fetchChangeRequestDetails = async () => {
@@ -194,7 +193,6 @@ const handleRejectSubmit = async (comment) => {
     );
   }
 };
-
 const statusClass = (status) => {
   switch (status) {
     case "Approved":
@@ -234,8 +232,5 @@ textarea {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #f8f8f8;
-  padding: 16px;
-  border-top: 1px solid #e2e8f0;
 }
 </style>
