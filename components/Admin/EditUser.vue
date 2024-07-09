@@ -22,79 +22,81 @@
         </v-col>
       </v-row>
 
-      <h2 class="font-bold text-blue-900 text-xl mb-4">Permissions</h2>
-      <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border-collapse border border-gray-200">
-          <thead>
-            <tr>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Pages</th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Create</th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Edit</th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Publish</th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-for="page in pages" :key="page.id">
-              <tr class="parent-permission">
-                <td class="px-6 py-4 border-b border-gray-200">
-                  <span>{{ page.page_name }}</span>
-                </td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[page.id].View" class="mx-auto" />
-                </td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[page.id].Edit" class="mx-auto" />
-                </td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[page.id].Publish" class="mx-auto" />
-                </td>
-                <td class="px-6 py-4 border-b border-gray-200 text-center">
-                  <input type="checkbox" v-model="rolePermissions[page.id].Delete" class="mx-auto" />
-                </td>
+      <template v-if="userRole !== 'admin'">
+        <div class="overflow-x-auto">
+          <h2 class="font-bold text-blue-900 text-xl mb-4">Permissions</h2>
+          <table class="min-w-full bg-white border-collapse border border-gray-200">
+            <thead>
+              <tr>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Pages</th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Create</th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Edit</th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Publish</th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 font-medium text-gray-700 uppercase tracking-wider">Delete</th>
               </tr>
-              <template v-if="page.children && page.children.length" v-for="child in page.children" :key="child.id">
-                <tr>
-                  <td class="px-6 py-4 border-b border-gray-200 pl-10">
-                    {{ child.page_name }}
+            </thead>
+            <tbody>
+              <template v-for="page in pages" :key="page.id">
+                <tr class="parent-permission">
+                  <td class="px-6 py-4 border-b border-gray-200">
+                    <span>{{ page.page_name }}</span>
                   </td>
                   <td class="px-6 py-4 border-b border-gray-200 text-center">
-                    <input type="checkbox" v-model="rolePermissions[child.id].View" class="mx-auto" />
+                    <input type="checkbox" v-model="rolePermissions[page.id].View" class="mx-auto" />
                   </td>
                   <td class="px-6 py-4 border-b border-gray-200 text-center">
-                    <input type="checkbox" v-model="rolePermissions[child.id].Edit" class="mx-auto" />
+                    <input type="checkbox" v-model="rolePermissions[page.id].Edit" class="mx-auto" />
                   </td>
                   <td class="px-6 py-4 border-b border-gray-200 text-center">
-                    <input type="checkbox" v-model="rolePermissions[child.id].Publish" class="mx-auto" />
+                    <input type="checkbox" v-model="rolePermissions[page.id].Publish" class="mx-auto" />
                   </td>
                   <td class="px-6 py-4 border-b border-gray-200 text-center">
-                    <input type="checkbox" v-model="rolePermissions[child.id].Delete" class="mx-auto" />
+                    <input type="checkbox" v-model="rolePermissions[page.id].Delete" class="mx-auto" />
                   </td>
                 </tr>
-                <template v-if="child.children && child.children.length" v-for="grandchild in child.children" :key="grandchild.id">
-                  <tr class="child-permission bg-gray-50">
-                    <td class="px-6 py-4 border-b border-gray-200 pl-16">
-                      {{ grandchild.page_name }}
+                <template v-if="page.children && page.children.length" v-for="child in page.children" :key="child.id">
+                  <tr>
+                    <td class="px-6 py-4 border-b border-gray-200 pl-10">
+                      {{ child.page_name }}
                     </td>
                     <td class="px-6 py-4 border-b border-gray-200 text-center">
-                      <input type="checkbox" v-model="rolePermissions[grandchild.id].View" class="mx-auto" />
+                      <input type="checkbox" v-model="rolePermissions[child.id].View" class="mx-auto" />
                     </td>
                     <td class="px-6 py-4 border-b border-gray-200 text-center">
-                      <input type="checkbox" v-model="rolePermissions[grandchild.id].Edit" class="mx-auto" />
+                      <input type="checkbox" v-model="rolePermissions[child.id].Edit" class="mx-auto" />
                     </td>
                     <td class="px-6 py-4 border-b border-gray-200 text-center">
-                      <input type="checkbox" v-model="rolePermissions[grandchild.id].Publish" class="mx-auto" />
+                      <input type="checkbox" v-model="rolePermissions[child.id].Publish" class="mx-auto" />
                     </td>
                     <td class="px-6 py-4 border-b border-gray-200 text-center">
-                      <input type="checkbox" v-model="rolePermissions[grandchild.id].Delete" class="mx-auto" />
+                      <input type="checkbox" v-model="rolePermissions[child.id].Delete" class="mx-auto" />
                     </td>
                   </tr>
+                  <template v-if="child.children && child.children.length" v-for="grandchild in child.children" :key="grandchild.id">
+                    <tr class="child-permission bg-gray-50">
+                      <td class="px-6 py-4 border-b border-gray-200 pl-16">
+                        {{ grandchild.page_name }}
+                      </td>
+                      <td class="px-6 py-4 border-b border-gray-200 text-center">
+                        <input type="checkbox" v-model="rolePermissions[grandchild.id].View" class="mx-auto" />
+                      </td>
+                      <td class="px-6 py-4 border-b border-gray-200 text-center">
+                        <input type="checkbox" v-model="rolePermissions[grandchild.id].Edit" class="mx-auto" />
+                      </td>
+                      <td class="px-6 py-4 border-b border-gray-200 text-center">
+                        <input type="checkbox" v-model="rolePermissions[grandchild.id].Publish" class="mx-auto" />
+                      </td>
+                      <td class="px-6 py-4 border-b border-gray-200 text-center">
+                        <input type="checkbox" v-model="rolePermissions[grandchild.id].Delete" class="mx-auto" />
+                      </td>
+                    </tr>
+                  </template>
                 </template>
               </template>
-            </template>
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
+      </template>
 
       <div class="flex justify-end mt-6">
         <button class="bg-gray-500 text-white font-bold px-4 py-2 rounded-lg mr-4" @click="cancel">Cancel</button>
@@ -125,7 +127,7 @@ const selectedUserLevel = ref('');
 const permissionTypes = ['View', 'Edit', 'Publish', 'Delete'];
 const rolePermissions = ref({});
 
-const isAdmin = computed(() => authStore.user?.user_level === 'admin');
+const userRole = computed(() => authStore.userRole);
 
 const fetchPages = async () => {
   try {
@@ -385,10 +387,11 @@ const resetPermissions = () => {
 };
 
 onMounted(() => {
-  authStore.initializeStore();
-  fetchRoles();
-  fetchPages();
-  fetchUserDetails();
+  authStore.initializeStore().then(() => {
+    fetchRoles();
+    fetchPages();
+    fetchUserDetails();
+  });
 });
 </script>
 

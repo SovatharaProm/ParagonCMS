@@ -17,9 +17,9 @@
               </h3>
             </div>
             <div class="flex gap-5 my-auto items-center">
-              <NuxtLink :to="`/builder?id=${child.id}`" class="my-auto text-blue-900 text-lg flex items-center">
+              <button @click="navigateToBuilder(child.id)" class="my-auto text-blue-900 text-lg flex items-center">
                 <Icon name="ph:note-pencil-bold"></Icon>
-              </NuxtLink>
+              </button>
               <Icon name="carbon:link" @click="copyUrl(child.page_link)" class="cursor-pointer text-blue-900 text-lg flex items-center"></Icon>
               <v-menu>
                 <template v-slot:activator="{ props }">
@@ -85,6 +85,7 @@
 
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
+import { useRouter } from 'vue-router';
 import draggable from 'vuedraggable';
 import { useAuthStore } from '~/stores/auth';
 import { useToast } from 'vue-toast-notification';
@@ -101,6 +102,7 @@ const props = defineProps({
 const emit = defineEmits(['update:children', 'drag-end', 'toggle-child-page', 'open-create-modal', 'open-create-change-request', 'toggle-page-in-nav', 'copy-url']);
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const createChangeRequestModal = ref(false);
 const newChangeRequestTitle = ref('');
@@ -147,6 +149,10 @@ const updatePageName = async (child, childIndex) => {
   }
 };
 
+const navigateToBuilder = (pageId) => {
+  router.push(`/builder?id=${pageId}`);
+};
+
 const openCreatePageModal = (isSubPage, parentId = null) => {
   emit('open-create-modal', isSubPage, parentId);
 };
@@ -181,9 +187,12 @@ const createChangeRequest = async (title) => {
       createChangeRequestModal.value = false;
       newChangeRequestTitle.value = ''; // Clear the input field
       notifyApprover.value = false; // Reset the checkbox
+    } else if (data.code === 403) {  // Assuming 403 is the status code for forbidden access
+      console.error('User doesn\'t have edit permission for this page:', data.message);
+      toast.error('User doesn\'t have edit permission for this page.');
     } else {
       console.error('Failed to create change request:', data.message);
-      toast.error('Failed to create change request.');
+      toast.error(data.message || 'Failed to create change request.');
     }
   } catch (error) {
     console.error('Error creating change request:', error);
@@ -258,7 +267,7 @@ const deletePage = async (page) => {
       emit('update:children', [...props.children]); // Emit updated children
     } else {
       console.error('Failed to delete page:', data.message);
-      toast.error('Failed to delete page.');
+      toast.error(data.message  || 'Failed to delete page.');
     }
   } catch (error) {
     console.error('Error deleting page:', error);

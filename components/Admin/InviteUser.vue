@@ -38,9 +38,9 @@
         </v-col>
       </v-row>
 
-      <template v-if="!isAdmin">
-        <h2 class="font-bold text-blue-900 text-xl mb-4">Permissions</h2>
+      <template v-if="userRole !== 'admin'">
         <div class="overflow-x-auto">
+          <h2 class="font-bold text-blue-900 text-xl mb-4">Permissions</h2>
           <table class="min-w-full bg-white border-collapse border border-gray-200">
             <thead>
               <tr>
@@ -104,13 +104,15 @@ const emailError = ref(false);
 const pages = ref([]);
 const availableRoles = ref([]);
 const availableUserLevels = ['User', 'Admin'];
-const permissionTypes = ref(['View', 'Edit', 'Publish', 'Delete']);
+const permissionTypes = ref(['Create', 'Edit', 'Publish', 'Delete']);
 const rolePermissions = ref({});
 
-const isSuperAdmin = computed(() => authStore.user?.user_level === 'super_admin');
-const isAdmin = computed(() => authStore.user?.user_level === 'admin');
+const userRole = computed(() => authStore.userRole);
 
-const displayedUserLevels = computed(() => (isAdmin.value ? ['User'] : availableUserLevels));
+
+const displayedUserLevels = computed(() => {
+  return userRole.value === 'admin' ? ['User'] : availableUserLevels;
+});
 
 const debounceEmail = debounce(() => {
   email.value = email.value.trim();
@@ -141,14 +143,14 @@ const fetchPages = async () => {
     // Initialize rolePermissions based on fetched pages
     pages.value.forEach((page) => {
       rolePermissions.value[page.id] = {
-        View: false,
+        Create: false,
         Edit: false,
         Publish: false,
         Delete: false,
       };
       page.children.forEach((child) => {
         rolePermissions.value[child.id] = {
-          View: false,
+          Create: false,
           Edit: false,
           Publish: false,
           Delete: false,
@@ -156,7 +158,7 @@ const fetchPages = async () => {
         if (child.children && child.children.length) {
           child.children.forEach((grandchild) => {
             rolePermissions.value[grandchild.id] = {
-              View: false,
+              Create: false,
               Edit: false,
               Publish: false,
               Delete: false,

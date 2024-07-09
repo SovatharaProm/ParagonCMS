@@ -72,6 +72,12 @@ const fetchPageContent = async (pageId) => {
         'Authorization': `Bearer ${authStore.token}`,
       },
     });
+    if (!response.ok) {
+      if (response.status === 403 || response.status === 400) {
+        throw new Error('Unauthorized');
+      }
+      throw new Error('Failed to fetch page content');
+    }
     const data = await response.json();
     if (data.code === 200) {
       return data.data['Page Content'];
@@ -81,6 +87,12 @@ const fetchPageContent = async (pageId) => {
     }
   } catch (error) {
     console.error('Error fetching page content:', error);
+    if (error.message === 'Unauthorized') {
+      toast.error('User does not have permission');
+      router.push('/'); // Redirect the user to a different page
+    } else {
+      toast.error('Error fetching page content: ' + error.message);
+    }
     return null;
   }
 };
@@ -244,7 +256,7 @@ const customElementsPlugin = (editor) => {
                 <textarea name="message" placeholder="Your Message"></textarea>
                 <select name="options">
                   <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
+                  <option value="option2"></option>
                 </select>
                 <div>
                   <label><input type="checkbox" name="subscribe"/> Subscribe to newsletter</label>
@@ -565,37 +577,6 @@ onMounted(async () => {
   } else {
     editor.BlockManager.get('fixed-content-block').set({ active: true });
     editor.runCommand('core:canvas-clear');
-    editor.addComponents(
-      `<header class="bg-blue-950 py-2 my-auto">
-        <div class="container mx-auto flex items-center justify-between">
-            <nav class="flex space-x-8">
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
-                <a href="#" class="text-white hover:text-gray-300 my-auto bg-[#FFC107] p-2">My.Paragon.U</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="mx-20 my-auto py-3 border-b-2 ">
-        <div class="flex items-center justify-between">
-            <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
-                <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </div>
-        </div>
-    </main>`
-    );
   }
 
   customElementsPlugin(editor);

@@ -1,5 +1,9 @@
 <template>
-    <AdminWebsite />
+  
+    <AdminHeader />
+    <AdminFooter />
+
+  <AdminWebsite />
   </template>
   
   <style scoped>

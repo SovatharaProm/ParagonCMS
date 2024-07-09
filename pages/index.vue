@@ -1,12 +1,12 @@
 <template>
-  <h1 class="text-2xl font-bold text-blue-900 text-start pt-4 pb-6 h-fit">
-    Pages
-  </h1>
-  <div class="mb-5 flex justify-end">
+  <div class="flex items-center justify-between my-auto ">
+    <h1 class="text-2xl font-bold text-blue-900 pt-4 pb-6">
+      Pages
+    </h1>
     <button
       v-if="isAdmin"
       @click="openCreatePageModal(false)"
-      class="my-auto px-5 p-2 bg-blue-900 text-white rounded-md font-medium"
+      class="px-5 py-2 bg-blue-900 text-white rounded-md font-medium"
     >
       Create main page
     </button>
@@ -164,7 +164,7 @@ async function createPages(pageName) {
       await fetchPages();
     } else {
       console.error("Failed to create page:", data.message);
-      toast.error(`Failed to create main page: ${data.message}`);
+      toast.error(`Failed to create page ${data.message}`);
     }
   } catch (error) {
     console.error("Error creating page:", error);

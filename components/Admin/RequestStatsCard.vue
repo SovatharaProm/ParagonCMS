@@ -193,7 +193,13 @@ const openPreviewUrl = async (id) => {
     }
 
     const data = await response.json();
-    const previewUrl = data.data.change_request.preview_url;
+    let previewUrl = data.data.change_request.preview_url;
+
+    // Ensure the URL includes the protocol
+    if (!/^https?:\/\//i.test(previewUrl)) {
+      previewUrl = `http://${previewUrl}`;
+    }
+
     window.open(previewUrl, '_blank');
   } catch (error) {
     console.error('Error fetching change request details:', error);

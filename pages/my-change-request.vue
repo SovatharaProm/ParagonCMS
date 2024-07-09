@@ -235,13 +235,25 @@ const viewRequest = async (id) => {
     }
 
     const data = await response.json();
-    viewRequestDetails.value = data.data.change_request;
+    let previewUrl = data.data.change_request.preview_url;
+
+    // Ensure the URL includes the protocol
+    if (!/^https?:\/\//i.test(previewUrl)) {
+      previewUrl = `${import.meta.env.VITE_BASE_DOMAIN}${previewUrl}`;
+    }
+
+    viewRequestDetails.value = {
+      ...data.data.change_request,
+      preview_url: previewUrl,
+    };
     openViewDialog();
   } catch (error) {
     console.error("Error fetching change request details:", error);
     toast.error("Failed to fetch change request details");
   }
 };
+
+
 
 const resubmitChangeRequest = async () => {
   if (!authStore.token) {

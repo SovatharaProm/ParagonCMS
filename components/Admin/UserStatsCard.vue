@@ -35,7 +35,7 @@
 
     <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-4">
       <select v-model="selectedRole" class="border border-gray-300 rounded py-2 px-4">
-        <option value="" class="font-bold">All Roles</option>
+        <option value="" class="font-bold">All Levels</option>
         <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
       </select>
       <select v-model="selectedStatus" class="border border-gray-300 rounded py-2 px-4">
