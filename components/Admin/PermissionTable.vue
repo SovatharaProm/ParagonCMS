@@ -308,7 +308,7 @@
         icon: true,
         rtl: false,
       });
-      router.push("/admin");
+      router.push("/admin/roles/RoleManagement");
     } catch (error) {
       console.error("Error assigning permissions:", error.message);
       toast.error("Failed to assign permissions: " + error.message, {
@@ -329,7 +329,7 @@
   };
   
   const cancel = () => {
-    router.push("/admin");
+    router.push("/admin/roles/RoleManagement");
   };
   
   onMounted(() => {

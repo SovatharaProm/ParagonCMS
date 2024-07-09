@@ -111,7 +111,7 @@ const customElementsPlugin = (editor) => {
   editor.Blocks.add('1-column', {
     label: '1 Column',
     content: `<div style="display:flex;">
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color:#fffff"></div>
               </div>`,
     category: 'Column',
     attributes: { class: 'fa fa-columns' },
