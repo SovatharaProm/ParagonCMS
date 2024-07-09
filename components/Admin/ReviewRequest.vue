@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <div class="flex-grow">
+    <div class="flex-grow pb-20"> <!-- Added padding to the bottom -->
       <h1 class="text-2xl font-bold text-blue-900 text-start mb-8">
         {{ changeRequest?.request_name || "Loading..." }}
       </h1>
@@ -51,18 +51,18 @@
             :key="comment.id"
             class="mb-4 p-4 border rounded-lg shadow"
           >
-            <p class="text-lg"><strong>{{ comment.commenter_name }}</strong></p>
-            <p class="text-gray-600">{{ comment.created_time }}</p>
-            <p class="mt-2">{{ comment.comments }}</p>
+            <p class="text-lg font-medium"><strong>{{ comment.commenter_name }}</strong></p>
+            <p class="text-gray-600 font-medium">{{ comment.created_time }}</p>
+            <p class="mt-2 font-medium">{{ comment.comments }}</p>
           </div>
         </div>
         <div v-else>
-          <p>No comments available.</p>
+          <p class="font-medium">No comments available.</p>
         </div>
       </div>
     </div>
 
-    <div class="flex justify-end mt-4 mb-4 space-x-4 sticky bottom-0 bg-white py-2">
+    <div class="fixed bottom-0 w-full bg-white py-4 flex justify-end space-x-4 px-4"> <!-- Fixed positioning for buttons -->
       <button
         @click="openRejectModal"
         class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
