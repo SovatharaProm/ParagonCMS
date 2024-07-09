@@ -91,7 +91,6 @@ import { ref, onMounted } from "vue";
 import { useToast } from "vue-toast-notification";
 import { useAuthStore } from "../stores/auth";
 import { useRouter, useRoute } from "vue-router";
-import AdminRejectCommentDialog from '@/components/AdminRejectCommentDialog.vue';
 
 const toast = useToast();
 const router = useRouter();
