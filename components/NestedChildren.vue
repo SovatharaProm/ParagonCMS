@@ -34,7 +34,7 @@
                   <v-list-item @click="openCreatePageModal(true, child.id)">
                     <v-list-item-title>Create Subpage</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="confirmDeletePage(child)">
+                  <v-list-item @click="confirmDeletePage(child)" class="text-blue-900">
                     <v-list-item-title>Delete</v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="togglePublish(child, parentState, childIndex)">
