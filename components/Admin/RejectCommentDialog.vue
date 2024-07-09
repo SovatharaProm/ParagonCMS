@@ -7,7 +7,7 @@
         class="bg-[#F5F5F5] rounded-lg w-full h-32 p-2 border border-gray-300 outline-none"
         placeholder="Write Something Here"
       ></textarea>
-      <div class="flex justify-end gap-4 mt-4">
+      <div class="flex justify-end gap-4 mt-4 fixed">
         <button
           @click="closeModal"
           class="bg-gray-500 hover:bg-gray-400 text-white py-2 px-4 rounded"
