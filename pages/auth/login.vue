@@ -85,7 +85,7 @@ definePageMeta({
 })
 import { ref } from "vue";
 import { useAuthStore } from "../stores/auth";
-import { navigateTo } from "nuxt/app";
+import { navigateTo, useRoute } from "nuxt/app";
 
 const email = ref("");
 const password = ref("");
@@ -93,6 +93,7 @@ const emailError = ref("");
 const loginError = ref("");
 const showPassword = ref(false);
 const authStore = useAuthStore();
+const route = useRoute();
 
 const getCsrfToken = async () => {
   try {
@@ -109,8 +110,6 @@ const getCsrfToken = async () => {
 
 const handleLogin = async () => {
   loginError.value = "";
-  emailError.value = "";
-
   if (!email.value) {
     emailError.value = "Email is required";
     return;
@@ -137,8 +136,8 @@ const handleLogin = async () => {
 
     const data = await response.json();
     if (!response.ok) {
-      if (response.status === 401 && data.message === "User's account have been suspended") {
-        loginError.value = "Your account has been suspended. Please contact support.";
+      if (data.message === "User have been suspended") {
+        loginError.value = "Your account has been suspended.";
         return;
       }
       if (response.status === 422) {
@@ -167,7 +166,13 @@ const handleLogin = async () => {
   }
 };
 
-
+// Check if there is a suspension message in the URL query
+onMounted(() => {
+  const message = route.query.message;
+  if (message) {
+    loginError.value = message;
+  }
+});
 </script>
 
 <style scoped>

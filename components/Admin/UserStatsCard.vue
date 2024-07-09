@@ -210,6 +210,7 @@ const toggleSuspendUser = async (user) => {
   }
 };
 
+
 function getRoleClass(role) {
   switch (role) {
     case 'User':
