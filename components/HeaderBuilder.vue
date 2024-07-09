@@ -1,15 +1,16 @@
 <template>
   <div ref="grapesjsEditor" class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"></div>
 
-  <div class="flex justify-end my-5 ml-[300px] flex-grow">
+  <div class="sticky-footer flex justify-end my-5 ml-[300px] flex-grow">
     <NuxtLink to="/admin/website" class="mr-5">
-      <v-btn class="text-none" color="blue-darken-4" variant="outlined">Discard</v-btn>
+      <v-btn class="text-none button-same-size" color="blue-darken-4" variant="outlined">Discard</v-btn>
     </NuxtLink>
-    <v-btn class="text-none text-white px-8 mr-5" color="blue-darken-4" variant="flat" @click="saveContent">Save</v-btn>
+    <v-btn class="text-none text-white px-8 mr-5 button-same-size" color="blue-darken-4" variant="flat" @click="saveContent">Save</v-btn>
     <div v-html="outputHtml"></div>
     <pre>{{ outputCss }}</pre>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
@@ -282,4 +283,20 @@ console.log('Editing header with ID:', headerId); // Debug log
 
 <style scoped>
 @import "/assets/css/style.css";
+
+.sticky-footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: white;
+  padding: 10px 20px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.button-same-size {
+  min-width: 100px;
+}
 </style>
