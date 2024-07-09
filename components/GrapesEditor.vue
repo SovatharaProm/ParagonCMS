@@ -1,18 +1,15 @@
 <template>
   <div ref="grapesjsEditor" class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"></div>
-
-  <div class="flex justify-end my-5 ml-[300px] flex-grow">
+  <div class="sticky bottom-0 flex justify-end my-5 ml-[300px] flex-grow bg-white py-2 px-4">
     <NuxtLink :to="discardRoute" class="mr-5">
       <v-btn class="text-none" color="blue-darken-4" variant="outlined">Discard</v-btn>
     </NuxtLink>
     <v-btn class="text-none text-white px-8 mr-5" color="blue-darken-4" variant="flat" @click="saveContent">Save</v-btn>
-    <div v-html="outputHtml"></div>
-    <pre>{{ outputCss }}</pre>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
@@ -34,6 +31,7 @@ const discardRoute = computed(() => {
   }
   return '/';
 });
+
 const saveContent = async () => {
   if (!editor) {
     console.error('Editor is not initialized');
@@ -99,7 +97,7 @@ const fetchPageContent = async (pageId) => {
     console.error('Error fetching page content:', error);
     if (error.message === 'Unauthorized') {
       toast.error('User does not have permission');
-      router.push('/'); // Redirect the user to a different page
+      router.push('/');
     } else {
       toast.error('Error fetching page content: ' + error.message);
     }
@@ -167,17 +165,6 @@ const customElementsPlugin = editor => {
     category: 'Column',
     attributes: { class: 'fa fa-columns' }
   });
-  
-  editor.Blocks.add('3-columns', {
-    label: '3 Columns',
-    content: `<div style="display:flex;">
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-              </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
-  });
 
   editor.Blocks.add('4-columns', {
     label: '4 Columns',
@@ -200,41 +187,41 @@ const customElementsPlugin = editor => {
 
   editor.Blocks.add('image-block', {
     label: 'Image',
-    content: '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
+    content: '<img data-gjs-type="image" src="/path-to-default-image.jpg" alt="Placeholder image"/>',
     category: 'Basic',
     attributes: { class: 'fa fa-image' }
   });
 
-editor.Blocks.add('icon-bar-block', {
+  editor.Blocks.add('icon-bar-block', {
     label: 'Icon Bar',
     content: `
         <div class="container mx-auto" style="display: flex; justify-content: space-around; align-items: center; padding: 10px; background-color: #f4f4f4;">
         <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="apple-icon.png" style="width: 50px; height: 50px; float: left" alt="Student Clubs">
+            <img src="/apple-icon.png" style="width: 50px; height: 50px; float: left" alt="Student Clubs">
             <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Student Clubs</p>
             <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
         </div>
         <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="graduate-icon.png" style="width: 50px; height: 50px; float: left" alt="Partner Universities">
+            <img src="/graduate-icon.png" style="width: 50px; height: 50px; float: left" alt="Partner Universities">
             <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Partner Universities</p>
             <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
         </div>
         <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="scholarship-icon.png" style="width: 50px; height: 50px; float: left" alt="Active Scholarships">
+            <img src="/scholarship-icon.png" style="width: 50px; height: 50px; float: left" alt="Active Scholarships">
             <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Active Scholarships</p>
             <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
         </div>
         <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="gallery-icon.png" style="width: 50px; height: 50px; float: left" alt="Gallery">
+            <img src="/gallery-icon.png" style="width: 50px; height: 50px; float: left" alt="Gallery">
             <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Gallery</p>
             <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">View ...</a>
         </div>
     </div>`,
     category: 'Advanced',
     attributes: { class: 'fa fa-cog' }
-});
+  });
 
-editor.Blocks.add('page-detail-block', {
+  editor.Blocks.add('page-detail-block', {
     label: 'Page Detail',
     content: `
         <div class="container" style="width: 300px; margin: 20px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
@@ -250,9 +237,9 @@ editor.Blocks.add('page-detail-block', {
     </div>`,
     category: 'Advanced',
     attributes: { class: 'fa fa-list-ul' }
-});
+  });
 
-editor.Blocks.add('dep-contact-block', {
+  editor.Blocks.add('dep-contact-block', {
     label: 'Department Contact',
     content: `
     <body style="font-family: Arial, sans-serif;
@@ -285,9 +272,9 @@ editor.Blocks.add('dep-contact-block', {
     </body>`,
     category: 'Advanced',
     attributes: { class: 'fa fa-list-ul' }
-});
+  });
 
-editor.Blocks.add('faculty-departments-block', {
+  editor.Blocks.add('faculty-departments-block', {
     label: 'Faculty Departments',
     content: `
     <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
@@ -325,17 +312,16 @@ editor.Blocks.add('faculty-departments-block', {
     </div>`,
     category: 'Advanced',
     attributes: { class: 'fa fa-table' }
-});
-
+  });
 
   editor.Blocks.add('video-block', {
     label: 'Video',
-    content: '<video controls><source src="path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
+    content: '<video controls><source src="/path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
     category: 'Basic',
     attributes: { class: 'fa fa-video-camera' }
   });
 
-   editor.Blocks.add('link-block', {
+  editor.Blocks.add('link-block', {
     label: 'Link',
     content: '<a href="#" class="custom-link">Click here</a>',
     category: 'Basic',
@@ -530,7 +516,7 @@ editor.Blocks.add('faculty-departments-block', {
       </div>
     </footer>`,
     category: 'Layout',
-    attributes: { class: 'fa fa-file-text-o' } 
+    attributes: { class: 'fa fa-file-text-o' }
   });
 
   editor.Blocks.add('faq-block', {
@@ -555,12 +541,12 @@ editor.Blocks.add('faculty-departments-block', {
     content: `<div class="team-section">
                 <h2>Our Team</h2>
                 <div class="team-member">
-                  <img src="path-to-image.jpg" alt="Team Member">
+                  <img src="/path-to-image.jpg" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
                 <div class="team-member">
-                  <img src="path-to-image.jpg" alt="Team Member">
+                  <img src="/path-to-image.jpg" alt="Team Member">
                   <h3>Member Name</h3>
                   <p>Position</p>
                 </div>
@@ -610,9 +596,9 @@ editor.Blocks.add('faculty-departments-block', {
      model: {
        defaults: {
          name: 'Fixed Content',
-         draggable: false, // Disables dragging
-         copyable: false, // Disables copying
-         removable: false, // Disables removing
+         draggable: false,
+         copyable: false,
+         removable: false,
          content: `<div class="fixed-content">
                      <h1>Welcome to My Website</h1>
                      <p>This content is fixed and cannot be edited or removed.</p>
@@ -620,67 +606,66 @@ editor.Blocks.add('faculty-departments-block', {
        }
      }
    });
-  
-   // Now, add this new fixed content block to the canvas
-   editor.BlockManager.add('fixed-content-block', {
-     label: 'NavBar',
-     content: `<header style="background-color: rgb(23 37 84); padding: 0.5rem;">
-            <div style="container mx-auto display: flex; align-items: flex-end; ">
-                <nav style="display: flex; margin-left: 500px;  justify-content: flex-end;">
-                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-top: 10px; margin-bottom: 10px;">Rector's Scholarship</a>
-                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Covid-19 Info</a>
-                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Alumni</a>
-                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Calendar</a>
-                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">FAQ</a>
-                    <a href="#" style="color: #ffffff; :hover {color: #D1D5DB;} margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Jobs@Paragon.U</a>
-                    <a href="#" style="margin-left: 1.25rem; padding: 0.5rem; color: #ffffff; background-color: #F59E0B; :hover {color: #D1D5DB;}py-full">My.Paragon.U</a>
-                </nav>
-            </div>
-        </header>
-    <main style="margin-left: 5rem; margin-right: 5rem; border-bottom-width: 2px; ">
-      <div style="display: flex; justify-content: space-between; align-items: center; ">
-        <img src="/assets/images/Logo.png" alt="Paragon University Logo" style="height: 5rem; ">
-        <div style="display: flex; margin-left: 2rem; font-weight: 600; ">
-          <div style="position: relative; ">
-            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">About</a>
-            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Our History</a>
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Mission & Vision</a>
-            </div>
-          </div>
-          <div style="position: relative; ">
-            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Paragon Students</a>
-            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Current Students</a>
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Student Life</a>
+
+  editor.Blocks.add('fixed-content-block', {
+    label: 'NavBar',
+    content: `<header style="background-color: rgb(23 37 84); padding: 0.5rem;">
+      <div class="container mx-auto" style="display: flex; align-items: flex-end;">
+        <nav style="display: flex; margin-left: 500px; justify-content: flex-end;">
+          <a href="#" style="color: #ffffff; margin-top: 10px; margin-bottom: 10px;">Rector's Scholarship</a>
+          <a href="#" style="color: #ffffff; margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Covid-19 Info</a>
+          <a href="#" style="color: #ffffff; margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Alumni</a>
+          <a href="#" style="color: #ffffff; margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Calendar</a>
+          <a href="#" style="color: #ffffff; margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">FAQ</a>
+          <a href="#" style="color: #ffffff; margin-left: 1.25rem; margin-top: 10px; margin-bottom: 10px;">Jobs@Paragon.U</a>
+          <a href="#" style="margin-left: 1.25rem; padding: 0.5rem; color: #ffffff; background-color: #F59E0B;">My.Paragon.U</a>
+        </nav>
+      </div>
+    </header>
+    <main style="margin-left: 5rem; margin-right: 5rem; border-bottom-width: 2px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <img src="/assets/images/Logo.png" alt="Paragon University Logo" style="height: 5rem;">
+        <div style="display: flex; margin-left: 2rem; font-weight: 600;">
+          <div style="position: relative;">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px;">About</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Our History</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Mission & Vision</a>
             </div>
           </div>
-          <div style="position: relative; ">
-            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Prospective Students</a>
-            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Admissions</a>
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Programs</a>
+          <div style="position: relative;">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px;">Paragon Students</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Current Students</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Student Life</a>
             </div>
           </div>
-          <div style="position: relative; ">
-            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Academics</a>
-            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Departments</a>
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Research</a>
+          <div style="position: relative;">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px;">Prospective Students</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Admissions</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Programs</a>
             </div>
           </div>
-          <div style="position: relative; ">
-            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Admissions</a>
-            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Apply Now</a>
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Financial Aid</a>
+          <div style="position: relative;">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px;">Academics</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Departments</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Research</a>
             </div>
           </div>
-          <div style="position: relative; >
-            <a href="#" style="font-weight: 500; font-size: 1rem; olor: #1F2937; margin-left: 36px; :hover {color: #6B7280;}">Partnerships</a>
-            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); ">
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Collaborations</a>
-              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937; :hover {background-color: #F3F4F6; }">Corporate Partners</a>
+          <div style="position: relative;">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px;">Admissions</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Apply Now</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Financial Aid</a>
+            </div>
+          </div>
+          <div style="position: relative;">
+            <a href="#" style="font-weight: 500; font-size: 1rem; color: #1F2937; margin-left: 36px;">Partnerships</a>
+            <div style="display: none; position: absolute; background-color: #ffffff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Collaborations</a>
+              <a href="#" style="display: block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; color: #1F2937;">Corporate Partners</a>
             </div>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" style="width: 1.5rem; height: 1.5rem; margin-left: 36px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -689,10 +674,9 @@ editor.Blocks.add('faculty-departments-block', {
         </div>
       </div>
     </main>`,
-     category: 'Layout',
-     attributes: { class: 'fa fa-lock' }
-   });
-   
+    category: 'Layout',
+    attributes: { class: 'fa fa-lock' }
+  });
 };
 
 const uploadFileToSpace = async (file) => {
@@ -723,7 +707,7 @@ const uploadFileToSpace = async (file) => {
 };
 
 onMounted(async () => {
-  await authStore.initializeStore(); // Ensure the store is initialized and token is available
+  await authStore.initializeStore();
 
   const pageId = route.query.id;
   if (!pageId) {
@@ -756,7 +740,7 @@ onMounted(async () => {
       },
     },
   });
-  
+
   document.documentElement.style.setProperty('--gjs-primary-color', '#172947');
   document.documentElement.style.setProperty('--gjs-secondary-color', '#fff');
 
