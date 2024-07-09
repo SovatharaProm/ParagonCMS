@@ -1,7 +1,6 @@
 <template>
-  <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-    <div class="bg-white rounded-lg p-4 w-96">
-     
+  <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 overflow-y-auto">
+    <div class="bg-white rounded-lg p-4 w-96 mx-auto my-8">
       <h2 class="text-lg font-bold mb-4">Add Rejection Comment</h2>
       <textarea
         v-model="comment"
@@ -57,6 +56,7 @@ const submitComment = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-y: auto;
+  height: 100vh;
 }
 </style>
