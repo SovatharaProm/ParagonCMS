@@ -89,7 +89,7 @@ const fetchFooterContent = async () => {
 
 
 
-const customElementsPlugin = editor => {
+  const customElementsPlugin = editor => {
     editor.BlockManager.add('footer-block', {
     label: 'Footer',
     content: `<footer class="bg-stone-900 text-gray-300 py-10">
@@ -128,7 +128,7 @@ const customElementsPlugin = editor => {
         </div>
         <div>
           <h3 class="text-white text-lg font-semibold mb-4">Paragon International University</h3>
-
+          <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
           <div class="h-96">
             <iframe
               width="100%"
