@@ -182,15 +182,22 @@ const toggleSuspendUser = async (user) => {
       throw new Error(responseData.message || 'Failed to suspend user');
     }
 
+    console.log('Suspend/Unsuspend API response:', responseData);
+
+    // Ensure response data is as expected
+    if (!responseData.data || typeof responseData.data.status === 'undefined') {
+      throw new Error('Unexpected response format');
+    }
+
     // Update the user's suspension status in the local state based on the response
     user.suspended = responseData.data.status === 'deactivated';
 
     // Show a toast notification
     if (user.suspended) {
       toast.success('User suspended successfully');
+      // Terminate the session for the suspended user
       if (user.id === authStore.user.id) {
-        // Terminate the session for the suspended user
-        authStore.logout();
+        await authStore.logout();
         router.push('/auth/login');
       }
     } else {
@@ -201,6 +208,7 @@ const toggleSuspendUser = async (user) => {
     toast.error(error.message || 'There was an error suspending the user');
   }
 };
+
 
 
 function getRoleClass(role) {

@@ -137,8 +137,8 @@ const handleLogin = async () => {
 
     const data = await response.json();
     if (!response.ok) {
-      if (response.status === 401 && data.message === "User's account have be suspended") {
-        loginError.value = "Your account might be suspended. Please contact support.";
+      if (response.status === 401 && data.message === "User's account have been suspended") {
+        loginError.value = "Your account has been suspended. Please contact support.";
         return;
       }
       if (response.status === 422) {
@@ -166,6 +166,7 @@ const handleLogin = async () => {
     loginError.value = "An error occurred. Please try again.";
   }
 };
+
 
 </script>
 
