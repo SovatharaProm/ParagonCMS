@@ -30,7 +30,7 @@ let editor = null;
 
 const discardRoute = computed(() => {
   if (authStore.userRole === 'admin' || authStore.userRole === 'super_admin') {
-    return '/website';
+    return '/admin/website';
   }
   return '/';
 });
@@ -63,7 +63,7 @@ const saveContent = async () => {
     if (result.code === 200) {
       toast.success('Content saved successfully!');
       if (authStore.userRole === 'admin' || authStore.userRole === 'super_admin') {
-        router.push('/admin');
+        router.push('/admin/website');
       } else {
         router.push('/');
       }
