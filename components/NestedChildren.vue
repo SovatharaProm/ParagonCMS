@@ -251,7 +251,7 @@ const onDragEnd = async (event) => {
       console.log('Page order updated successfully:', data);
       emit('update:children', [...props.children]); // Emit updated children
     } else {
-      console.error('Failed to update page order:', data.message);
+      console.error(data.message);
     }
   } catch (error) {
     console.error('Error updating page order:', error);
