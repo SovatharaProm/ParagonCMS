@@ -128,7 +128,7 @@ const customElementsPlugin = editor => {
         </div>
         <div>
           <h3 class="text-white text-lg font-semibold mb-4">Paragon International University</h3>
-          <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+          <img src="assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
           <div class="h-96">
             <iframe
               width="100%"
