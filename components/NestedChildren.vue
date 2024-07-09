@@ -95,7 +95,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
@@ -126,6 +125,9 @@ const editablePageName = ref('');
 
 const deleteConfirmDialog = ref(false);
 const selectedPage = ref(null);
+
+// Store the original state of children
+let originalChildren = JSON.parse(JSON.stringify(props.children));
 
 const enableEditing = (child) => {
   editablePageId.value = child.id;
@@ -249,12 +251,17 @@ const onDragEnd = async (event) => {
     const data = await response.json();
     if (data.code === 200) {
       console.log('Page order updated successfully:', data);
+      originalChildren = JSON.parse(JSON.stringify(props.children)); // Update original state
       emit('update:children', [...props.children]); // Emit updated children
     } else {
       toast.error(data.message);
+      props.children = JSON.parse(JSON.stringify(originalChildren)); // Restore original state
+      emit('update:children', [...props.children]);
     }
   } catch (error) {
     console.error('Error updating page order:', error);
+    props.children = JSON.parse(JSON.stringify(originalChildren)); // Restore original state
+    emit('update:children', [...props.children]);
   }
 };
 
