@@ -92,7 +92,6 @@ import { useToast } from "vue-toast-notification";
 import { useAuthStore } from "../stores/auth";
 import { useRouter, useRoute } from "vue-router";
 
-
 const toast = useToast();
 const router = useRouter();
 const route = useRoute();
@@ -193,6 +192,7 @@ const handleRejectSubmit = async (comment) => {
     );
   }
 };
+
 const statusClass = (status) => {
   switch (status) {
     case "Approved":
@@ -232,5 +232,17 @@ textarea {
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.fixed.inset-0 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.z-60 {
+  z-index: 60;
 }
 </style>
