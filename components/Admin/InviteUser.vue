@@ -80,7 +80,16 @@
 
       <div class="flex justify-end mt-6">
         <button class="bg-gray-500 text-white font-bold px-4 py-2 rounded-lg mr-4" @click="cancel">Cancel</button>
-        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="sendInvite">Send Invite</button>
+        <button class="bg-blue-900 text-white font-bold px-4 py-2 rounded-lg" @click="sendInvite" :disabled="isLoading">
+          <span v-if="isLoading" class="flex items-center">
+            <svg class="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            Sending...
+          </span>
+          <span v-else>Send Invite</span>
+        </button>
       </div>
     </v-container>
   </div>
@@ -106,9 +115,9 @@ const availableRoles = ref([]);
 const availableUserLevels = ['User', 'Admin'];
 const permissionTypes = ref(['Create', 'Edit', 'Publish', 'Delete']);
 const rolePermissions = ref({});
+const isLoading = ref(false); // Add loading state
 
 const userRole = computed(() => authStore.userRole);
-
 
 const displayedUserLevels = computed(() => {
   return userRole.value === 'admin' ? ['User'] : availableUserLevels;
@@ -203,10 +212,12 @@ const handleRoleChange = (roleId) => {
 };
 
 const sendInvite = async () => {
+  isLoading.value = true; // Set loading state to true
   const token = authStore.token;
 
   if (!token) {
     console.error('No token found, please login again.');
+    isLoading.value = false; // Set loading state to false
     return;
   }
 
@@ -258,6 +269,8 @@ const sendInvite = async () => {
   } catch (error) {
     console.error('There was an error sending the invite:', error);
     toast.error('There was an error sending the invite.');
+  } finally {
+    isLoading.value = false; // Set loading state to false
   }
 };
 

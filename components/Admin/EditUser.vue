@@ -337,7 +337,6 @@ const updateRole = async () => {
       throw new Error(errorData.message || 'Failed to assign roles');
     }
 
-    console.log('Roles assigned successfully');
   } catch (error) {
     console.error('Error assigning roles:', error.message);
     throw new Error('Error assigning roles: ' + error.message);
@@ -378,8 +377,6 @@ const updatePermissions = async () => {
       throw new Error(data.message || 'Failed to assign permissions');
     }
 
-    console.log('Permissions assigned successfully');
-    toast.success('Permissions assigned successfully!');
   } catch (error) {
     console.error('Error assigning permissions:', error.message);
     toast.error('Error assigning permissions.');
