@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col min-h-screen">
-    <div class="flex-grow pb-20"> <!-- Added padding to the bottom -->
+  <div class="relative min-h-screen flex flex-col">
+    <div class="flex-grow p-4">
       <h1 class="text-2xl font-bold text-blue-900 text-start mb-8">
         {{ changeRequest?.request_name || "Loading..." }}
       </h1>
@@ -62,7 +62,8 @@
       </div>
     </div>
 
-    <div class="fixed bottom-0 w-full bg-white py-4 flex justify-end space-x-4 px-4"> <!-- Fixed positioning for buttons -->
+    <!-- Sticky Footer -->
+    <div class="sticky-footer flex justify-end p-4 bg-white border-t border-gray-200">
       <button
         @click="openRejectModal"
         class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
@@ -224,5 +225,12 @@ textarea {
 
 .actions button {
   width: 100px; /* Fixed width for buttons */
+}
+
+.sticky-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>
