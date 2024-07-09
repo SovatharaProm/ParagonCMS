@@ -1,66 +1,69 @@
 <template>
-  <div>
-    <h1 class="text-2xl font-bold text-blue-900 text-start mb-8">
-      {{ changeRequest?.request_name || "Loading..." }}
-    </h1>
+  <div class="relative min-h-screen flex flex-col">
+    <div class="flex-grow p-4">
+      <h1 class="text-2xl font-bold text-blue-900 text-start mb-8">
+        {{ changeRequest?.request_name || "Loading..." }}
+      </h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
-      <div>
-        <p class="text-lg font-semibold mb-2">
-          <span class="font-bold">Request Name:</span>
-          {{ changeRequest?.request_name || "Loading..." }}
-        </p>
-        <p class="text-lg font-semibold mb-2">
-          <span class="font-bold">Requester:</span>
-          {{ changeRequest?.requester || "Loading..." }}
-        </p>
-        <p class="text-lg font-semibold mb-2">
-          <span class="font-bold">Page:</span>
-          {{ changeRequest?.page || "Loading..." }}
-        </p>
-        <p class="text-lg font-semibold mb-2">
-          <span class="font-bold">Status: </span>
-          <span :class="statusClass(changeRequest?.status)">
-            {{ changeRequest?.status || "Loading..." }}
-          </span>
-        </p>
-        <p class="text-lg font-semibold mb-2">
-          <span class="font-bold">Created Time:</span>
-          {{ changeRequest?.created_time || "Loading..." }}
-        </p>
-        <p class="text-lg font-semibold mb-2">
-          <span class="font-bold">Preview URL:</span>
-          <a
-            :href="changeRequest?.preview_url"
-            target="_blank"
-            class="text-blue-500 hover:underline"
-          >
-            {{ changeRequest?.preview_url || "Loading..." }}
-          </a>
-        </p>
-      </div>
-    </div>
-
-    <!-- Comments Section -->
-    <div class="mt-8">
-      <h2 class="text-xl font-bold mb-4">Comments</h2>
-      <div v-if="changeRequest?.comments?.length">
-        <div
-          v-for="comment in changeRequest.comments"
-          :key="comment.id"
-          class="mb-4 p-4 border rounded-lg shadow"
-        >
-          <p class="text-lg"><strong>{{ comment.commenter_name }}</strong></p>
-          <p class="text-gray-600">{{ comment.created_time }}</p>
-          <p class="mt-2">{{ comment.comments }}</p>
+      <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
+        <div>
+          <p class="text-lg font-semibold mb-2">
+            <span class="font-bold">Request Name:</span>
+            {{ changeRequest?.request_name || "Loading..." }}
+          </p>
+          <p class="text-lg font-semibold mb-2">
+            <span class="font-bold">Requester:</span>
+            {{ changeRequest?.requester || "Loading..." }}
+          </p>
+          <p class="text-lg font-semibold mb-2">
+            <span class="font-bold">Page:</span>
+            {{ changeRequest?.page || "Loading..." }}
+          </p>
+          <p class="text-lg font-semibold mb-2">
+            <span class="font-bold">Status: </span>
+            <span :class="statusClass(changeRequest?.status)">
+              {{ changeRequest?.status || "Loading..." }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold mb-2">
+            <span class="font-bold">Created Time:</span>
+            {{ changeRequest?.created_time || "Loading..." }}
+          </p>
+          <p class="text-lg font-semibold mb-2">
+            <span class="font-bold">Preview URL:</span>
+            <a
+              :href="changeRequest?.preview_url"
+              target="_blank"
+              class="text-blue-500 hover:underline"
+            >
+              {{ changeRequest?.preview_url || "Loading..." }}
+            </a>
+          </p>
         </div>
       </div>
-      <div v-else>
-        <p>No comments available.</p>
+
+      <!-- Comments Section -->
+      <div class="mt-8">
+        <h2 class="text-xl font-bold mb-4">Comments</h2>
+        <div v-if="changeRequest?.comments?.length">
+          <div
+            v-for="comment in changeRequest.comments"
+            :key="comment.id"
+            class="mb-4 p-4 border rounded-lg shadow"
+          >
+            <p class="text-lg"><strong>{{ comment.commenter_name }}</strong></p>
+            <p class="text-gray-600">{{ comment.created_time }}</p>
+            <p class="mt-2">{{ comment.comments }}</p>
+          </div>
+        </div>
+        <div v-else>
+          <p>No comments available.</p>
+        </div>
       </div>
     </div>
 
-    <div class="sticky-buttons-container">
+    <!-- Sticky Footer -->
+    <div class="sticky-footer flex justify-end p-4 bg-white border-t border-gray-200">
       <button
         @click="openRejectModal"
         class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
@@ -211,15 +214,23 @@ onMounted(async () => {
 
 <style scoped>
 @import "@/assets/css/style.css";
+.creator .avatar {
+  font-size: 0.75rem; /* Adjust size as needed */
+}
 
-.sticky-buttons-container {
-  position: -webkit-sticky;
+textarea {
+  border: none;
+  resize: none;
+}
+
+.actions button {
+  width: 100px; /* Fixed width for buttons */
+}
+
+.sticky-footer {
   position: sticky;
   bottom: 0;
-  background: white;
-  padding: 1rem;
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
+  left: 0;
+  right: 0;
 }
 </style>
