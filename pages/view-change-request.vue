@@ -3,7 +3,7 @@
     <h1 class="text-3xl font-bold text-blue-900 text-center py-4">
       Requests Assign to Me
     </h1>
-    <div v-if="!hasAccess || !requests.length" class="text-center text-gray-500">
+    <div v-if="!hasAccess || !requests || !requests.length" class="text-center text-gray-500">
       No data available
     </div>
     <div v-else class="flex flex-col gap-5">
@@ -120,7 +120,7 @@ const fetchRequests = async () => {
     }
 
     const data = await response.json();
-    requests.value = data.data.requests_assign_to_me; // Fetch requests assigned to the user
+    requests.value = data.data.requests_assign_to_me || []; // Fetch requests assigned to the user and handle undefined
     if (!requests.value.length) {
       hasAccess.value = false;  // No data available
     }
@@ -226,7 +226,6 @@ const openPreviewUrl = async (id) => {
     toast.error('Failed to fetch change request details');
   }
 };
-
 
 onMounted(() => {
   authStore.initializeStore().then(() => {
