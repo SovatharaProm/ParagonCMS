@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', {
 
     removeCookie(name) {
       const cookies = new Cookies();
-      cookies.remove(name, { path: '/' });
+      cookies.remove(name, { path: '/auth/login' });
     },
 
     nullToken() {
