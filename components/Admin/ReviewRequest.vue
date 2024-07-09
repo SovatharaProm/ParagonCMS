@@ -104,10 +104,12 @@ const changeRequest = ref(null);
 
 const openRejectModal = () => {
   showRejectModal.value = true;
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling when modal is open
 };
 
 const closeRejectModal = () => {
   showRejectModal.value = false;
+  document.body.style.overflow = 'auto'; // Restore background scrolling
 };
 
 const fetchChangeRequestDetails = async () => {
