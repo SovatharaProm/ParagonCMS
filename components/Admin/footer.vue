@@ -54,35 +54,36 @@
   });
   
   const fetchFooter = async () => {
-    try {
-      if (!authStore.token) {
-        throw new Error("Token is missing");
-      }
-  
-      const response = await fetch(`${API_BASE_URL}/list-footer`, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`,
-        },
-      });
-      const data = await response.json();
-      console.log('API response:', data);
-      if (data.code === 200) {
-        footer.value = data.data.footer
-          ? {
-              ...data.data.footer,
-              isActive: data.data.footer.is_published, // Assuming 'is_published' indicates if the footer is active
-            }
-          : null; // Set to null if no footer is returned
-        console.log('footer fetched:', footer.value);
-      } else {
-        console.error('Error fetching footer:', data.message);
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      console.error('Error fetching footer:', error.message || error);
-      toast.error('Error fetching footer: ' + (error.message || error));
+  try {
+    if (!authStore.token) {
+      throw new Error("Token is missing");
     }
-  };
+
+    const response = await fetch(`${API_BASE_URL}/list-footer`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    });
+    const data = await response.json();
+    console.log('API response:', data);
+    if (data.code === 200) {
+      footer.value = data.data && data.data.footer
+        ? {
+            ...data.data.footer,
+            isActive: data.data.footer.is_published, // Assuming 'is_published' indicates if the footer is active
+          }
+        : null; // Set to null if no footer is returned
+      console.log('footer fetched:', footer.value);
+    } else {
+      console.error('Error fetching footer:', data.message);
+      throw new Error(data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching footer:', error.message || error);
+    toast.error('Error fetching footer: ' + (error.message || error));
+  }
+};
+
   
   const publishFooter = async () => {
     try {
