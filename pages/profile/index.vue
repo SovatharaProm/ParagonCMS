@@ -158,6 +158,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useAuthStore } from "../stores/auth";
 import { useRouter } from "vue-router";
+import { useToast } from 'vue-toast-notification';
 
 definePageMeta({
   layout: "usersidebar",
@@ -169,6 +170,7 @@ const errorMessage = ref(''); // Ref to store error message
 
 const authStore = useAuthStore();
 const router = useRouter();
+const toast = useToast();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const user = ref({
@@ -265,8 +267,10 @@ const updateName = async () => {
     // Refresh the profile to get the updated name
     await fetchProfile();
     dialog.value = false;
+    toast.success('Name updated successfully!');
   } catch (error) {
     console.error('Error updating name:', error);
+    toast.error('Failed to update name.');
   }
 };
 
@@ -274,6 +278,7 @@ const changeUserPassword = async () => {
   errorMessage.value = ''; // Reset the error message
   if (changePassword.value.new_password !== changePassword.value.confirm_password) {
     errorMessage.value = 'New password and confirm password do not match!';
+    toast.error(errorMessage.value);
     return;
   }
   
@@ -291,16 +296,19 @@ const changeUserPassword = async () => {
       if (response.status === 422) {
         const errorData = await response.json();
         errorMessage.value = errorData.message || 'Failed to change password';
+        toast.error(errorMessage.value);
       } else {
         throw new Error('Failed to change password');
       }
     } else {
       const data = await response.json();
       dialog1.value = false;
+      toast.success('Password changed successfully!');
     }
   } catch (error) {
     console.error('Error changing password:', error);
     errorMessage.value = error.message;
+    toast.error(errorMessage.value);
   }
 };
 </script>
