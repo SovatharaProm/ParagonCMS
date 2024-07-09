@@ -92,53 +92,58 @@ const fetchFooterContent = async () => {
 const customElementsPlugin = editor => {
     editor.BlockManager.add('footer-block', {
     label: 'Footer',
-    content: `<footer style="display: flex; justify-content: space-around; background-color: #222; color: #fff; padding: 20px 0;">
-        <div class="footer-section" style="flex: 1; padding: 0 20px;">
-            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Quick Links</h3>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Library</a></li>
-                <li><a href="#">Undergraduate Majors</a></li>
-                <li><a href="#">Postgraduate Programs</a></li>
-                <li><a href="#">Jobs@Paragon</a></li>
-                <li><a href="#">My.Paragon.U</a></li>
-                <li><a href="#">Tuition and Fees</a></li>
-            </ul>
+    content: `<footer class="bg-stone-900 text-gray-300 py-10">
+      <div class="container mx-auto grid grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="my-10">
+            <li><a href="#" class="hover:text-gray-100">Home</a></li>
+            <li><a href="#" class="hover:text-gray-100">Library</a></li>
+            <li><a href="#" class="hover:text-gray-100">Undergraduate Majors</a></li>
+            <li><a href="#" class="hover:text-gray-100">Postgraduate Programs</a></li>
+            <li><a href="#" class="hover:text-gray-100">Jobs@Paragon</a></li>
+            <li><a href="#" class="hover:text-gray-100">My.Paragon.U</a></li>
+            <li><a href="#" class="hover:text-gray-100">Tuition and Fees</a></li>
+          </ul>
         </div>
-        <div class="footer-section" style="flex: 1; padding: 0 20px;>
-            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Recent Posts</h3>
-            <ul>
-                <li><a href="#">USDP Cohort 5 Grand Finale and Awards Ceremony</a></li>
-                <li><a href="#">National Exam Grade-Based Scholarship</a></li>
-                <li><a href="#">Scholarship Exam 2023 Awards</a></li>
-                <li><a href="#">Hengsopheavan Sam, MIS Alumnus, and his Startups “Kong Vong”</a></li>
-            </ul>
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Recent Posts</h3>
+          <ul class="my-10">
+            <li><a href="#" class="hover:text-gray-100">USDP Cohort 5 Grand Finale and Awards Ceremony</a></li>
+            <li><a href="#" class="hover:text-gray-100">National Exam Grade-Based Scholarship</a></li>
+            <li><a href="#" class="hover:text-gray-100">Scholarship Exam 2023 Awards</a></li>
+            <li><a href="#" class="hover:text-gray-100">Hengsopheavan Sam, MIS Alumnus, and his Startups "Kong Vong"</a></li>
+          </ul>
         </div>
-        <div class="footer-section" style="flex: 1; padding: 0 20px;>
-            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Find Us</h3>
-            <address>
-                <p style="  font-size: 14px; margin-top: 10px; text-align: center; color: #666;">No. 8, St. 315,<br>
-                Boeng Kak 1, Tuol Kork,<br>
-                Phnom Penh, Cambodia, 12151</p>
-                <p style="  font-size: 14px; margin-top: 10px; text-align: center; color: #666;">+855 23 996 111<br>
-                +855 17 996 111<br>
-                +855 15 996 111</p>
-                <p style="  font-size: 14px; margin-top: 10px; text-align: center; color: #666;"><a href="mailto:info@paragoniu.edu.kh">info@paragoniu.edu.kh</a></p>
-            </address>
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Find Us</h3>
+          <div class="my-10">
+            <p>Paragon International University</p>
+            <p>No. 8, St. 315, Boeng Kak 1, Tuol Kork, Phnom Penh, Cambodia, 12151</p>
+            <p>+855 23 996 111</p>
+            <p>+855 17 996 111</p>
+            <p>+855 15 996 111</p>
+            <p>info@paragoniu.edu.kh</p>
+            </div>
         </div>
-        <div class="footer-section" style="flex: 1; padding: 0 20px;>
-            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Paragon International University</h3>
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.8283195657286!2d104.89043111533703!3d11.56573524734942!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109513c6c5c1b9b%3A0x4294c8e5e0d4e707!2sParagon%20International%20University!5e0!3m2!1sen!2skh!4v1598351224831!5m2!1sen!2skh" 
-                width="300" 
-                height="200" 
-                frameborder="0" 
-                style="border:0;" 
-                allowfullscreen="" 
-                aria-hidden="false" 
-                tabindex="0">
+        <div>
+          <h3 class="text-white text-lg font-semibold mb-4">Paragon International University</h3>
+          <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+          <div class="h-96">
+            <iframe
+              width="100%"
+              height="100%"
+              frameborder="0"
+              style="border:0"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019879094116!2d144.96305831531678!3d-37.81410797975133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5777529bb4d3bd5!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1614114372457!5m2!1sen!2sau"
+              allowfullscreen>
             </iframe>
+          </div>
         </div>
+      </div>
+      <div class="mt-8 border-t border-gray-800 pt-4 text-center text-sm">
+        <p>Copyright © All Rights Reserved. 2022, PARAGON International University</p>
+      </div>
     </footer>`,
     category: 'Layout',
     attributes: { class: 'fa fa-window-maximize' }
