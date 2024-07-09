@@ -138,7 +138,7 @@ const activateAccount = async () => {
     authStore.setToken(data.data.token);
 
     // Redirect based on user level
-    if (data.data.user_level === 'admin' || data.data.user_level === 'superadmin') {
+    if (data.data.user_level === 'admin' || data.data.user_level === 'super_admin') {
       router.push('/admin');
     } else {
       router.push('/');
