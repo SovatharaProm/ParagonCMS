@@ -167,6 +167,11 @@ const fetchUsers = async () => {
 
 const toggleSuspendUser = async (user) => {
   try {
+    console.log('User object:', user); // Debug log to check the user object
+    if (!user || !user.id) {
+      throw new Error('Invalid user object');
+    }
+
     const response = await fetch(`${API_BASE_URL}/ban-user`, {
       method: 'POST',
       headers: {
@@ -208,6 +213,7 @@ const toggleSuspendUser = async (user) => {
     toast.error(error.message || 'There was an error suspending the user');
   }
 };
+
 
 
 
