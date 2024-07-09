@@ -7,11 +7,6 @@
         Enter OTP
       </h2>
       <OtpInput @update:modelValue="updateOtp" :length="6" />
-      <div class="flex justify-center">
-        <button @click="resendOtp" class="mt-4 text-sm text-blue-900 hover:underline">
-          Resend
-        </button>
-      </div>
       <button @click="confirm" class="mt-8 w-full md:w-[20%] py-2 px-4 bg-blue-900 text-white rounded-lg hover:bg-blue-700">
         Confirm
       </button>
@@ -22,6 +17,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useToast } from 'vue-toast-notification';
 import OtpInput from '~/components/OtpInput.vue';
 import Header from '~/components/Header.vue';
 import BackButton from '~/components/BackButton.vue';
@@ -30,6 +26,7 @@ const otp = ref(Array(6).fill(''));
 const transactionId = ref('');
 const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
 const updateOtp = ({ index, value }) => {
   otp.value[index - 1] = value;
@@ -60,7 +57,7 @@ const confirm = async () => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error('Error response:', errorData);
-      throw new Error("Failed to confirm OTP");
+      throw new Error(errorData.message || "Failed to confirm OTP");
     }
 
     const data = await response.json();
@@ -70,6 +67,7 @@ const confirm = async () => {
     router.push({ path: '/auth/newPassword', query: { secret } });
   } catch (error) {
     console.error("Failed to confirm OTP", error);
+    toast.error(error.message || 'Failed to confirm OTP');
   }
 };
 
