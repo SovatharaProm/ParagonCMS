@@ -34,7 +34,7 @@
                   <v-list-item @click="openCreatePageModal(true, child.id)">
                     <v-list-item-title>Create Subpage</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="confirmDeletePage(child)" class="text-blue-900">
+                  <v-list-item @click="confirmDeletePage(child)">
                     <v-list-item-title>Delete</v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="togglePublish(child, parentState, childIndex)">
@@ -81,14 +81,14 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="deleteConfirmDialog" max-width="400px">
+    <v-dialog v-model="deleteConfirmDialog" max-width="400px" class="font-bold">
       <v-card>
-        <v-card-title>Confirm Delete</v-card-title>
+        <v-card-title class="text-blue-900">Confirm Delete</v-card-title>
         <v-card-text>Are you sure you want to delete this page?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="deleteConfirmDialog = false">Cancel</v-btn>
-          <v-btn color="red darken-1" @click="deletePage(selectedPage)">Delete</v-btn>
+          <v-btn color="blue-darken-4" @click="deletePage(selectedPage)">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

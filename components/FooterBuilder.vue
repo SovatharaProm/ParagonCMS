@@ -90,113 +90,59 @@ const fetchFooterContent = async () => {
 
 
 const customElementsPlugin = editor => {
-  
-  editor.BlockManager.add('header-1-block', {
-      label: 'Header 1',
-      content: `<header class="bg-blue-950 p-2 my-auto">
-          <div class="container mx-auto flex items-end justify-end">
-              <nav class="flex space-x-5">
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
-                  <a href="#" class="text-white hover:text-gray-300 bg-yellow-500 p-2 py-full">My.Paragon.U</a>
-              </nav>
-          </div>
-      </header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
-  // Add Header 2 block to the canvas
-  editor.BlockManager.add('header-2-block', {
-      label: 'Header 2',
-      content: `<header class="mx-20 my-auto py-3 border-b-2">
-    <div class="flex items-center justify-between">
-      <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
-      <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Our History</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mission & Vision</a>
-          </div>
+    editor.BlockManager.add('footer-block', {
+    label: 'Footer',
+    content: `<footer style="display: flex; justify-content: space-around; background-color: #222; color: #fff; padding: 20px 0;">
+        <div class="footer-section" style="flex: 1; padding: 0 20px;">
+            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Library</a></li>
+                <li><a href="#">Undergraduate Majors</a></li>
+                <li><a href="#">Postgraduate Programs</a></li>
+                <li><a href="#">Jobs@Paragon</a></li>
+                <li><a href="#">My.Paragon.U</a></li>
+                <li><a href="#">Tuition and Fees</a></li>
+            </ul>
         </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Current Students</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Student Life</a>
-          </div>
+        <div class="footer-section" style="flex: 1; padding: 0 20px;>
+            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Recent Posts</h3>
+            <ul>
+                <li><a href="#">USDP Cohort 5 Grand Finale and Awards Ceremony</a></li>
+                <li><a href="#">National Exam Grade-Based Scholarship</a></li>
+                <li><a href="#">Scholarship Exam 2023 Awards</a></li>
+                <li><a href="#">Hengsopheavan Sam, MIS Alumnus, and his Startups “Kong Vong”</a></li>
+            </ul>
         </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Admissions</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Programs</a>
-          </div>
+        <div class="footer-section" style="flex: 1; padding: 0 20px;>
+            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Find Us</h3>
+            <address>
+                <p style="  font-size: 14px; margin-top: 10px; text-align: center; color: #666;">No. 8, St. 315,<br>
+                Boeng Kak 1, Tuol Kork,<br>
+                Phnom Penh, Cambodia, 12151</p>
+                <p style="  font-size: 14px; margin-top: 10px; text-align: center; color: #666;">+855 23 996 111<br>
+                +855 17 996 111<br>
+                +855 15 996 111</p>
+                <p style="  font-size: 14px; margin-top: 10px; text-align: center; color: #666;"><a href="mailto:info@paragoniu.edu.kh">info@paragoniu.edu.kh</a></p>
+            </address>
         </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Departments</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Research</a>
-          </div>
+        <div class="footer-section" style="flex: 1; padding: 0 20px;>
+            <h3 style="color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; margin-bottom: 20px;">Paragon International University</h3>
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.8283195657286!2d104.89043111533703!3d11.56573524734942!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109513c6c5c1b9b%3A0x4294c8e5e0d4e707!2sParagon%20International%20University!5e0!3m2!1sen!2skh!4v1598351224831!5m2!1sen!2skh" 
+                width="300" 
+                height="200" 
+                frameborder="0" 
+                style="border:0;" 
+                allowfullscreen="" 
+                aria-hidden="false" 
+                tabindex="0">
+            </iframe>
         </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Apply Now</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Financial Aid</a>
-          </div>
-        </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Collaborations</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Corporate Partners</a>
-          </div>
-        </div>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </div>
-    </div>
-  </header>`,
-  category: 'Layout Headers',
-  attributes: { class: 'fa fa-window-restore' }
+    </footer>`,
+    category: 'Layout',
+    attributes: { class: 'fa fa-window-maximize' }
   });
-
-  editor.BlockManager.add('header-3-block', {
-      label: 'Header 3',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><nav class="md:ml-auto flex flex-wrap items-center text-base justify-center"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="mr-5 hover:text-gray-900">Fourth Link</a></nav><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
-  editor.BlockManager.add('header-4-block', {
-      label: 'Header 4',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="mr-5 hover:text-gray-900">Fourth Link</a></nav><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
-  editor.BlockManager.add('header-5-block', {
-      label: 'Header 5',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="hover:text-gray-900">Fourth Link</a></nav><a class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0"><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
-  editor.BlockManager.add('header-6-block', {
-      label: 'Header 6',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="mr-5 hover:text-gray-900">Fourth Link</a></nav><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
 };
 
 const uploadFileToSpace = async (file) => {
