@@ -37,7 +37,10 @@
       </select>
     </div>
 
-    <div class="flex flex-col gap-5">
+    <div v-if="requests.length === 0" class="text-center text-gray-500">
+      No data available
+    </div>
+    <div v-else class="flex flex-col gap-5">
       <div
         v-for="request in filteredRequests"
         :key="request.id"
@@ -124,7 +127,7 @@ definePageMeta({
 const authStore = useAuthStore();
 const toast = useToast();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const requests = ref([]);
+const requests = ref([]); // Ensure requests is always an array
 const searchQuery = ref("");
 const statusFilter = ref("");
 const isResubmitDialogOpen = ref(false);
@@ -157,7 +160,7 @@ const fetchRequests = async () => {
     }
 
     const data = await response.json();
-    requests.value = data.data.my_change_requests; // Fetch requests assigned to the user
+    requests.value = data.data.my_change_requests || []; // Ensure it is an array
   } catch (error) {
     console.error("Error fetching requests:", error.message);
     toast.error(error.message || "An unexpected error occurred", {
@@ -253,8 +256,6 @@ const viewRequest = async (id) => {
   }
 };
 
-
-
 const resubmitChangeRequest = async () => {
   if (!authStore.token) {
     toast.error("Authentication token is missing");
@@ -294,6 +295,7 @@ onMounted(() => {
   });
 });
 </script>
+
 
 <style scoped>
 @import "@/assets/css/style.css";
