@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header />
     <div class="flex justify-center items-center mt-16 px-8">
       <div class="bg-white p-6 w-full max-w-md mt-2">
         <h2 class="font-bold text-center text-3xl text-blue-900 mb-10">
@@ -82,7 +82,7 @@
 <script setup>
 definePageMeta({
   middleware: "login",
-})
+});
 import { ref } from "vue";
 import { useAuthStore } from "../stores/auth";
 import { navigateTo } from "nuxt/app";
@@ -96,12 +96,9 @@ const authStore = useAuthStore();
 
 const getCsrfToken = async () => {
   try {
-    await fetch(
-      `${import.meta.env.VITE_SANCTUM_BASE_URL}/sanctum/csrf-cookie`,
-      {
-        credentials: "include",
-      }
-    );
+    await fetch(`api/sanctum/csrf-cookie`, {
+      credentials: "include",
+    });
   } catch (error) {
     console.error("Failed to get CSRF token:", error);
   }
