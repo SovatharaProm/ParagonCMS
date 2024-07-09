@@ -1,7 +1,8 @@
 <template>
-  <h1 class="text-2xl font-bold text-blue-900 text-start mb-8">
-    {{ changeRequest?.request_name || "Loading..." }}
-  </h1>
+  <div>
+    <h1 class="text-2xl font-bold text-blue-900 text-start mb-8">
+      {{ changeRequest?.request_name || "Loading..." }}
+    </h1>
 
     <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
       <div>
@@ -39,26 +40,47 @@
         </p>
       </div>
     </div>
-  <div class="flex justify-end mt-96 gap-4">
-    <button
-      @click="openRejectModal"
-      class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
-    >
-      Decline
-    </button>
-    <button
-      @click="approveChangeRequest"
-      class="bg-blue-900 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium"
-    >
-      Approve
-    </button>
-  </div>
 
-  <AdminRejectCommentDialog
-    :show="showRejectModal"
-    @close="closeRejectModal"
-    @submit="handleRejectSubmit"
-  />
+    <!-- Comments Section -->
+    <div class="mt-8">
+      <h2 class="text-xl font-bold mb-4">Comments</h2>
+      <div v-if="changeRequest?.comments?.length">
+        <div
+          v-for="comment in changeRequest.comments"
+          :key="comment.id"
+          class="mb-4 p-4 border rounded-lg shadow"
+        >
+          <p class="text-lg"><strong>{{ comment.commenter_name }}</strong></p>
+          <p class="text-gray-600">{{ comment.created_time }}</p>
+          <p class="mt-2">{{ comment.comments }}</p>
+        </div>
+      </div>
+      <div v-else>
+        <p>No comments available.</p>
+      </div>
+    </div>
+
+    <div class="flex justify-end mt-96 gap-4">
+      <button
+        @click="openRejectModal"
+        class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
+      >
+        Decline
+      </button>
+      <button
+        @click="approveChangeRequest"
+        class="bg-blue-900 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium"
+      >
+        Approve
+      </button>
+    </div>
+
+    <AdminRejectCommentDialog
+      :show="showRejectModal"
+      @close="closeRejectModal"
+      @submit="handleRejectSubmit"
+    />
+  </div>
 </template>
 
 <script setup>
