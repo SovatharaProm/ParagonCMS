@@ -69,9 +69,11 @@ import { ref } from 'vue';
 import Header from "@/components/Header";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
+import { useToast } from 'vue-toast-notification';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const toast = useToast();
 
 const isDrawerOpen = ref(false);
 
@@ -84,8 +86,30 @@ const closeDrawer = () => {
 };
 
 const handleLogout = async () => {
-  await authStore.logout(router);
-  closeDrawer();
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/log-out`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to log out');
+    }
+
+    authStore.nullToken();
+    toast.success('Successfully signed out');
+    router.push('/auth/login');
+    closeDrawer();
+  } catch (error) {
+    console.error('Error signing out:', error);
+    authStore.nullToken();
+    toast.error('Failed to sign out');
+    router.push('/auth/login');
+    closeDrawer();
+  }
 };
 </script>
 
