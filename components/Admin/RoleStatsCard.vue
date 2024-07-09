@@ -81,7 +81,6 @@
                   <Icon name="lucide:edit" class="text-2xl"></Icon>
                 </NuxtLink>
                 <button
-                  v-if="!isAdmin"
                   @click="editRole(role)"
                   class="hover:text-green-500 text-green-700"
                   title="Assign Role to User"
