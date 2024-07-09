@@ -266,6 +266,7 @@ const sendInvite = async () => {
 
     console.log('Invite sent successfully:', responseData);
     toast.success('Invite sent successfully!');
+    router.push('/admin/users/usermanagement'); // Navigate to user management after successful invite
   } catch (error) {
     console.error('There was an error sending the invite:', error);
     toast.error('There was an error sending the invite.');
