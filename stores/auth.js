@@ -75,7 +75,7 @@ export const useAuthStore = defineStore('auth', {
       this.userStatus = null; // Reset userStatus
     },
 
-    async logout() {
+    async logout(router) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/log-out`, {
           method: 'POST',
@@ -92,9 +92,11 @@ export const useAuthStore = defineStore('auth', {
         }
 
         this.nullToken();
+        router.push('/auth/login'); // Redirect to login page
       } catch (error) {
         console.error('Error logging out:', error);
         this.nullToken(); // Ensure token is nullified even if the logout request fails
+        router.push('/auth/login'); // Redirect to login page even if there was an error
       }
     },
   },

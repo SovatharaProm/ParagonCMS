@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toast-notification';
 import { useAuthStore } from '~/stores/auth';
@@ -89,14 +89,25 @@ const signOut = async () => {
 
     console.log('Log out successful. Clearing user data...');
     // Clear user data from the store
-    authStore.logout(router);
+    authStore.nullToken();
     toast.success('Successfully signed out');
     closeDrawer();
   } catch (error) {
     console.error('Error signing out:', error);
+    authStore.nullToken(); // Ensure token is nullified even if the logout request fails
     toast.error('Failed to sign out');
   }
 };
+
+// Watch for changes in the token and redirect to login page if token is null
+watch(
+  () => authStore.token,
+  (newToken) => {
+    if (!newToken) {
+      router.push('/auth/login');
+    }
+  }
+);
 </script>
 
 <style scoped>
