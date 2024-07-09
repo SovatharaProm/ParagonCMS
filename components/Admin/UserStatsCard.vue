@@ -182,8 +182,6 @@ const toggleSuspendUser = async (user) => {
       throw new Error(responseData.message || 'Failed to suspend user');
     }
 
-    console.log('Suspend/Unsuspend API response:', responseData);
-
     // Ensure response data is as expected
     if (!responseData.data || typeof responseData.data.status === 'undefined') {
       throw new Error('Unexpected response format');
@@ -195,20 +193,21 @@ const toggleSuspendUser = async (user) => {
     // Show a toast notification
     if (user.suspended) {
       toast.success('User suspended successfully');
+
+      // If the currently logged-in user is suspended, log them out
+      if (authStore.userId === user.id) {
+        authStore.nullToken();
+        router.push('/auth/login?message=Your account has been suspended.');
+      }
     } else {
       toast.success('User unsuspended successfully');
-    }
-
-    // If the suspended user is the current user, log them out and redirect to login
-    if (authStore.token && user.id === authStore.userId && user.suspended) {
-      await authStore.logout();
-      router.push('/auth/login?message=Your account has been suspended.');
     }
   } catch (error) {
     console.error('Error suspending user:', error.message);
     toast.error(error.message || 'There was an error suspending the user');
   }
 };
+
 
 
 function getRoleClass(role) {

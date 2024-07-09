@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', {
     token: null,
     userRole: null,
     userName: null,
+    userStatus: null, // Add userStatus property
   }),
   actions: {
     async initializeStore() {
@@ -51,6 +52,7 @@ export const useAuthStore = defineStore('auth', {
         if (data && data.data && data.data.profile) {
           this.userRole = data.data.profile.level;
           this.userName = data.data.profile.name;
+          this.userStatus = data.data.profile.status; // Update the userStatus based on the profile status
         } else {
           console.error('Invalid response structure, user level not found');
           throw new Error('Invalid response structure, user level not found');
@@ -62,7 +64,7 @@ export const useAuthStore = defineStore('auth', {
 
     removeCookie(name) {
       const cookies = new Cookies();
-      cookies.remove(name, { path: '/auth/login' });
+      cookies.remove(name, { path: '/' });
     },
 
     nullToken() {
@@ -70,6 +72,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null;
       this.userRole = null;
       this.userName = null;
+      this.userStatus = null; // Reset userStatus
     },
 
     async logout() {

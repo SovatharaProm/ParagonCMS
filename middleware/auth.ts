@@ -11,7 +11,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     // Redirect to login page if token is not found
     if (!authStore.token) {
-        // console.error("No token found during initialization");
         if (to.fullPath !== "/auth/login") {
             return navigateTo("/auth/login");
         }
@@ -25,6 +24,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         if (!authStore.userRole) {
             console.error("User role not found after fetching");
             return navigateTo("/auth/login");
+        }
+
+        // Check if the user is suspended
+        if (authStore.userStatus === 'deactivated') {
+            authStore.nullToken();
+            return navigateTo("/auth/login?message=Your account has been suspended.");
         }
 
         // If user is authenticated and tries to access the login page, redirect to home page

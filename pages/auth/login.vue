@@ -80,12 +80,9 @@
 </template>
 
 <script setup>
-definePageMeta({
-  middleware: "login",
-})
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useAuthStore } from "../stores/auth";
-import { navigateTo, useRoute } from "nuxt/app";
+import { useRouter, useRoute } from "vue-router";
 
 const email = ref("");
 const password = ref("");
@@ -93,6 +90,7 @@ const emailError = ref("");
 const loginError = ref("");
 const showPassword = ref(false);
 const authStore = useAuthStore();
+const router = useRouter();
 const route = useRoute();
 
 const getCsrfToken = async () => {
@@ -136,11 +134,10 @@ const handleLogin = async () => {
 
     const data = await response.json();
     if (!response.ok) {
-      if (data.message === "User have been suspended") {
+      if (response.status === 401 && data.message === "User have been suspended") {
         loginError.value = "Your account has been suspended.";
         return;
-      }
-      if (response.status === 422) {
+      } else if (response.status === 422) {
         emailError.value = "Invalid credentials";
         return;
       }
@@ -154,9 +151,9 @@ const handleLogin = async () => {
       data.data.user_level === "super_admin" ||
       data.data.user_level === "admin"
     ) {
-      navigateTo("/admin");
+      router.push("/admin");
     } else if (data.data.user_level === "user") {
-      navigateTo("/");
+      router.push("/");
     } else {
       loginError.value = "Unknown user level";
     }
@@ -166,7 +163,6 @@ const handleLogin = async () => {
   }
 };
 
-// Check if there is a suspension message in the URL query
 onMounted(() => {
   const message = route.query.message;
   if (message) {
