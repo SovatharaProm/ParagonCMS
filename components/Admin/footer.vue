@@ -3,7 +3,7 @@
       <h1 class="text-2xl font-bold text-blue-900 text-start pt-4 pb-6 h-fit w-1/2">
         Footer
       </h1>
-      <div v-if="footer !== null" class="flex gap-5 my-auto w-3/4 flex-col">
+      <div v-if="footer !== null" class="flex gap-5 my-auto w-full flex-col">
         <div class="flex justify-between m-1 p-2 px-5 shadow items-center rounded">
           <div class="my-2">
             <h3 class="font-medium">Footer</h3>

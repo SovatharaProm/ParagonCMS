@@ -6,7 +6,7 @@
       Headers
     </h1>
     <div
-      class="flex gap-5 my-auto w-3/4 flex-col"
+      class="flex gap-5 my-auto w-full flex-col"
       v-for="header in headers"
       :key="header.id"
     >
