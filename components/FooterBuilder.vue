@@ -1,26 +1,39 @@
 <template>
-  <div ref="grapesjsEditor" class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"></div>
+  <div
+    ref="grapesjsEditor"
+    class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"
+  ></div>
 
   <div class="flex justify-end my-5 ml-[300px] flex-grow">
     <NuxtLink to="/admin/website" class="mr-5">
-      <v-btn class="text-none" color="blue-darken-4" variant="outlined">Discard</v-btn>
+      <v-btn class="text-none" color="blue-darken-4" variant="outlined"
+        >Discard</v-btn
+      >
     </NuxtLink>
-    <v-btn class="text-none text-white px-8 mr-5" color="blue-darken-4" variant="flat" @click="saveContent">Save</v-btn>
+    <v-btn
+      class="text-none text-white px-8 mr-5"
+      color="blue-darken-4"
+      variant="flat"
+      @click="saveContent"
+      >Save</v-btn
+    >
     <div v-html="outputHtml"></div>
     <pre>{{ outputCss }}</pre>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed} from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import { useRoute, useRouter } from 'vue-router';
-import grapesjs from 'grapesjs';
-import 'grapesjs/dist/css/grapes.min.css';
-import plugin from 'grapesjs-tailwind';
-import 'tailwindcss/tailwind.css';
+import { useRoute, useRouter } from "vue-router";
+import grapesjs from "grapesjs";
+import "grapesjs/dist/css/grapes.min.css";
+import plugin from "grapesjs-tailwind";
+import "tailwindcss/tailwind.css";
 
-const isAdmin = computed(() => authStore.userRole === "admin" || authStore.userRole === "super_admin");
+const isAdmin = computed(
+  () => authStore.userRole === "admin" || authStore.userRole === "super_admin"
+);
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const authStore = useAuthStore();
 const grapesjsEditor = ref(null);
@@ -30,7 +43,7 @@ let editor;
 
 const saveContent = async () => {
   if (!editor) {
-    console.error('Editor is not initialized');
+    console.error("Editor is not initialized");
     return;
   }
 
@@ -44,26 +57,25 @@ const saveContent = async () => {
 
   try {
     const response = await fetch(`${API_BASE_URL}/update-footer`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${authStore.token}`,
       },
       body: JSON.stringify(data),
     });
     const result = await response.json();
     if (result.code === 200) {
-      console.log('Saved footer content'); // Debug log
-      alert('Content saved successfully!');
-      router.push('/admin/website');
+      console.log("Saved footer content"); // Debug log
+      alert("Content saved successfully!");
+      router.push("/admin/website");
     } else {
-      alert('Error: ' + result.message);
+      alert("Error: " + result.message);
     }
   } catch (error) {
-    alert('Error: ' + error.message);
+    alert("Error: " + error.message);
   }
 };
-
 
 const fetchFooterContent = async () => {
   try {
@@ -75,23 +87,21 @@ const fetchFooterContent = async () => {
 
     const data = await response.json();
     if (data.code === 200) {
-      console.log('Fetched footer content', data); // Debug log
+      console.log("Fetched footer content", data); // Debug log
       return data;
     } else {
-      console.error('Error fetching footer content:', data.message);
+      console.error("Error fetching footer content:", data.message);
       return null;
     }
   } catch (error) {
-    console.error('Error fetching footer content:', error);
+    console.error("Error fetching footer content:", error);
     return null;
   }
 };
 
-
-
-  const customElementsPlugin = editor => {
-    editor.BlockManager.add('footer-block', {
-    label: 'Footer',
+const customElementsPlugin = (editor) => {
+  editor.BlockManager.add("footer-block", {
+    label: "Footer",
     content: `<footer class="bg-stone-900 text-gray-300 py-10">
       <div class="container mx-auto grid grid-cols-4 gap-8">
         <div>
@@ -128,7 +138,6 @@ const fetchFooterContent = async () => {
         </div>
         <div>
           <h3 class="text-white text-lg font-semibold mb-4">Paragon International University</h3>
-          <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
           <div class="h-96">
             <iframe
               width="100%"
@@ -145,35 +154,37 @@ const fetchFooterContent = async () => {
         <p>Copyright © All Rights Reserved. 2022, PARAGON International University</p>
       </div>
     </footer>`,
-    category: 'Layout',
-    attributes: { class: 'fa fa-window-maximize' }
+    category: "Layout",
+    attributes: { class: "fa fa-window-maximize" },
   });
 };
 
 const uploadFileToSpace = async (file) => {
   // Fetch the pre-signed URL from the backend
-  const response = await fetch(`http://localhost:3001/generate-url?filename=${file.name}`);
+  const response = await fetch(
+    `http://localhost:3001/generate-url?filename=${file.name}`
+  );
   if (!response.ok) {
-    throw new Error('Failed to generate pre-signed URL');
+    throw new Error("Failed to generate pre-signed URL");
   }
   const data = await response.json();
 
   if (!data.success) {
-    throw new Error('Failed to generate pre-signed URL');
+    throw new Error("Failed to generate pre-signed URL");
   }
 
   // Upload the file to DigitalOcean Spaces using the pre-signed URL
   const uploadResponse = await fetch(data.uploadUrl, {
-    method: 'PUT',
+    method: "PUT",
     body: file,
     headers: {
-      'Content-Type': file.type,
-      'x-amz-acl': 'public-read',
-    }
+      "Content-Type": file.type,
+      "x-amz-acl": "public-read",
+    },
   });
 
   if (!uploadResponse.ok) {
-    throw new Error('Failed to upload file to DigitalOcean Space');
+    throw new Error("Failed to upload file to DigitalOcean Space");
   }
 
   return data.fileUrl;
@@ -186,8 +197,8 @@ onMounted(async () => {
     container: grapesjsEditor.value,
     plugins: [customElementsPlugin, plugin],
     fromElement: true,
-    height: '100vh',
-    width: '100%',
+    height: "100vh",
+    width: "100%",
     assetManager: {
       upload: false, // Disable default upload
       uploadFile: async (e) => {
@@ -199,7 +210,7 @@ onMounted(async () => {
             const fileUrl = await uploadFileToSpace(file);
             images.push({ src: fileUrl });
           } catch (error) {
-            console.error('Error uploading file:', error);
+            console.error("Error uploading file:", error);
           }
         }
 
@@ -207,16 +218,16 @@ onMounted(async () => {
       },
     },
   });
-  
-  document.documentElement.style.setProperty('--gjs-primary-color', '#172947');
-  document.documentElement.style.setProperty('--gjs-secondary-color', '#fff');
+
+  document.documentElement.style.setProperty("--gjs-primary-color", "#172947");
+  document.documentElement.style.setProperty("--gjs-secondary-color", "#fff");
 
   const pageContent = await fetchFooterContent();
   if (pageContent && pageContent.html && pageContent.css) {
     editor.setComponents(pageContent.html);
     editor.setStyle(pageContent.css);
   } else {
-    console.warn('No footer content found'); // Debug log
+    console.warn("No footer content found"); // Debug log
   }
 });
 </script>
