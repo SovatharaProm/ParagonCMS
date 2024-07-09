@@ -192,15 +192,42 @@ const toggleSuspendUser = async (user) => {
     // Update the user's suspension status in the local state based on the response
     user.suspended = responseData.data.status === 'deactivated';
 
+    // Call the endpoint to invalidate the user's session
+    await invalidateUserSession(user.id);
+
     // Show a toast notification
     if (user.suspended) {
-      toast.success('User suspended successfully');
+      toast.success('User suspended and session terminated successfully');
     } else {
       toast.success('User unsuspended successfully');
     }
   } catch (error) {
     console.error('Error suspending user:', error.message);
     toast.error(error.message || 'There was an error suspending the user');
+  }
+};
+
+const invalidateUserSession = async (userId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/invalidate-session`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user_id: userId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to invalidate user session');
+    }
+
+    console.log('Invalidate session API response:', data);
+  } catch (error) {
+    console.error('Error invalidating user session:', error.message);
+    toast.error('Error invalidating user session');
   }
 };
 
