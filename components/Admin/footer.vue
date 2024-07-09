@@ -20,7 +20,7 @@
               </template>
               <v-list>
                 <v-list-item @click="toggleFooter">
-                  <v-list-item-title>{{ footer.isActive ? 'Unpublish' : 'Publish' }}</v-list-item-title>
+                  <v-list-item-title>{{ footer?.isActive ? 'Unpublish' : 'Publish' }}</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="publishFooter">
                   <v-list-item-title>Apply Draft</v-list-item-title>

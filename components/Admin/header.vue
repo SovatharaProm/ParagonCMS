@@ -61,7 +61,6 @@ const toast = useToast();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const authStore = useAuthStore();
 const headers = ref([]);
-const requests = ref([]);
 const isAdmin = computed(
   () => authStore.userRole === "admin" || authStore.userRole === "super_admin"
 );
