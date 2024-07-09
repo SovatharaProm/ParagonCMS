@@ -109,6 +109,8 @@ const getCsrfToken = async () => {
 
 const handleLogin = async () => {
   loginError.value = "";
+  emailError.value = "";
+
   if (!email.value) {
     emailError.value = "Email is required";
     return;
@@ -135,6 +137,10 @@ const handleLogin = async () => {
 
     const data = await response.json();
     if (!response.ok) {
+      if (response.status === 401 && data.message === "User's account have be suspended") {
+        loginError.value = "Your account might be suspended. Please contact support.";
+        return;
+      }
       if (response.status === 422) {
         emailError.value = "Invalid credentials";
         return;
@@ -144,7 +150,6 @@ const handleLogin = async () => {
     }
 
     authStore.setToken(data.data.token);
-    // console.log("Login successful. Token:", data.data.token);
 
     if (
       data.data.user_level === "super_admin" ||
@@ -161,6 +166,7 @@ const handleLogin = async () => {
     loginError.value = "An error occurred. Please try again.";
   }
 };
+
 </script>
 
 <style scoped>

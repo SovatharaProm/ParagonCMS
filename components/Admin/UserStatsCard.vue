@@ -182,22 +182,17 @@ const toggleSuspendUser = async (user) => {
       throw new Error(responseData.message || 'Failed to suspend user');
     }
 
-    console.log('Suspend/Unsuspend API response:', responseData);
-
-    // Ensure response data is as expected
-    if (!responseData.data || typeof responseData.data.status === 'undefined') {
-      throw new Error('Unexpected response format');
-    }
-
     // Update the user's suspension status in the local state based on the response
     user.suspended = responseData.data.status === 'deactivated';
 
-    // Call the endpoint to invalidate the user's session
-    await invalidateUserSession(user.id);
-
     // Show a toast notification
     if (user.suspended) {
-      toast.success('User suspended and session terminated successfully');
+      toast.success('User suspended successfully');
+      if (user.id === authStore.user.id) {
+        // Terminate the session for the suspended user
+        authStore.logout();
+        router.push('/auth/login');
+      }
     } else {
       toast.success('User unsuspended successfully');
     }
@@ -207,29 +202,6 @@ const toggleSuspendUser = async (user) => {
   }
 };
 
-const invalidateUserSession = async (userId) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/invalidate-session`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${authStore.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ user_id: userId }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to invalidate user session');
-    }
-
-    console.log('Invalidate session API response:', data);
-  } catch (error) {
-    console.error('Error invalidating user session:', error.message);
-    toast.error('Error invalidating user session');
-  }
-};
 
 function getRoleClass(role) {
   switch (role) {
