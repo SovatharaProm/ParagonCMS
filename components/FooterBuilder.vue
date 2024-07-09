@@ -2,7 +2,7 @@
   <div ref="grapesjsEditor" class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"></div>
 
   <div class="flex justify-end my-5 ml-[300px] flex-grow">
-    <NuxtLink to="/" class="mr-5">
+    <NuxtLink to="/admin/website" class="mr-5">
       <v-btn class="text-none" color="blue-darken-4" variant="outlined">Discard</v-btn>
     </NuxtLink>
     <v-btn class="text-none text-white px-8 mr-5" color="blue-darken-4" variant="flat" @click="saveContent">Save</v-btn>
