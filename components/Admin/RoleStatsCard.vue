@@ -81,7 +81,7 @@
                 </NuxtLink>
                 <button
                   @click="editRole(role)"
-                  class="hover:text-green-700 text-green-500"
+                  class="hover:text-green-500 text-green-700"
                   title="Assign Role to User"
                 >
                   <Icon name="clarity:assign-user-line" class="text-2xl"></Icon>
