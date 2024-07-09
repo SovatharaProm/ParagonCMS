@@ -52,7 +52,7 @@
     <span class="username text-[32px] text-[#172947] font-bold">{{ user.name }}</span>
     <span class="email text-[#172947]">{{ user.email }}</span>
   </div>
-  <div>
+  <div> 
     <div class="role">
       <h2 class="text-[#172947] text-lg font-bold my-5">Role</h2>
       <div class="flex gap-2 mb-5">
@@ -93,7 +93,7 @@
           ></v-btn>
         </template>
 
-        <v-card title="Change Password" class="font-bold text-blue-900">
+        <v-card title="Change Password" class="font-bold">
           <v-card-text>
             <v-row dense>
               <v-col cols="8">
@@ -103,8 +103,6 @@
                   variant="outlined"
                   type="password"
                   required
-                  :error="errors.old_password"
-                  :error-messages="errors.old_password ? 'Current password is incorrect' : ''"
                 ></v-text-field>
               </v-col>
 
@@ -115,8 +113,6 @@
                   variant="outlined"
                   type="password"
                   required
-                  :error="errors.new_password"
-                  :error-messages="errors.new_password ? 'New password and confirm password do not match' : ''"
                 ></v-text-field>
               </v-col>
 
@@ -127,11 +123,11 @@
                   variant="outlined"
                   type="password"
                   required
-                  :error="errors.confirm_password"
-                  :error-messages="errors.confirm_password ? 'Confirm password does not match new password' : ''"
                 ></v-text-field>
               </v-col>
             </v-row>
+            <!-- Error message display -->
+            <p v-if="errorMessage" class="text-red-500 text-sm mt-2">{{ errorMessage }}</p>
           </v-card-text>
 
           <v-divider></v-divider>
@@ -149,7 +145,7 @@
               color="primary"
               text="Save"
               variant="tonal"
-              @click="validateAndChangePassword"
+              @click="changeUserPassword"
             ></v-btn>
           </v-card-actions>
         </v-card>
@@ -169,6 +165,7 @@ definePageMeta({
 
 const dialog = ref(false);
 const dialog1 = ref(false);
+const errorMessage = ref(''); // Ref to store error message
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -184,18 +181,6 @@ const user = ref({
 
 const newName = ref(user.value.name);
 const changePassword = ref({
-  old_password: '',
-  new_password: '',
-  confirm_password: ''
-});
-
-const errors = ref({
-  old_password: false,
-  new_password: false,
-  confirm_password: false
-});
-
-const errorMessage = ref({
   old_password: '',
   new_password: '',
   confirm_password: ''
@@ -285,33 +270,13 @@ const updateName = async () => {
   }
 };
 
-const validateAndChangePassword = () => {
-  // Reset error states
-  errors.value.old_password = false;
-  errors.value.new_password = false;
-  errors.value.confirm_password = false;
-  errorMessage.value.old_password = '';
-  errorMessage.value.new_password = '';
-  errorMessage.value.confirm_password = '';
-
-  if (changePassword.value.new_password !== changePassword.value.confirm_password) {
-    errors.value.new_password = true;
-    errors.value.confirm_password = true;
-    errorMessage.value.new_password = 'New password and confirm password do not match';
-    errorMessage.value.confirm_password = 'Confirm password does not match new password';
-    return;
-  }
-
-  if (changePassword.value.old_password === changePassword.value.new_password) {
-    errors.value.new_password = true;
-    errorMessage.value.new_password = 'New password cannot be the same as the old password';
-    return;
-  }
-
-  changeUserPassword();
-};
-
 const changeUserPassword = async () => {
+  errorMessage.value = ''; // Reset the error message
+  if (changePassword.value.new_password !== changePassword.value.confirm_password) {
+    errorMessage.value = 'New password and confirm password do not match!';
+    return;
+  }
+  
   try {
     const response = await fetch(`${API_BASE_URL}/change-password`, {
       method: 'POST',
@@ -323,31 +288,23 @@ const changeUserPassword = async () => {
     });
 
     if (!response.ok) {
-      if (response.status === 400) {
-        const data = await response.json();
-        if (data.message.includes('Current password is incorrect')) {
-          errors.value.old_password = true;
-          errorMessage.value.old_password = 'Current password is incorrect';
-        }
-        if (data.message.includes('New password and confirm password do not match')) {
-          errors.value.new_password = true;
-          errors.value.confirm_password = true;
-          errorMessage.value.new_password = 'New password and confirm password do not match';
-          errorMessage.value.confirm_password = 'Confirm password does not match new password';
-        }
-        return;
+      if (response.status === 422) {
+        const errorData = await response.json();
+        errorMessage.value = errorData.message || 'Failed to change password';
+      } else {
+        throw new Error('Failed to change password');
       }
-      throw new Error('Failed to change password');
+    } else {
+      const data = await response.json();
+      dialog1.value = false;
     }
-
-    const data = await response.json();
-    dialog1.value = false;
   } catch (error) {
     console.error('Error changing password:', error);
+    errorMessage.value = error.message;
   }
 };
 </script>
 
 <style scoped>
-@import "/assets/css/style.css";
+@import "@/assets/css/style.css";
 </style>
