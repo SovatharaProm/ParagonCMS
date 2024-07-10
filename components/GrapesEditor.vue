@@ -682,7 +682,7 @@ const customElementsPlugin = editor => {
 };
 
 const uploadFileToSpace = async (file) => {
-  const response = await fetch(`http://localhost:3001/generate-url?filename=${file.name}`);
+  const response = await fetch(`http://178.128.103.134:3001/generate-url?filename=${file.name}`);
   if (!response.ok) {
     throw new Error('Failed to generate pre-signed URL');
   }
