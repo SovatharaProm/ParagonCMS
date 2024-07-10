@@ -17,7 +17,7 @@
       <!-- User Name and Profile Icon -->
       <div v-if="userRole" class="flex items-center gap-2 relative">
         <span class="font-semibold text-sm md:text-lg pr-5">{{ userName }}</span>
-        <NuxtLink to="/adminprofile" class="flex items-center">
+        <NuxtLink to="/profile/adminprofile" class="flex items-center">
           <Icon name="gg:profile" class="text-xl md:text-3xl cursor-pointer" />
         </NuxtLink>
       </div>
