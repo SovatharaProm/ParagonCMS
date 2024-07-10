@@ -1,6 +1,6 @@
 <template>
-  <div class="relative min-h-screen flex flex-col">
-    <div class="flex-grow p-4">
+  <div class="relative flex flex-col">
+    <div class="flex-grow">
       <h1 class="text-2xl font-bold text-blue-900 text-start mb-8">
         {{ changeRequest?.request_name || "Loading..." }}
       </h1>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Sticky Footer -->
-    <div class="sticky-footer flex justify-end p-4 bg-white border-t border-gray-200">
+    <div class="sticky-footer flex justify-end gap-4 p-4 bg-white border-t border-gray-200">
       <button
         @click="openRejectModal"
         class="bg-red-700 hover:bg-red-600 text-white py-2 px-6 rounded-lg font-medium"
@@ -91,7 +91,6 @@ import { ref, onMounted } from "vue";
 import { useToast } from "vue-toast-notification";
 import { useAuthStore } from "../stores/auth";
 import { useRouter, useRoute } from "vue-router";
-
 
 const toast = useToast();
 const router = useRouter();
