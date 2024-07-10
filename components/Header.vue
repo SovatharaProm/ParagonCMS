@@ -1,6 +1,6 @@
 <template>
   <nav class="bg-white shadow-md flex justify-between items-center py-3 px-4 md:px-20">
-    <div>
+    <div @click="navigateToHome" class="cursor-pointer">
       <img src="@/assets/images/Logo.png" alt="Logo" class="h-12 md:h-20" />
     </div>
     <div class="flex gap-3 items-center">
@@ -28,8 +28,10 @@
 <script setup>
 import { computed } from 'vue';
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
+const router = useRouter();
 await authStore.initializeStore();
 
 const userRole = computed(() => authStore.userRole);
@@ -60,6 +62,14 @@ const roleBadgeClass = computed(() => {
       return 'bg-gray-100 text-gray-800';
   }
 });
+
+const navigateToHome = () => {
+  if (userRole.value === 'admin' || userRole.value === 'super_admin') {
+    router.push('/admin');
+  } else {
+    router.push('/');
+  }
+};
 </script>
 
 <style scoped>
