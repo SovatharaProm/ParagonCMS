@@ -95,7 +95,7 @@ const signOut = async () => {
   } catch (error) {
     console.error('Error signing out:', error);
     authStore.nullToken(); // Ensure token is nullified even if the logout request fails
-    toast.error('Failed to sign out');
+
   }
 };
 

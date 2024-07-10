@@ -106,7 +106,6 @@ const handleLogout = async () => {
   } catch (error) {
     console.error('Error signing out:', error);
     authStore.nullToken();
-    toast.error('Failed to sign out');
     router.push('/auth/login');
     closeDrawer();
   }
