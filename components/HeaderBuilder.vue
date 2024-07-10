@@ -95,112 +95,267 @@ const fetchPageContent = async (headerId) => {
 
 
 const customElementsPlugin = editor => {
+    editor.Blocks.add('1-column', {
+    label: '1 Column',
+    content: `<div style="display:flex;">
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
+
+  editor.Blocks.add('2-columns', {
+    label: '2 Columns',
+    content: `<div style="display:flex;">
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
+
+  editor.Blocks.add('2-columns-2-3', {
+      label: '2 Columns 2/3',
+      content: `<div style="display:flex;">
+                  <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                  <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                </div>`,
+      category: 'Column',
+      attributes: { class: 'fa fa-columns' }
+    });
+
+  editor.Blocks.add('2-columns-3-7', {
+    label: '2 Columns 3/7',
+    content: `<div style="display:flex;">
+                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
+
+  editor.Blocks.add('2-columns-7-3', {
+    label: '2 Columns 7/3',
+    content: `<div style="display:flex;">
+                <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
+
+  editor.Blocks.add('3-columns', {
+    label: '3 Columns',
+    content: `<div style="display:flex;">
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
   
-  editor.BlockManager.add('header-1-block', {
-      label: 'Header 1',
-      content: `<header class="bg-blue-950 p-2 my-auto">
-          <div class="container mx-auto flex items-end justify-end">
-              <nav class="flex space-x-5">
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
-                  <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
-                  <a href="#" class="text-white hover:text-gray-300 bg-yellow-500 p-2 py-full">My.Paragon.U</a>
-              </nav>
-          </div>
-      </header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
+  editor.Blocks.add('3-columns', {
+    label: '3 Columns',
+    content: `<div style="display:flex;">
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
   });
 
-  // Add Header 2 block to the canvas
-  editor.BlockManager.add('header-2-block', {
-      label: 'Header 2',
-      content: `<header class="mx-20 my-auto py-3 border-b-2">
-    <div class="flex items-center justify-between">
-      <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Our History</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mission & Vision</a>
+  editor.Blocks.add('4-columns', {
+    label: '4 Columns',
+    content: `<div style="display:flex;">
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
+
+  editor.Blocks.add('text-block', {
+    label: 'Text',
+    content: '<div data-gjs-type="text">Insert your text here</div>',
+    category: 'Basic',
+    attributes: { class: 'fa fa-text-height' }
+  });
+
+  editor.Blocks.add('image-block', {
+    label: 'Image',
+    content: '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
+    category: 'Basic',
+    attributes: { class: 'fa fa-image' }
+  });
+
+  editor.Blocks.add('video-block', {
+    label: 'Video',
+    content: '<video controls><source src="path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
+    category: 'Basic',
+    attributes: { class: 'fa fa-video-camera' }
+  });
+
+   editor.Blocks.add('link-block', {
+    label: 'Link',
+    content: '<a href="#" class="custom-link">Click here</a>',
+    category: 'Basic',
+    attributes: { class: 'fa fa-link' }
+  });
+
+    editor.BlockManager.add('nav-bar-block', {
+    label: 'NavBar',
+    content: `<header class="bg-blue-950 p-2 my-auto">
+            <div class="container mx-auto flex items-end justify-end">
+                <nav class="flex space-x-5">
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
+                    <a href="#" class="text-white hover:text-gray-300 bg-yellow-500 p-2 py-full">My.Paragon.U</a>
+                </nav>
+            </div>
+        </header>
+    <main class="mx-20 my-auto border-b-2">
+      <div class="flex items-center justify-between">
+        <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+        <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Our History</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mission & Vision</a>
+            </div>
           </div>
-        </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Current Students</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Student Life</a>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Current Students</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Student Life</a>
+            </div>
           </div>
-        </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Admissions</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Programs</a>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Admissions</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Programs</a>
+            </div>
           </div>
-        </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Departments</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Research</a>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Departments</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Research</a>
+            </div>
           </div>
-        </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Apply Now</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Financial Aid</a>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Apply Now</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Financial Aid</a>
+            </div>
           </div>
-        </div>
-        <div class="relative group">
-          <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Collaborations</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Corporate Partners</a>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Collaborations</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Corporate Partners</a>
+            </div>
           </div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
       </div>
-    </div>
-  </header>`,
-  category: 'Layout Headers',
-  attributes: { class: 'fa fa-window-restore' }
+    </main>`,
+    category: 'Layout',
+    attributes: { class: 'fa fa-bars' }
   });
 
-  editor.BlockManager.add('header-3-block', {
-      label: 'Header 3',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><nav class="md:ml-auto flex flex-wrap items-center text-base justify-center"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="mr-5 hover:text-gray-900">Fourth Link</a></nav><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
+    // Add Header 1 block to the canvas
+    editor.BlockManager.add('header-1-block', {
+        label: 'Header 1',
+        content: `<header class="bg-blue-950 p-2 my-auto">
+            <div class="container mx-auto flex items-end justify-end">
+                <nav class="flex space-x-5">
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
+                    <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
+                    <a href="#" class="text-white hover:text-gray-300 bg-yellow-500 p-2 py-full">My.Paragon.U</a>
+                </nav>
+            </div>
+        </header>>
+        </header>`,
+        category: 'Layout',
+        attributes: { class: 'fa fa-minus' }
+    });
 
-  editor.BlockManager.add('header-4-block', {
-      label: 'Header 4',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="mr-5 hover:text-gray-900">Fourth Link</a></nav><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
-  editor.BlockManager.add('header-5-block', {
-      label: 'Header 5',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="hover:text-gray-900">Fourth Link</a></nav><a class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0"><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
-  editor.BlockManager.add('header-6-block', {
-      label: 'Header 6',
-      content: `<header class="text-gray-600 body-font"><div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"><a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg><span class="ml-3 text-xl">Tailblocks</span></a><nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center"><a class="mr-5 hover:text-gray-900">First Link</a><a class="mr-5 hover:text-gray-900">Second Link</a><a class="mr-5 hover:text-gray-900">Third Link</a><a class="mr-5 hover:text-gray-900">Fourth Link</a></nav><button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></div></header>`,
-      category: 'Layout Headers',
-      attributes: { class: 'fa fa-window-restore' }
-  });
-
+    // Add Header 2 block to the canvas
+    editor.BlockManager.add('header-2-block', {
+        label: 'Header 2',
+        content: `<main class="mx-20 my-auto border-b-2">
+      <div class="flex items-center justify-between">
+        <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+        <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Our History</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mission & Vision</a>
+            </div>
+          </div>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Current Students</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Student Life</a>
+            </div>
+          </div>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Admissions</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Programs</a>
+            </div>
+          </div>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Departments</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Research</a>
+            </div>
+          </div>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Apply Now</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Financial Aid</a>
+            </div>
+          </div>
+          <div class="relative group">
+            <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
+            <div class="absolute hidden group-hover:block bg-white shadow-lg">
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Collaborations</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Corporate Partners</a>
+            </div>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+    </main>`,
+        category: 'Layout',
+        attributes: { class: 'fa fa-window-restore' }
+    });
 };
 
 const uploadFileToSpace = async (file) => {
