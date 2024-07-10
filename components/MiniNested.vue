@@ -154,7 +154,7 @@ const updatePageName = async (child, childIndex) => {
       toast.success('Page name updated successfully');
       editablePageId.value = null;
     } else {
-      toast.error('Failed to update page name: ' + data.message);
+      toast.error(data.message);
     }
   } catch (error) {
     toast.error('Error updating page name: ' + error.message);

@@ -99,6 +99,7 @@ const updatePageName = async (element, index) => {
       editablePageId.value = null; // Exit editing mode
     } else {
       console.error('Failed to update page name:', data.message);
+      toast.error(data.message);
     }
   } catch (error) {
     console.error('Error updating page name:', error);

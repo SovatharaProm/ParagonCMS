@@ -231,6 +231,7 @@ const updatePageName = async (page, index) => {
       console.log("Page name updated successfully:", data);
     } else {
       console.error("Failed to update page name:", data.message);
+      toast.error(data.message);
     }
   } catch (error) {
     console.error("Error updating page name:", error);
