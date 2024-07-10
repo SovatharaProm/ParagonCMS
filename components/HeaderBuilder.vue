@@ -9,6 +9,7 @@
     <div v-html="outputHtml"></div>
     <pre>{{ outputCss }}</pre>
   </div>
+
 </template>
 
 
@@ -360,7 +361,7 @@ const customElementsPlugin = editor => {
 
 const uploadFileToSpace = async (file) => {
   // Fetch the pre-signed URL from the backend
-  const response = await fetch(`http://mypress.paragoniu.app/image/generate-url?filename=${file.name}`);
+  const response = await fetch(`https://mypress.paragoniu.app/image/generate-url?filename=${file.name}`);
   if (!response.ok) {
     throw new Error('Failed to generate pre-signed URL');
   }

@@ -4,7 +4,7 @@
     class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"
   ></div>
 
-  <div class="sticky-footer flex justify-end my-5 ml-[300px] flex-grow">
+  <div class="sticky-footer flex justify-end my-5 ml-[300px] flex-grow w-full">
     <NuxtLink to="/admin/website" class="mr-5">
       <v-btn class="text-none button-same-size" color="blue-darken-4" variant="outlined"
         >Discard</v-btn
@@ -277,7 +277,7 @@ const customElementsPlugin = editor => {
 const uploadFileToSpace = async (file) => {
   // Fetch the pre-signed URL from the backend
   const response = await fetch(
-    `http://mypress.paragoniu.app/image/generate-url?filename=${file.name}`
+    `https://mypress.paragoniu.app/image/generate-url?filename=${file.name}`
   );
   if (!response.ok) {
     throw new Error("Failed to generate pre-signed URL");
