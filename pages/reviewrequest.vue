@@ -87,6 +87,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+layout: "usersidebar",
+
+});
 import { ref, onMounted } from "vue";
 import { useToast } from "vue-toast-notification";
 import { useAuthStore } from "../stores/auth";
