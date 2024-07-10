@@ -4,7 +4,7 @@
     class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"
   ></div>
 
-  <div class="sticky-footer flex justify-end my-5 ml-[300px] flex-grow w-full">
+  <div class="sticky-footer flex justify-end my-5 ml-[300px] flex-grow">
     <NuxtLink to="/admin/website" class="mr-5">
       <v-btn class="text-none button-same-size" color="blue-darken-4" variant="outlined"
         >Discard</v-btn
