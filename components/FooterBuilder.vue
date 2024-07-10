@@ -277,7 +277,7 @@ const customElementsPlugin = editor => {
 const uploadFileToSpace = async (file) => {
   // Fetch the pre-signed URL from the backend
   const response = await fetch(
-    `http://localhost:3001/generate-url?filename=${file.name}`
+    `http://mypress.paragoniu.app/image/generate-url?filename=${file.name}`
   );
   if (!response.ok) {
     throw new Error("Failed to generate pre-signed URL");
