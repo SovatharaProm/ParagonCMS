@@ -9,7 +9,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -108,269 +107,65 @@ const fetchPageContent = async (pageId) => {
 };
 
 const customElementsPlugin = editor => {
-  editor.Blocks.add('1-column', {
+  // Add custom blocks
+  editor.BlockManager.add('1-column', {
     label: '1 Column',
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
+    category: 'Layout',
     attributes: { class: 'fa fa-columns' }
   });
 
-  editor.Blocks.add('2-columns', {
+  editor.BlockManager.add('2-columns', {
     label: '2 Columns',
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
+    category: 'Layout',
     attributes: { class: 'fa fa-columns' }
   });
 
-  editor.Blocks.add('2-columns-2-3', {
-      label: '2 Columns 2/3',
-      content: `<div style="display:flex;">
-                  <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                  <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                </div>`,
-      category: 'Column',
-      attributes: { class: 'fa fa-columns' }
-    });
-
-  editor.Blocks.add('2-columns-3-7', {
-    label: '2 Columns 3/7',
-    content: `<div style="display:flex;">
-                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-              </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
-  });
-
-  editor.Blocks.add('2-columns-7-3', {
-    label: '2 Columns 7/3',
-    content: `<div style="display:flex;">
-                <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-              </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
-  });
-
-  editor.Blocks.add('3-columns', {
+  editor.BlockManager.add('3-columns', {
     label: '3 Columns',
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
+    category: 'Layout',
     attributes: { class: 'fa fa-columns' }
   });
 
-  editor.Blocks.add('4-columns', {
-    label: '4 Columns',
-    content: `<div style="display:flex;">
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-              </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
-  });
-
-  editor.Blocks.add('text-block', {
+  editor.BlockManager.add('text-block', {
     label: 'Text',
     content: '<div data-gjs-type="text">Insert your text here</div>',
     category: 'Basic',
-    attributes: { class: 'fa fa-text-height' }
+    attributes: { class: 'fa fa-font' }
   });
 
-  editor.Blocks.add('image-block', {
+  editor.BlockManager.add('image-block', {
     label: 'Image',
     content: '<img data-gjs-type="image" src="/path-to-default-image.jpg" alt="Placeholder image"/>',
     category: 'Basic',
     attributes: { class: 'fa fa-image' }
   });
 
-  editor.Blocks.add('icon-bar-block', {
-    label: 'Icon Bar',
-    content: `
-        <div class="container mx-auto" style="display: flex; justify-content: space-around; align-items: center; padding: 10px; background-color: #f4f4f4;">
-        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="/apple-icon.png" style="width: 50px; height: 50px; float: left" alt="Student Clubs">
-            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Student Clubs</p>
-            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
-        </div>
-        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="/graduate-icon.png" style="width: 50px; height: 50px; float: left" alt="Partner Universities">
-            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Partner Universities</p>
-            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
-        </div>
-        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="/scholarship-icon.png" style="width: 50px; height: 50px; float: left" alt="Active Scholarships">
-            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Active Scholarships</p>
-            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">Read more ...</a>
-        </div>
-        <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
-            <img src="/gallery-icon.png" style="width: 50px; height: 50px; float: left" alt="Gallery">
-            <p style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; ">Gallery</p>
-            <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">View ...</a>
-        </div>
-    </div>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-cog' }
-  });
-
-  editor.Blocks.add('page-detail-block', {
-    label: 'Page Detail',
-    content: `
-        <div class="container" style="width: 300px; margin: 20px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
-        <div class="header" style="background-color: #f1f1f1; padding: 20px; text-align: center; border-bottom: 1px solid #ddd;">
-            <h2 style="margin: 0; font-size: 1.5em; color: #333; text-align: left;">Computer Science</h2>
-        </div>
-        <div class="content" style="padding: 20px;">
-            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">Academic Staff</a>
-            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">Department FB Page</a>
-            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">FAQ</a>
-            <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">Apply for Admission</a>
-        </div>
-    </div>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-list-ul' }
-  });
-
-  editor.Blocks.add('dep-contact-block', {
-    label: 'Department Contact',
-    content: `
-    <body style="font-family: Arial, sans-serif;
-            background-color: #1d274b;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200vh;
-            margin: 0;">
-        <div class="container" style="background-color: #273264;
-            padding: 20px;
-            width: 300px;
-            text-align: left;">
-        <h2 style="color: #ffffff;
-            margin-bottom: 20px;">Department Contact Info</h2>
-        <div class="info" style="margin-bottom: 20px;">
-            <h3 style="color: #fbbd05;
-            margin-top: 0;">Department of Computer Science</h3>
-            <p style="color: #ffffff"><span class="icon">📍</span> Paragon International University</p>
-            <p style="color: #ffffff"><span class="icon">⏰</span> Monday – Friday ➡️ 08:00 – 17:00</p>
-            <p style="color: #ffffff"><span class="icon">✉️</span> ict@paragoniu.edu.kh</p>
-        </div>
-        <div class="social">
-            <h2 style="style="color: #ffffff;
-            margin-bottom: 20px;">Social Info</h2>
-            <p style="color: #ffffff"><a href="#">Facebook</a></p>
-        </div>
-    </div>
-    </body>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-list-ul' }
-  });
-
-  editor.Blocks.add('faculty-departments-block', {
-    label: 'Faculty Departments',
-    content: `
-    <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-        <table style="width: 100%; border-collapse: collapse; margin: 0 auto; background-color: #ffffff;">
-            <thead>
-                <tr>
-                    <th style="background-color: #fbbd05; color: white; padding: 10px; text-align: left; font-size: 1.2em;">Faculty</th>
-                    <th style="background-color: #fbbd05; color: white; padding: 10px; text-align: left; font-size: 1.2em;">Departments</th>
-                    <th style="background-color: #fbbd05; color: white; padding: 10px; text-align: left; font-size: 1.2em;">Fee/Semester</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">Faculty of Engineering</td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;">Architecture<br>Civil Engineering<br>Industrial Engineering</td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">2,250 USD</td>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">Faculty of Information and Computer Technologies</td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;">Computer Science<br>Management of Information Systems</td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">1,750 USD</td>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">Economics and Administrative Sciences</td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;">Banking and Finance<br>Business Administration<br>International Trade and Logistics<br>International Relations</td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">1,500 USD</td>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">English Preparatory School</td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left; background-color: #f8f8f8;"></td>
-                    <td style="border: 1px solid #dddddd; padding: 10px; text-align: left;">1,250 USD</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-table' }
-  });
-
-  editor.Blocks.add('video-block', {
+  editor.BlockManager.add('video-block', {
     label: 'Video',
     content: '<video controls><source src="/path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
     category: 'Basic',
     attributes: { class: 'fa fa-video-camera' }
   });
 
-  editor.Blocks.add('link-block', {
-    label: 'Link',
-    content: '<a href="#" class="custom-link">Click here</a>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-link' }
-  });
-
-  editor.Blocks.add('map-block', {
-    label: 'Map',
-    content: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019879094116!2d144.96305831531678!3d-37.81410797975133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5777529bb4d3bd5!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1614114372457!5m2!1sen!2sau" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`,
-    category: 'Basic',
-    attributes: { class: 'fa fa-map' }
-  });
-
-  editor.Blocks.add('text-section-block', {
-    label: 'Text Section',
-    content: `<div class="text-section">
-                <h2>Title</h2>
-                <p>This is a text section. Add your content here.</p>
-              </div>`,
-    category: 'Basic',
-    attributes: { class: 'fa fa-font' }
-  });
-
-  editor.Blocks.add('link-block', {
-    label: 'Link',
-    content: '<a href="#" class="custom-link">Click here</a>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-link' }
-  });
-
-  editor.Blocks.add('testimonial-block', {
-    label: 'Testimonial',
-    content: `<div class="testimonial">
-                <p>"This is a fantastic product! Highly recommend it to everyone."</p>
-                <cite>- Jane Doe</cite>
-              </div>`,
-    category: 'Basic',
-    attributes: { class: 'fa fa-quote-right' }
-  });
-
-  editor.Blocks.add('form-block', {
+  editor.BlockManager.add('form-block', {
     label: 'Form',
-    content: `<form class="custom-form" style=" max-width: 400px; margin: 0 auto; padding: 20px; background: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-                <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="name" placeholder="Your Name"/>
-                <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="phonenumber" placeholder="Phone Number"/>
-                <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="email" placeholder="Email"/>
-                <textarea style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical; height: 100px;" name="message" placeholder="Your Message"></textarea>
+    content: `<form class="custom-form" style="max-width: 400px; margin: 0 auto; padding: 20px; background: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <input type="text" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="name" placeholder="Your Name"/>
+                <input type="text" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="phonenumber" placeholder="Phone Number"/>
+                <input type="text" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="email" placeholder="Email"/>
+                <textarea style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical; height: 100px;" name="message" placeholder="Your Message"></textarea>
                 <div>
                   <label><input type="checkbox" name="subscribe"/> Subscribe to newsletter</label>
                 </div>
@@ -384,232 +179,116 @@ const customElementsPlugin = editor => {
     attributes: { class: 'fa fa-wpforms' }
   });
 
-  editor.Blocks.add('contact-form-block', {
-    label: 'Contact Form',
-    content: `<form class="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email">
-                <label for="message">Message:</label>
-                <textarea id="message" name="message"></textarea>
-                <button type="submit">Send</button>
-              </form>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-envelope' }
-  });
-
-  editor.Blocks.add('input-block', {
-    label: 'Input',
-    content: '<input type="text" name="name" placeholder="Your Name" class="custom-input"/>',
-    category: 'Forms',
-    attributes: { class: 'fa fa-pencil' }
-  });
-
-  editor.Blocks.add('textarea-block', {
-    label: 'Textarea',
-    content: '<textarea name="message" placeholder="Your Message" class="custom-textarea"></textarea>',
-    category: 'Forms',
-    attributes: { class: 'fa fa-align-left' }
-  });
-
-  editor.Blocks.add('select-block', {
-    label: 'Select',
-    content: `<select name="options" class="custom-select">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-              </select>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-caret-down' }
-  });
-
-  editor.Blocks.add('checkbox-block', {
-    label: 'Checkbox',
-    content: '<label><input type="checkbox" name="subscribe" class="custom-checkbox"/> Subscribe to newsletter</label>',
-    category: 'Forms',
-    attributes: { class: 'fa fa-check-square' }
-  });
-
-  editor.Blocks.add('radio-block', {
-    label: 'Radio',
-    content: `<div>
-                <label><input type="radio" name="gender" value="male" class="custom-radio"/> Male</label>
-                <label><input type="radio" name="gender" value="female" class="custom-radio"/> Female</label>
-              </div>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-dot-circle-o' }
-  });
-
-  editor.Blocks.add('button-block', {
+  editor.BlockManager.add('button-block', {
     label: 'Button',
-    content: `<button class="btn-primary" style="font-size: .92em !important; padding: 15px 35px !important; background: #ffae00 !important; color: #ffffff !important; letter-spacing: 1px; font-weight: bold !important;
-    text-transform: uppercase;
-    border: none !important;
-    border-radius: 3px !important;
-    height: auto !important;">Click Me</button>`,
+    content: '<button class="btn-primary" style="font-size: .92em !important; padding: 15px 35px !important; background: #ffae00 !important; color: #ffffff !important; letter-spacing: 1px; font-weight: bold !important; text-transform: uppercase; border: none !important; border-radius: 3px !important; height: auto !important;">Click Me</button>',
     category: 'Forms',
     attributes: { class: 'fa fa-minus-square-o' }
   });
 
-  editor.Blocks.add('feature-list-block', {
-    label: 'Feature List',
-    content: `<ul class="features">
-                <li>Feature 1</li>
-                <li>Feature 2</li>
-                <li>Feature 3</li>
-              </ul>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-list' }
-  });
-
-  editor.Blocks.add('footer-block', {
-    label: 'Footer',
-    content: `<footer class="bg-stone-900 text-gray-300 py-10">
-      <div class="container mx-auto grid grid-cols-4 gap-8">
-        <div>
-          <h3 class="text-white text-lg font-semibold mb-4">Quick Links</h3>
-          <ul class="my-10">
-            <li><a href="#" class="hover:text-gray-100">Home</a></li>
-            <li><a href="#" class="hover:text-gray-100">Library</a></li>
-            <li><a href="#" class="hover:text-gray-100">Undergraduate Majors</a></li>
-            <li><a href="#" class="hover:text-gray-100">Postgraduate Programs</a></li>
-            <li><a href="#" class="hover:text-gray-100">Jobs@Paragon</a></li>
-            <li><a href="#" class="hover:text-gray-100">My.Paragon.U</a></li>
-            <li><a href="#" class="hover:text-gray-100">Tuition and Fees</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-white text-lg font-semibold mb-4">Recent Posts</h3>
-          <ul class="my-10">
-            <li><a href="#" class="hover:text-gray-100">USDP Cohort 5 Grand Finale and Awards Ceremony</a></li>
-            <li><a href="#" class="hover:text-gray-100">National Exam Grade-Based Scholarship</a></li>
-            <li><a href="#" class="hover:text-gray-100">Scholarship Exam 2023 Awards</a></li>
-            <li><a href="#" class="hover:text-gray-100">Hengsopheavan Sam, MIS Alumnus, and his Startups "Kong Vong"</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-white text-lg font-semibold mb-4">Find Us</h3>
-          <div class="my-10">
-            <p>Paragon International University</p>
-            <p>No. 8, St. 315, Boeng Kak 1, Tuol Kork, Phnom Penh, Cambodia, 12151</p>
-            <p>+855 23 996 111</p>
-            <p>+855 17 996 111</p>
-            <p>+855 15 996 111</p>
-            <p>info@paragoniu.edu.kh</p>
-            </div>
-        </div>
-        <div>
-          <h3 class="text-white text-lg font-semibold mb-4">Paragon International University</h3>
-          <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
-          <div class="h-96">
-            <iframe
-              width="100%"
-              height="100%"
-              frameborder="0"
-              style="border:0"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019879094116!2d144.96305831531678!3d-37.81410797975133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5777529bb4d3bd5!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1614114372457!5m2!1sen!2sau"
-              allowfullscreen>
-            </iframe>
-          </div>
-        </div>
-      </div>
-      <div class="mt-8 border-t border-gray-800 pt-4 text-center text-sm">
-        <p>Copyright © All Rights Reserved. 2022, PARAGON International University</p>
-      </div>
-    </footer>`,
-    category: 'Layout',
-    attributes: { class: 'fa fa-file-text-o' }
-  });
-
-  editor.Blocks.add('faq-block', {
-    label: 'FAQ',
-    content: `<div class="faq">
-                <h2>Frequently Asked Questions</h2>
-                <div class="faq-item">
-                  <h3>Question 1</h3>
-                  <p>Answer to question 1.</p>
-                </div>
-                <div class="faq-item">
-                  <h3>Question 2</h3>
-                  <p>Answer to question 2.</p>
-                </div>
-              </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-question-circle' }
-  });
-
-  editor.Blocks.add('team-section-block', {
-    label: 'Team Section',
-    content: `<div class="team-section">
-                <h2>Our Team</h2>
-                <div class="team-member">
-                  <img src="/path-to-image.jpg" alt="Team Member">
-                  <h3>Member Name</h3>
-                  <p>Position</p>
-                </div>
-                <div class="team-member">
-                  <img src="/path-to-image.jpg" alt="Team Member">
-                  <h3>Member Name</h3>
-                  <p>Position</p>
-                </div>
-              </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-users' }
-  });
-
-  editor.Blocks.add('cta-block', {
-    label: 'Call to Action',
-    content: `<div class="cta">
-                <h2>Call to Action</h2>
-                <p>This is an important call to action message.</p>
-                <button class="btn-cta">Take Action</button>
-              </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-bullhorn' }
-  });
-
-  editor.Blocks.add('curriculum-table', {
-    label: 'Curriculum Table',
-    content: `<div style="display: flex; justify-content: space-around; padding: 20px;">
-                <div style="background-color: #f9f9f9; border: 2px solid #ccc; padding: 20px; width: 48%;">
-                    <h3 style="color: #333; margin-bottom: 15px;">Semester I</h3>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ENGL 101 - Academic English I</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ECON 100 - Introductory Economics</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">KHM 101 - Khmer Studies I</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">MATH 131 - Calculus I</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">CS 125 - Principles of Programming I</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">MIS 120 - Computers, the Internet, and the Networked Society</div>
-                </div>
-                <div style="background-color: #f9f9f9; border: 2px solid #ccc; padding: 20px; width: 48%;">
-                    <h3 style="color: #333; margin-bottom: 15px;">Semester II</h3>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ENGL 102 - Academic English II</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">KHM 102 - Khmer Studies II</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">ECON 201 - Microeconomics</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">CS 126 - Principles of Programming II</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">MATH 241 - Linear Algebra</div>
-                    <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">CS 260 - Web Design & Development</div>
-                </div>
-            </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-table' }
+  // Add advanced style properties
+  editor.StyleManager.addSector('advanced', {
+    name: 'Advanced',
+    open: false,
+    buildProps: [
+      'width',
+      'min-width',
+      'max-width',
+      'height',
+      'min-height',
+      'max-height',
+      'float',
+      'display',
+      'position',
+      'top',
+      'right',
+      'left',
+      'bottom',
+      'overflow',
+      'overflow-x',
+      'overflow-y',
+      'z-index',
+      'flex',
+      'flex-grow',
+      'flex-shrink',
+      'flex-basis',
+      'flex-direction',
+      'flex-wrap',
+      'justify-content',
+      'align-items',
+      'align-content',
+      'order',
+      'gap',
+      'row-gap',
+      'column-gap',
+      'object-fit',
+      'object-position',
+      'opacity',
+      'cursor',
+      'pointer-events',
+      'transition',
+      'transition-property',
+      'transition-duration',
+      'transition-timing-function',
+      'transition-delay',
+      'transform',
+      'transform-origin',
+      'backface-visibility',
+      'filter',
+      'box-shadow',
+      'background-attachment',
+      'background-blend-mode',
+      'background-clip',
+      'background-origin',
+      'background-position-x',
+      'background-position-y',
+      'background-repeat',
+      'background-size',
+      'border-collapse',
+      'border-spacing',
+      'caption-side',
+      'empty-cells',
+      'table-layout',
+      'animation',
+      'animation-name',
+      'animation-duration',
+      'animation-timing-function',
+      'animation-delay',
+      'animation-iteration-count',
+      'animation-direction',
+      'animation-fill-mode',
+      'animation-play-state',
+      'backdrop-filter',
+    ],
+    properties: [
+      { name: 'Flex', property: 'display', type: 'select', defaults: 'flex', list: [{ value: 'flex' }, { value: 'inline-flex' }] },
+      { name: 'Direction', property: 'flex-direction', type: 'select', defaults: 'row', list: [{ value: 'row' }, { value: 'row-reverse' }, { value: 'column' }, { value: 'column-reverse' }] },
+      { name: 'Wrap', property: 'flex-wrap', type: 'select', defaults: 'nowrap', list: [{ value: 'nowrap' }, { value: 'wrap' }, { value: 'wrap-reverse' }] },
+      { name: 'Justify Content', property: 'justify-content', type: 'select', defaults: 'flex-start', list: [{ value: 'flex-start' }, { value: 'flex-end' }, { value: 'center' }, { value: 'space-between' }, { value: 'space-around' }, { value: 'space-evenly' }] },
+      { name: 'Align Items', property: 'align-items', type: 'select', defaults: 'stretch', list: [{ value: 'stretch' }, { value: 'flex-start' }, { value: 'flex-end' }, { value: 'center' }, { value: 'baseline' }] },
+      { name: 'Align Content', property: 'align-content', type: 'select', defaults: 'stretch', list: [{ value: 'stretch' }, { value: 'flex-start' }, { value: 'flex-end' }, { value: 'center' }, { value: 'space-between' }, { value: 'space-around' }] },
+      { name: 'Gap', property: 'gap', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+      { name: 'Row Gap', property: 'row-gap', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+      { name: 'Column Gap', property: 'column-gap', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+    ]
   });
 
   editor.DomComponents.addType('fixed-content', {
-     model: {
-       defaults: {
-         name: 'Fixed Content',
-         draggable: false,
-         copyable: false,
-         removable: false,
-         content: `<div class="fixed-content">
-                     <h1>Welcome to My Website</h1>
-                     <p>This content is fixed and cannot be edited or removed.</p>
-                   </div>`
-       }
-     }
-   });
+    model: {
+      defaults: {
+        name: 'Fixed Content',
+        draggable: false,
+        copyable: false,
+        removable: false,
+        content: `<div class="fixed-content">
+                    <h1>Welcome to My Website</h1>
+                    <p>This content is fixed and cannot be edited or removed.</p>
+                  </div>`
+      }
+    }
+  });
 
-  editor.Blocks.add('fixed-content-block', {
+  editor.BlockManager.add('fixed-content-block', {
     label: 'NavBar',
     content: `<header style="background-color: rgb(23 37 84); padding: 0.5rem;">
       <div class="container mx-auto" style="display: flex; align-items: flex-end;">
@@ -679,6 +358,53 @@ const customElementsPlugin = editor => {
     category: 'Layout',
     attributes: { class: 'fa fa-lock' }
   });
+
+  // Add custom blocks
+  editor.BlockManager.add('accordion-block', {
+    label: 'Accordion',
+    content: `<div class="accordion">
+                <div class="accordion-item">
+                  <button class="accordion-header">Section 1</button>
+                  <div class="accordion-body">Lorem ipsum...</div>
+                </div>
+                <div class="accordion-item">
+                  <button class="accordion-header">Section 2</button>
+                  <div class="accordion-body">Lorem ipsum...</div>
+                </div>
+                <div class="accordion-item">
+                  <button class="accordion-header">Section 3</button>
+                  <div class="accordion-body">Lorem ipsum...</div>
+                </div>
+              </div>`,
+    category: 'Components',
+    attributes: { class: 'fa fa-list-ul' }
+  });
+
+  editor.BlockManager.add('carousel-block', {
+    label: 'Carousel',
+    content: `<div class="carousel">
+                <div class="carousel-item active">
+                  <img src="http://placehold.it/350x150/78c5d6/fff/image1.jpg">
+                </div>
+                <div class="carousel-item">
+                  <img src="http://placehold.it/350x150/459ba8/fff/image2.jpg">
+                </div>
+                <div class="carousel-item">
+                  <img src="http://placehold.it/350x150/79c267/fff/image3.jpg">
+                </div>
+                <div class="carousel-item">
+                  <img src="http://placehold.it/350x150/c5d647/fff/image4.jpg">
+                </div>
+                <div class="carousel-item">
+                  <img src="http://placehold.it/350x150/f28c33/fff/image5.jpg">
+                </div>
+                <div class="carousel-item">
+                  <img src="http://placehold.it/350x150/e868a2/fff/image6.jpg">
+                </div>
+              </div>`,
+    category: 'Components',
+    attributes: { class: 'fa fa-picture-o' }
+  });
 };
 
 const uploadFileToSpace = async (file) => {
@@ -741,10 +467,107 @@ onMounted(async () => {
         editor.AssetManager.add(images);
       },
     },
+    styleManager: {
+      sectors: [{
+          name: 'General',
+          buildProps: ['float', 'display', 'position', 'top', 'right', 'left', 'bottom'],
+          properties: [{
+              name: 'Display',
+              property: 'display',
+              type: 'select',
+              defaults: 'block',
+              list: [
+                { value: 'block', name: 'Block' },
+                { value: 'inline', name: 'Inline' },
+                { value: 'inline-block', name: 'Inline Block' },
+                { value: 'flex', name: 'Flex' },
+                { value: 'inline-flex', name: 'Inline Flex' },
+                { value: 'grid', name: 'Grid' },
+                { value: 'inline-grid', name: 'Inline Grid' },
+              ]
+            },
+            {
+              name: 'Position',
+              property: 'position',
+              type: 'select',
+              defaults: 'static',
+              list: [
+                { value: 'static', name: 'Static' },
+                { value: 'relative', name: 'Relative' },
+                { value: 'absolute', name: 'Absolute' },
+                { value: 'fixed', name: 'Fixed' },
+                { value: 'sticky', name: 'Sticky' }
+              ]
+            }
+          ]
+        },
+        {
+          name: 'Dimension',
+          open: false,
+          buildProps: ['width', 'height', 'max-width', 'min-height', 'margin', 'padding'],
+          properties: [{
+            name: 'Margin',
+            property: 'margin',
+            type: 'composite',
+            properties: [
+              { name: 'Top', property: 'margin-top', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              { name: 'Right', property: 'margin-right', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              { name: 'Bottom', property: 'margin-bottom', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              { name: 'Left', property: 'margin-left', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+            ]
+          },
+          {
+            name: 'Padding',
+            property: 'padding',
+            type: 'composite',
+            properties: [
+              { name: 'Top', property: 'padding-top', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              { name: 'Right', property: 'padding-right', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              { name: 'Bottom', property: 'padding-bottom', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              { name: 'Left', property: 'padding-left', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+            ]
+          },
+          ]
+        },
+        {
+          name: 'Typography',
+          open: false,
+          buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align'],
+          properties: [
+            { name: 'Font', property: 'font-family', type: 'select', defaults: 'Arial', list: [{ value: 'Arial' }, { value: 'Georgia' }, { value: 'Times New Roman' }] },
+            { name: 'Size', property: 'font-size', type: 'integer', units: ['px', 'em', '%'], defaults: '14px' },
+            { name: 'Weight', property: 'font-weight', type: 'select', defaults: 'normal', list: [{ value: 'normal' }, { value: 'bold' }, { value: 'bolder' }, { value: 'lighter' }] },
+            { name: 'Letter Spacing', property: 'letter-spacing', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+            { name: 'Color', property: 'color', type: 'color', defaults: 'black' },
+            { name: 'Line Height', property: 'line-height', type: 'integer', units: ['px', 'em', '%'], defaults: 'normal' },
+            { name: 'Align', property: 'text-align', type: 'radio', defaults: 'left', list: [{ value: 'left' }, { value: 'center' }, { value: 'right' }, { value: 'justify' }] }
+          ]
+        },
+        {
+          name: 'Decorations',
+          open: false,
+          buildProps: ['border-radius', 'border', 'box-shadow', 'background'],
+          properties: [
+            { name: 'Border Radius', property: 'border-radius', type: 'composite', properties: [{ name: 'Top', property: 'border-top-left-radius', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Right', property: 'border-top-right-radius', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Bottom', property: 'border-bottom-left-radius', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Left', property: 'border-bottom-right-radius', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }] },
+            { name: 'Border', property: 'border', type: 'composite', properties: [{ name: 'Width', property: 'border-width', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Style', property: 'border-style', type: 'select', defaults: 'solid', list: [{ value: 'solid' }, { value: 'dotted' }, { value: 'dashed' }, { value: 'double' }] }, { name: 'Color', property: 'border-color', type: 'color', defaults: 'black' }] },
+            { name: 'Box Shadow', property: 'box-shadow', type: 'composite', properties: [{ name: 'Horizontal', property: 'box-shadow-h', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Vertical', property: 'box-shadow-v', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Blur', property: 'box-shadow-blur', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Spread', property: 'box-shadow-spread', type: 'integer', units: ['px', 'em', '%'], defaults: 0 }, { name: 'Color', property: 'box-shadow-color', type: 'color', defaults: 'black' }] },
+            { name: 'Background', property: 'background', type: 'composite', properties: [{ name: 'Color', property: 'background-color', type: 'color', defaults: 'transparent' }, { name: 'Image', property: 'background-image', type: 'file' }, { name: 'Position', property: 'background-position', type: 'select', defaults: 'left top', list: [{ value: 'left top' }, { value: 'left center' }, { value: 'left bottom' }, { value: 'right top' }, { value: 'right center' }, { value: 'right bottom' }, { value: 'center top' }, { value: 'center center' }, { value: 'center bottom' }] }, { name: 'Repeat', property: 'background-repeat', type: 'select', defaults: 'no-repeat', list: [{ value: 'no-repeat' }, { value: 'repeat' }, { value: 'repeat-x' }, { value: 'repeat-y' }] }, { name: 'Size', property: 'background-size', type: 'select', defaults: 'auto', list: [{ value: 'auto' }, { value: 'cover' }, { value: 'contain' }] }] }
+          ]
+        },
+        {
+          name: 'Extra',
+          open: false,
+          buildProps: ['opacity', 'visibility', 'cursor', 'z-index'],
+          properties: [
+            { name: 'Opacity', property: 'opacity', type: 'integer', units: ['%'], defaults: 100, min: 0, max: 100 },
+            { name: 'Visibility', property: 'visibility', type: 'radio', defaults: 'visible', list: [{ value: 'visible', name: 'Visible' }, { value: 'hidden', name: 'Hidden' }] },
+            { name: 'Cursor', property: 'cursor', type: 'select', defaults: 'auto', list: [{ value: 'auto', name: 'Auto' }, { value: 'pointer', name: 'Pointer' }, { value: 'move', name: 'Move' }, { value: 'text', name: 'Text' }, { value: 'wait', name: 'Wait' }, { value: 'help', name: 'Help' }, { value: 'not-allowed', name: 'Not Allowed' }] },
+            { name: 'Z-index', property: 'z-index', type: 'integer', defaults: 1 }
+          ]
+        }
+      ]
+    }
   });
-
-  document.documentElement.style.setProperty('--gjs-primary-color', '#172947');
-  document.documentElement.style.setProperty('--gjs-secondary-color', '#fff');
 
   const pageContent = await fetchPageContent(pageId);
   if (pageContent && pageContent.html && pageContent.css) {
@@ -778,4 +601,3 @@ onMounted(async () => {
   min-width: 100px;
 }
 </style>
-
