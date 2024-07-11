@@ -499,13 +499,19 @@ onMounted(async () => {
   document.documentElement.style.setProperty("--gjs-secondary-color", "#fff");
 
   const pageContent = await fetchPageContent(headerId);
-  if (pageContent && pageContent.html && pageContent.css) {
-    editor.setComponents(pageContent.html);
-    editor.setStyle(pageContent.css);
-  } else {
-    console.warn("No content found for header ID:", headerId); // Debug log
-  }
+
+if (pageContent && pageContent.html && pageContent.css) {
+  console.log("Fetched HTML Content:", pageContent.html); // Log fetched content for inspection
+  // Clean the fetched HTML content to remove unwanted characters
+  const cleanedHtml = pageContent.html.replace(/> >/g, '');
+  editor.setComponents(cleanedHtml);
+  editor.setStyle(pageContent.css);
+} else {
+  console.warn("No content found for header ID:", headerId); // Debug log
+}
+
 });
+
 </script>
 
 <style scoped>
