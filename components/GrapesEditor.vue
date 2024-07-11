@@ -269,345 +269,1205 @@ const customElementsPlugin = (editor) => {
     label: "Faculty Layout",
     category: "Custom Blocks",
     content: `
-      <div class="faculty-layout">
-        <div id="irpk">
-          <div id="i1o9" class="faculty-header">
-            <div id="izpfu" class="faculty-title">Faculty of Engineering</div>
+      <body id="iz2u">
+  <div id="i1o9">
+    <div id="ipoby7">Faculty of Engineering
+    </div>
+  </div>
+  <div id="inhd">
+    <div id="iyauz">
+      <div id="it0k">The Faculty of Engineering at Paragon.U strives to prepare its students with the highest quality education and research who will endure the challenges of the industry and the society competently. We envision our mission by providing a learning environment that promotes integrity and creativity, professional practice and commitment to the public service.
+      </div>
+      <b id="i3dl">Undergraduate Majors
+      </b>
+      <div id="iyl89g">
+        <div id="if27kz">
+          <div id="iitmk8">
           </div>
-          <div id="inhd" class="faculty-content">
-            <div id="iyauz" class="faculty-main">
-              <div id="it0k" class="faculty-description">
-                The Faculty of Engineering at Paragon.U strives to prepare its students with the highest quality education and research who will endure the challenges of the industry and the society competently. We envision our mission by providing a learning environment that promotes integrity and creativity, professional practice and commitment to the public service.
-              </div>
-              <b id="i3dl" class="faculty-majors-title">Undergraduate Majors</b>
-              <div id="iyl89g" class="faculty-majors">
-                <div id="if27kz" class="faculty-major-item">
-                  <div id="iitmk8" class="faculty-major-bg" style="background-image: url('https://paragoncms.sgp1.digitaloceanspaces.com/1720680062556_Arc2.jpg');"></div>
-                  <a href="#" class="faculty-major-link">Architecture (ARC)</a>
-                </div>
-                <div id="i1ijje" class="faculty-major-item">
-                  <div id="iqgo5z" class="faculty-major-bg" style="background-image: url('https://paragoncms.sgp1.digitaloceanspaces.com/1720702433333_CE2.jpg');"></div>
-                  <a href="#" class="faculty-major-link">Civil Engineering (CE)</a>
-                </div>
-                <div id="io713d" class="faculty-major-item">
-                  <div id="iu2z0i" class="faculty-major-bg" style="background-image: url('https://paragoncms.sgp1.digitaloceanspaces.com/1720681152517_IE2.jpg');"></div>
-                  <a href="#" class="faculty-major-link">Industrial Engineering (IE)</a>
-                </div>
-              </div>
-            </div>
-            <div id="ib9h" class="faculty-sidebar">
-              <div id="i5jtx7">
-                <div id="is5009">
-                  <b id="iy9afj" class="sidebar-title">Faculty of Economics and Administrative Sciences</b>
-                </div>
-                <a href="#" id="igl8nb" class="sidebar-link">Academic Staff</a>
-                <a href="#" id="iaac0m" class="sidebar-link">Department of Architecture</a>
-                <a href="#" id="irh1gh" class="sidebar-link">Department of Civil Engineering</a>
-                <a href="#" id="imhdb3" class="sidebar-link">Department of Industrial Engineering</a>
-              </div>
-              <div id="isbdqa" class="faculty-contact">
-                <div id="iipx6b" class="contact-info">
-                  <b id="i8fvt" class="contact-title">Faculty Contact Info</b>
-                  <b id="i6htbv" class="faculty-contact-department">Faculty of Engineering</b>
-                  <div id="iza2dz">Paragon International University</div>
-                  <div id="ipcl0n">Monday - Friday 08:00 - 17:00</div>
-                  <div id="ibzvxh">engineering@paragoniu.edu.kh</div>
-                </div>
-                <div id="ik42iy" class="contact-social">
-                  <b id="iitfur">Social Info</b>
-                  <a href="#" id="i356r3" class="social-link">Facebook</a>
-                </div>
-              </div>
-            </div>
+          <a href="#" class="custom-link">Architecture (ARC)</a>
+        </div>
+        <div id="i1ijje">
+          <div id="iqgo5z">
           </div>
-          <div id="i5ko" class="faculty-academic-staff">
-            <div id="i1cv4" class="faculty-academic-title">Academic Staff of Engineering Faculty</div>
-            <div id="iewtm" class="faculty-staff-list">
-              <div id="i8l9nz" class="faculty-staff-item">
-                <div class="faculty-staff-info">
-                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720685210605_Vichera-Heang-500x500.jpeg" alt="Placeholder image" class="faculty-staff-image"/>
-                  <div id="ipgoxh" class="faculty-staff-name">Vichera HEANG</div>
-                  <div id="ik3fie" class="faculty-staff-position">Lecturer</div>
-                  <div id="iym7n1" class="faculty-staff-department">Dean of the Engineering Faculty</div>
-                </div>
-                <div id="i5akwg" class="faculty-staff-link-container">
-                  <a href="#" class="details-link">Click here</a>
-                </div>
-              </div>
-              <div id="iwdtdk" class="faculty-staff-item">
-                <div class="faculty-staff-info">
-                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720685210153_Mengleang-LAY-2-sq-500x500.jpg" alt="Placeholder image" class="faculty-staff-image"/>
-                  <div id="i0v2hx" class="faculty-staff-name">MengLeang LAY</div>
-                  <div id="iqwvaf" class="faculty-staff-position">Lecturer</div>
-                  <div id="ikmmp4" class="faculty-staff-department">Mathematics and Science Faculty</div>
-                </div>
-                <div id="ici9zg" class="faculty-staff-link-container">
-                  <a href="#" class="details-link">Click here</a>
-                </div>
-              </div>
-              <div id="iksufa" class="faculty-staff-item">
-                <div class="faculty-staff-info">
-                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699618961_Nurmurat-KANDYMOV-02-sq-500x500.jpg" alt="Placeholder image" class="faculty-staff-image"/>
-                  <div id="ibizd1" class="faculty-staff-name">Nurmurat KANDYMOV</div>
-                  <div id="i8wx75" class="faculty-staff-position">Lecturer</div>
-                  <a href="#" class="details-link">Click here</a>
-                </div>
-              </div>
-              <div id="ii10jm" class="faculty-staff-item">
-                <div class="faculty-staff-info">
-                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699574721_Samnang-OU-SQ-min-500x500.jpg" alt="Placeholder image" class="faculty-staff-image"/>
-                  <div id="i1qs6a" class="faculty-staff-name">Samnang OU</div>
-                  <div id="ixkljs" class="faculty-staff-position">Lecturer</div>
-                  <div id="i8qryy" class="faculty-staff-department">Head of IE Department</div>
-                  <a href="#" class="details-link">Click here</a>
-                </div>
-              </div>
-              <div id="ihcfq3" class="faculty-staff-item">
-                <div class="faculty-staff-info">
-                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699574402_RUBEN-CASTILLERO-500x500.jpg" alt="Placeholder image" class="faculty-staff-image"/>
-                  <div id="i6d7kh" class="faculty-staff-name">Ruben Castillero MORTERA</div>
-                  <div id="idzkk8" class="faculty-staff-position">Lecturer</div>
-                  <div id="i43d4j" class="faculty-staff-department">Head of ARC Department</div>
-                  <a href="#" class="details-link">Click here</a>
-                </div>
-              </div>
-              <div id="iwi986" class="faculty-staff-item">
-                <div class="faculty-staff-info">
-                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699575054_Uddamvithiyea-ROM-sq-500x500.jpg" alt="Placeholder image" class="faculty-staff-image"/>
-                  <div id="ibdi8d" class="faculty-staff-name">Uddamvithiyea ROM</div>
-                  <div id="i2vl2f" class="faculty-staff-position">Lecturer</div>
-                  <div id="i4qx31" class="faculty-staff-department">Engineering Lab Manager</div>
-                  <a href="#" class="details-link">Click here</a>
-                </div>
-              </div>
-              <div id="i1oyv3" class="faculty-staff-item">
-                <div class="faculty-staff-info">
-                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699573722_Mr.-Sorn-Lida-sq-500x500.jpg" alt="Placeholder image" class="faculty-staff-image"/>
-                  <div id="i4s82i" class="faculty-staff-name">Lida SORN</div>
-                  <div id="iv0skh" class="faculty-staff-position">Lecturer</div>
-                  <div id="ihk3ed" class="faculty-staff-department">Head of CE department</div>
-                  <a href="#" class="details-link">Click here</a>
-                </div>
-              </div>
-            </div>
+          <a href="#" class="custom-link">Civil Engineering (CE)</a>
+        </div>
+        <div id="io713d">
+          <div id="iu2z0i">
           </div>
-          <div id="ie7hc" class="faculty-footer">
-            <div id="ix2fm" class="faculty-footer-links">
-              <a href="#" class="apply-now">Click here</a>
-              <a href="#" class="download-prospectus">Download Prospectus</a>
-            </div>
-            <div id="igns7o" class="faculty-footer-image">
-              <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720690374591_BUS-bg-400x257.jpg" alt="Placeholder image" class="faculty-footer-img"/>
-            </div>
-          </div>
+          <a href="#" class="custom-link">Industrial Engineering (IE)</a>
         </div>
       </div>
-      <style>
-        .faculty-header {
-          flex-grow: 1;
-          min-height: 75px;
-          background-image: url("https://paragoncms.sgp1.digitaloceanspaces.com/1720679431488_engineering-faculty-bg.jpg");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          height: 250px;
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-        }
-        .faculty-title {
-          font-weight: 700;
-          font-size: 36px;
-          color: white;
-          text-align: left;
-          padding-left: 15%;
-        }
-        .faculty-content {
-          display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          margin: 40px 5%;
-        }
-        .faculty-main {
-          flex-grow: 1;
-          min-height: 75px;
-          display: flex;
-          flex-direction: column;
-          flex-wrap: wrap;
-          max-width: 70%;
-        }
-        .faculty-description {
-          color: rgb(22, 22, 22);
-          font-family: Poppins, sans-serif;
-          font-size: 16px;
-          margin-bottom: 20px;
-        }
-        .faculty-majors-title {
-          font-size: 30px;
-        }
-        .faculty-majors {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 32px;
-        }
-        .faculty-major-item {
-          position: relative;
-          min-height: 100px;
-          width: 400px;
-          background-color: rgb(255, 174, 0);
-        }
-        .faculty-major-bg {
-          position: absolute;
-          inset: 0;
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          opacity: 0.2;
-        }
-        .faculty-major-link {
-          position: absolute;
-          z-index: 10;
-          color: white;
-          font-weight: 700;
-          text-align: center;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .faculty-sidebar {
-          min-height: 75px;
-          margin: 5px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          max-width: 400px;
-        }
-        .sidebar-title {
-          background-color: rgb(237, 237, 237);
-          padding: 10px;
-        }
-        .sidebar-link {
-          padding: 5px 0;
-        }
-        .faculty-contact {
-          display: flex;
-          background-color: rgb(25, 47, 89);
-          padding: 20px;
-          flex-direction: column;
-          gap: 8px;
-        }
-        .contact-info, .contact-social {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-        .contact-title {
-          font-size: 20px;
-        }
-        .faculty-contact-department, .social-link {
-          color: rgb(255, 174, 0);
-        }
-        .faculty-academic-staff {
-          padding: 2% 5%;
-          background-color: rgb(230, 230, 230);
-          display: block;
-        }
-        .faculty-academic-title {
-          font-size: 30px;
-          color: rgb(22, 22, 22);
-          font-family: Poppins, sans-serif;
-          font-weight: 700;
-        }
-        .faculty-staff-list {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 16px;
-        }
-        .faculty-staff-item {
-          width: 197px;
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-          justify-content: space-between;
-        }
-        .faculty-staff-info {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5;
-        }
-        .faculty-staff-image {
-          width: 100%;
-          height: auto;
-        }
-        .faculty-staff-name {
-          font-weight: 700;
-        }
-        .faculty-staff-position, .faculty-staff-department {
-          color: rgb(96, 96, 96);
-        }
-        .details-link {
-          padding: 5px 10px;
-          background-color: rgb(255, 174, 0);
-          border-radius: 5px;
-          color: white;
-          font-weight: 700;
-          text-align: center;
-        }
-        .faculty-footer {
-          display: flex;
-          background-color: rgb(25, 47, 89);
-          justify-content: center;
-          align-items: stretch;
-          margin-bottom: 20px;
-        }
-        .faculty-footer-links {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          justify-content: center;
-        }
-        .apply-now {
-          padding: 5px 10px;
-          background-color: rgb(255, 174, 0);
-          border-radius: 5px;
-          color: white;
-          font-weight: 700;
-        }
-        .download-prospectus {
-          padding: 5px 10px;
-          background-color: transparent;
-          color: rgb(255, 174, 0);
-          border: 1px solid rgb(255, 174, 0);
-          border-radius: 5px;
-          font-weight: 700;
-          text-align: center;
-        }
-        .faculty-footer-image {
-          margin: 5px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .faculty-footer-img {
-          width: 100%;
-          height: auto;
-        }
-        @media (max-width: 768px){
-          .faculty-staff-list {
-            gap: 12px;
-          }
-        }
-        @media (max-width: 480px){
-          .faculty-staff-list {
-            justify-content: center;
-          }
-          .faculty-academic-title {
-            font-size: 23px;
-          }
-        }
-      </style>
+    </div>
+    <div id="ib9h">
+      <div id="i5jtx7">
+        <b id="iy9afj">Faculty of Economics and Administrative Sciences
+        </b>
+        <a href="#" id="igl8nb">Academic Staff</a>
+        <a href="#" id="iaac0m">Department of Architecture</a>
+        <a href="#" id="irh1gh">Department of Civil Engineering</a>
+        <a href="#" id="imhdb3">Department of Industrial Engineering</a>
+      </div>
+      <div id="isbdqa">
+        <div id="iipx6b">
+          <b id="i8fvt">Faculty Contact Info
+          </b>
+          <b id="i6htbv">Faculty of Engineering
+          </b>
+          <div id="iza2dz">Paragon International University
+          </div>
+          <div id="ipcl0n">Monday - Friday 08:00 - 17:00
+          </div>
+          <div id="ibzvxh">engineering@paragoniu.edu.kh
+          </div>
+        </div>
+        <div id="ik42iy">
+          <b id="iitfur">Social Info
+          </b>
+          <a href="#" id="i356r3">Facebook</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="i5ko">
+    <div id="i1cv4">
+      <span id="imk3w">Academic Staff of Engineering Faculty</span>
+    </div>
+    <div id="iewtm">
+      <div id="i8l9nz">
+        <div id="i3wzao">
+          <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720685210605_Vichera-Heang-500x500.jpeg" alt="Placeholder image" id="ia98mg"/>
+          <div id="ipgoxh">Vichera HEANG
+          </div>
+          <div id="ik3fie">Lecturer
+          </div>
+          <div id="iym7n1">Dean of the Engineering Faculty
+          </div>
+        </div>
+        <div id="i5akwg">
+          <a href="#" id="iugr7" class="details-link">Click here</a>
+        </div>
+      </div>
+      <div id="iwdtdk">
+        <div id="i593e6">
+          <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720685210153_Mengleang-LAY-2-sq-500x500.jpg" alt="Placeholder image" id="i2rwv2"/>
+          <div id="i0v2hx">MengLeang LAY
+          </div>
+          <div id="iqwvaf">Lecturer
+          </div>
+          <div id="ikmmp4">Mathematics and Science Faculty
+          </div>
+        </div>
+        <div id="ici9zg">
+          <a href="#" id="ivfqjy" class="details-link">Click here</a>
+        </div>
+      </div>
+      <div id="iksufa">
+        <div id="iar2vt">
+          <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699618961_Nurmurat-KANDYMOV-02-sq-500x500.jpg" alt="Placeholder image" id="ikatt1"/>
+          <div id="ibizd1">Nurmurat KANDYMOV
+          </div>
+          <div id="i8wx75">Lecturer
+          </div>
+          <a href="#" id="ihabjk" class="details-link">Click here</a>
+        </div>
+        <div id="i6ivka">
+        </div>
+      </div>
+      <div id="ii10jm">
+        <div id="i7c49i">
+          <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699574721_Samnang-OU-SQ-min-500x500.jpg" alt="Placeholder image" id="iwrc9r"/>
+          <div id="i1qs6a">Samnang OU
+          </div>
+          <div id="ixkljs">Lecturer
+          </div>
+          <div id="i8qryy">Head of IE Department
+          </div>
+          <a href="#" id="i50b4z" class="details-link">Click here</a>
+        </div>
+        <div id="i329li">
+        </div>
+      </div>
+      <div id="ihcfq3">
+        <div id="ie67te">
+          <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699574402_RUBEN-CASTILLERO-500x500.jpg" alt="Placeholder image" id="irh3be"/>
+          <div id="i6d7kh">Ruben Castillero MORTERA
+          </div>
+          <div id="idzkk8">Lecturer
+          </div>
+          <div id="i43d4j">Head of ARC Department
+          </div>
+          <a href="#" id="irkosj" class="details-link">Click here</a>
+        </div>
+        <div id="ig1v0p">
+        </div>
+      </div>
+      <div id="iwi986">
+        <div id="ih4vkl">
+          <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699575054_Uddamvithiyea-ROM-sq-500x500.jpg" alt="Placeholder image" id="ijbt9w"/>
+          <div id="ibdi8d">Uddamvithiyea ROM
+          </div>
+          <div id="i2vl2f">Lecturer
+          </div>
+          <div id="i4qx31">Engineering Lab Manager
+          </div>
+          <a href="#" id="i4kyok" class="details-link">Click here</a>
+        </div>
+        <div id="iguasa">
+        </div>
+      </div>
+      <div id="i1oyv3">
+        <div id="iycvqy">
+          <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699573722_Mr.-Sorn-Lida-sq-500x500.jpg" alt="Placeholder image" id="i9331m"/>
+          <div id="i4s82i">Lida SORN
+          </div>
+          <div id="iv0skh">Lecturer
+          </div>
+          <div id="ihk3ed">Head of CE department
+          </div>
+          <a href="#" id="ix2yti" class="details-link">Click here</a>
+        </div>
+        <div id="iqmzii">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="ie7hc">
+    <div id="ix2fm">
+      <a href="#" id="i7etkj" class="apply-now">Click here</a>
+      <a href="#" id="ipdzuh" class="download-prospectus">Download Prospectus</a>
+    </div>
+    <div id="igns7o">
+      <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720690374591_BUS-bg-400x257.jpg" alt="Placeholder image" id="iirk56"/>
+    </div>
+  </div>
+</body>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+*{
+  box-sizing:border-box;
+}
+body{
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#i1o9{
+  flex-grow:1;
+  min-height:75px;
+  background-image:url("https://paragoncms.sgp1.digitaloceanspaces.com/1720679431488_engineering-faculty-bg.jpg");
+  background-repeat:repeat;
+  background-position-x:50%;
+  background-position-y:50%;
+  background-attachment:scroll;
+  background-size:cover;
+  height:250px;
+  display:flex;
+  justify-content:center;
+  flex-direction:column;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#inhd{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  margin-top:40px;
+  margin-right:5%;
+  margin-bottom:40px;
+  margin-left:5%;
+}
+#ib9h{
+  min-height:75px;
+  margin-top:5px;
+  margin-right:5px;
+  margin-bottom:5px;
+  margin-left:5px;
+  display:flex;
+  flex-direction:column;
+  row-gap:8px;
+  column-gap:8px;
+  max-width:400px;
+}
+#i5ko{
+  padding-top:2%;
+  padding-right:5%;
+  padding-bottom:2%;
+  padding-left:5%;
+  background-color:rgb(230, 230, 230);
+  display:block;
+}
+#ie7hc{
+  display:flex;
+  background-color:rgb(25, 47, 89);
+  justify-content:center;
+  align-content:stretch;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:20px;
+  margin-left:0px;
+}
+#ix2fm{
+  min-height:75px;
+  margin-top:5px;
+  margin-right:5px;
+  margin-bottom:5px;
+  margin-left:5px;
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:center;
+  row-gap:8px;
+  column-gap:8px;
+}
+#iewtm{
+  flex-wrap:wrap;
+  justify-content:flex-start;
+  display:flex;
+  row-gap:16px;
+  column-gap:16px;
+}
+#imk3w{
+  color:rgb(22, 22, 22);
+  font-family:Poppins, sans-serif;
+  font-size:30px;
+  font-weight:700;
+}
+.custom-link{
+  color:rgb(255, 255, 255);
+  font-weight:700;
+  border-top-left-radius:4px;
+  border-top-right-radius:4px;
+  border-bottom-right-radius:4px;
+  border-bottom-left-radius:4px;
+  opacity:1;
+  padding-top:6px;
+  padding-right:12px;
+  padding-bottom:6px;
+  padding-left:12px;
+  text-align:center;
+  width:400px;
+  height:100px;
+  transition-property:unset;
+  transition-duration:unset;
+  transition-timing-function:unset;
+  transition-delay:unset;
+  transition-behavior:unset;
+  display:flex;
+  justify-content:center;
+  flex-direction:column;
+  position:absolute;
+  z-index:10;
+}
+#iyauz{
+  flex-grow:1;
+  min-height:75px;
+  margin-top:5px;
+  margin-right:5px;
+  margin-bottom:5px;
+  margin-left:5px;
+  display:flex;
+  flex-direction:column;
+  flex-wrap:wrap;
+  max-width:70%;
+}
+#i5jtx7{
+  display:flex;
+  flex-direction:column;
+}
+#isbdqa{
+  display:flex;
+  background-color:rgb(25, 47, 89);
+  padding-top:20px;
+  padding-right:20px;
+  padding-bottom:20px;
+  padding-left:20px;
+  flex-direction:column;
+  row-gap:8px;
+  column-gap:8px;
+}
+#imhdb3{
+  padding-top:5px;
+  padding-right:0px;
+  padding-bottom:5px;
+  padding-left:0px;
+  border-top-width:0px;
+  border-right-width:0px;
+  border-bottom-width:0px;
+  border-left-width:0px;
+  border-top-style:solid;
+  border-right-style:solid;
+  border-bottom-style:solid;
+  border-left-style:solid;
+  border-top-color:white;
+  border-right-color:white;
+  border-bottom-color:white;
+  border-left-color:white;
+  border-image-source:initial;
+  border-image-slice:initial;
+  border-image-width:initial;
+  border-image-outset:initial;
+  border-image-repeat:initial;
+}
+#irh1gh{
+  padding-top:5px;
+  padding-right:0px;
+  padding-bottom:5px;
+  padding-left:0px;
+}
+#iaac0m{
+  padding-top:5px;
+  padding-right:0px;
+  padding-bottom:5px;
+  padding-left:0px;
+}
+#igl8nb{
+  padding-top:5px;
+  padding-right:0px;
+  padding-bottom:5px;
+  padding-left:0px;
+}
+#ipcl0n{
+  color:rgb(255, 255, 255);
+}
+#iipx6b{
+  color:rgb(255, 255, 255);
+  display:flex;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#iza2dz{
+  color:rgb(255, 255, 255);
+}
+#ik42iy{
+  color:rgb(255, 255, 255);
+  display:flex;
+  flex-direction:column;
+  row-gap:6px;
+  column-gap:6px;
+}
+#ibzvxh{
+  color:rgb(255, 255, 255);
+}
+#iirk56{
+  height:250px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  padding-top:0px;
+  padding-right:0px;
+  padding-bottom:0px;
+  padding-left:0px;
+  display:block;
+}
+#igns7o{
+  min-height:75px;
+  margin-top:5px;
+  margin-right:5px;
+  margin-bottom:5px;
+  margin-left:5px;
+  display:block;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:center;
+}
+#iy9afj{
+  background-color:rgb(237, 237, 237);
+  padding-top:10px;
+  padding-right:10px;
+  padding-bottom:10px;
+  padding-left:10px;
+}
+#i9331m{
+  width:197px;
+  height:197px;
+}
+#iycvqy{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#iqmzii{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#i1oyv3{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+  justify-content:space-between;
+  position:static;
+}
+#ijbt9w{
+  width:197px;
+  height:197px;
+}
+#ih4vkl{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#iguasa{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#iwi986{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+  justify-content:space-between;
+  position:static;
+}
+#irh3be{
+  width:197px;
+  height:197px;
+}
+#ie67te{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#ig1v0p{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#ihcfq3{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+  justify-content:space-between;
+  position:static;
+}
+#iwrc9r{
+  width:197px;
+  height:197px;
+}
+#i7c49i{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#i329li{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#ii10jm{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+  justify-content:space-between;
+  position:static;
+}
+#ikatt1{
+  width:197px;
+  height:197px;
+}
+#iar2vt{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#i6ivka{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#iksufa{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+  justify-content:space-between;
+  position:static;
+}
+#i2rwv2{
+  width:197px;
+  height:197px;
+}
+#i593e6{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#ici9zg{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#iwdtdk{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+  justify-content:space-between;
+  position:static;
+}
+#ia98mg{
+  width:197px;
+  height:197px;
+}
+#i3wzao{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#i5akwg{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+}
+#i8l9nz{
+  display:flex;
+  width:197px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  flex-direction:column;
+  row-gap:4px;
+  column-gap:4px;
+  justify-content:space-between;
+  position:static;
+}
+#i3dl{
+  font-size:30px;
+}
+#i8fvt{
+  font-size:20px;
+}
+#i356r3{
+  color:rgb(255, 174, 0);
+}
+#i6htbv{
+  color:rgb(255, 174, 0);
+}
+#iyl89g{
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:flex-start;
+  align-self:flex-start;
+  position:static;
+  display:flex;
+  row-gap:32px;
+  column-gap:32px;
+  margin-top:5px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#if27kz{
+  min-height:100px;
+  display:block;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:flex-start;
+  position:static;
+  width:400px;
+  background-color:rgb(255, 174, 0);
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#iitmk8{
+  display:block;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:flex-start;
+  position:absolute;
+  z-index:10;
+  background-image:url("https://paragoncms.sgp1.digitaloceanspaces.com/1720680062556_Arc2.jpg");
+  background-repeat:repeat;
+  background-position-x:50%;
+  background-position-y:50%;
+  background-attachment:scroll;
+  background-size:cover;
+  opacity:0.17;
+  height:100px;
+  width:400px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#iu2z0i{
+  display:block;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:flex-start;
+  position:absolute;
+  z-index:10;
+  background-image:url("https://paragoncms.sgp1.digitaloceanspaces.com/1720681152517_IE2.jpg");
+  background-repeat:repeat;
+  background-position-x:50%;
+  background-position-y:50%;
+  background-attachment:scroll;
+  background-size:cover;
+  opacity:0.17;
+  height:100px;
+  width:400px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#io713d{
+  min-height:100px;
+  display:block;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:flex-start;
+  position:static;
+  width:400px;
+  background-color:rgb(255, 174, 0);
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#iqgo5z{
+  display:block;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:flex-start;
+  position:absolute;
+  z-index:10;
+  background-image:url("https://paragoncms.sgp1.digitaloceanspaces.com/1720702433333_CE2.jpg");
+  background-repeat:repeat;
+  background-position-x:50%;
+  background-position-y:50%;
+  background-attachment:scroll;
+  background-size:cover;
+  opacity:0.17;
+  height:100px;
+  width:400px;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+#i1ijje{
+  min-height:100px;
+  display:block;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-self:flex-start;
+  position:static;
+  width:400px;
+  background-color:rgb(255, 174, 0);
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+}
+.details-link{
+  padding-top:5px;
+  padding-right:10px;
+  padding-bottom:5px;
+  padding-left:10px;
+  background-color:rgb(255, 174, 0);
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  border-bottom-left-radius:5px;
+  color:rgb(255, 255, 255);
+  font-weight:700;
+  align-self:flex-start;
+}
+.download-prospectus{
+  background-color:rgba(0, 0, 0, 0);
+  color:rgb(255, 174, 0);
+  align-self:center;
+  padding-top:5px;
+  padding-right:10px;
+  padding-bottom:5px;
+  padding-left:10px;
+  font-weight:700;
+  border-top-width:1px;
+  border-right-width:1px;
+  border-bottom-width:1px;
+  border-left-width:1px;
+  border-top-style:solid;
+  border-right-style:solid;
+  border-bottom-style:solid;
+  border-left-style:solid;
+  border-top-color:rgb(255, 174, 0);
+  border-right-color:rgb(255, 174, 0);
+  border-bottom-color:rgb(255, 174, 0);
+  border-left-color:rgb(255, 174, 0);
+  border-image-source:initial;
+  border-image-slice:initial;
+  border-image-width:initial;
+  border-image-outset:initial;
+  border-image-repeat:initial;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  border-bottom-left-radius:5px;
+  text-align:center;
+}
+.apply-now{
+  align-self:center;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  border-bottom-left-radius:5px;
+  background-color:rgb(255, 174, 0);
+  font-weight:700;
+  color:rgb(255, 255, 255);
+  padding-top:5px;
+  padding-right:10px;
+  padding-bottom:5px;
+  padding-left:10px;
+}
+#ipoby7{
+  font-weight:700;
+  font-size:36px;
+  color:white;
+  margin-top:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  margin-left:0px;
+  text-align:left;
+  padding-top:0px;
+  padding-right:0px;
+  padding-bottom:0px;
+  padding-left:15%;
+  position:static;
+}
+@media (max-width: 768px){
+  #iewtm{
+    justify-content:flex-start;
+    row-gap:12px;
+    column-gap:12px;
+  }
+}
+@media (max-width: 480px){
+  #iewtm{
+    justify-content:center;
+  }
+  #imk3w{
+    font-size:23px;
+  }
+}
+
     `,
   });
   editor.Blocks.add("dep-contact-block", {
