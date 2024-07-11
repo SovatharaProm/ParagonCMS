@@ -846,6 +846,20 @@ const customElementsPlugin = (editor) => {
     category: "Layout",
     attributes: { class: "fa fa-lock" },
   });
+  editor.StyleManager.addProperty('Typography', {
+  name: 'Text Wrap',
+  property: 'white-space',
+  type: 'select',
+  defaults: 'normal',
+  list: [
+    { value: 'normal', name: 'Normal' },
+    { value: 'nowrap', name: 'No Wrap' },
+    { value: 'pre', name: 'Pre' },
+    { value: 'pre-wrap', name: 'Pre Wrap' },
+    { value: 'pre-line', name: 'Pre Line' },
+  ],
+});
+
 };
 
 const uploadFileToSpace = async (file) => {
@@ -960,6 +974,7 @@ onMounted(async () => {
             "text-align",
             "text-decoration",
             "text-shadow",
+            "white-space",
           ],
         },
         {
@@ -1161,6 +1176,7 @@ onMounted(async () => {
 
   customElementsPlugin(editor);
 });
+
 </script>
 
 <style scoped>
