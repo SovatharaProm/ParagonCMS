@@ -22,9 +22,8 @@
     >
   </div>
 </template>
-
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import grapesjs from "grapesjs";
 import "grapesjs/dist/css/grapes.min.css";
@@ -39,6 +38,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const toast = useToast();
 let editor = null;
+let copiedComponents = null;
 
 const discardRoute = computed(() => {
   if (authStore.userRole === "admin" || authStore.userRole === "super_admin") {
@@ -130,6 +130,349 @@ const fetchPageContent = async (pageId) => {
     return null;
   }
 };
+
+const copyElement = () => {
+  const selectedComponents = editor.getSelectedAll();
+  if (selectedComponents.length) {
+    copiedComponents = selectedComponents.map((comp) => comp.clone());
+    toast.success("Elements copied!");
+  } else {
+    toast.error("No elements selected!");
+  }
+};
+
+const pasteElement = () => {
+  if (copiedComponents && copiedComponents.length) {
+    const selectedComponent = editor.getSelected();
+    if (selectedComponent) {
+      copiedComponents.forEach((comp) => {
+        selectedComponent.append(comp);
+      });
+      toast.success("Elements pasted!");
+    } else {
+      toast.error("Select a parent element to paste the copied components!");
+    }
+  } else {
+    toast.error("No elements copied!");
+  }
+};
+
+const selectAllElements = () => {
+  const components = editor.getComponents();
+  editor.select(components.map((comp) => comp));
+  toast.success("All elements selected!");
+};
+
+const handleKeydown = (event) => {
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+
+  if ((isMac && event.metaKey) || (!isMac && event.ctrlKey)) {
+    switch (event.key) {
+      case "a":
+        event.preventDefault();
+        selectAllElements();
+        break;
+      case "c":
+        event.preventDefault();
+        copyElement();
+        break;
+      case "v":
+        event.preventDefault();
+        pasteElement();
+        break;
+      default:
+        break;
+    }
+  }
+};
+
+onMounted(async () => {
+  await authStore.initializeStore();
+
+  const pageId = route.query.id;
+  if (!pageId) {
+    console.error("Page ID is missing");
+    return;
+  }
+
+  editor = grapesjs.init({
+    container: grapesjsEditor.value,
+    plugins: [customElementsPlugin, plugin],
+    fromElement: true,
+    height: "100vh",
+    width: "100%",
+    assetManager: {
+      upload: false,
+      uploadFile: async (e) => {
+        const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+        const images = [];
+
+        for (const file of files) {
+          try {
+            const fileUrl = await uploadFileToSpace(file);
+            images.push({ src: fileUrl });
+          } catch (error) {
+            console.error("Error uploading file:", error);
+          }
+        }
+
+        editor.AssetManager.add(images);
+      },
+    },
+    styleManager: {
+      sectors: [
+        {
+          name: "General",
+          open: false,
+          buildProps: [
+            "float",
+            "display",
+            "position",
+            "top",
+            "right",
+            "left",
+            "bottom",
+          ],
+        },
+        {
+          name: "Dimension",
+          open: false,
+          buildProps: [
+            "width",
+            "min-height",
+            "height",
+            "max-width",
+            "min-width",
+            "max-height",
+            "margin",
+            "margin-top",
+            "margin-right",
+            "margin-bottom",
+            "margin-left",
+            "padding",
+            "padding-top",
+            "padding-right",
+            "padding-bottom",
+            "padding-left",
+          ],
+        },
+        {
+          name: "Typography",
+          open: false,
+          buildProps: [
+            "font-family",
+            "font-size",
+            "font-weight",
+            "letter-spacing",
+            "color",
+            "line-height",
+            "text-align",
+            "text-decoration",
+            "text-shadow",
+          ],
+        },
+        {
+          name: "Decoration",
+          open: false,
+          buildProps: [
+            "background-color",
+            "border-radius",
+            "border",
+            "box-shadow",
+            "background",
+          ],
+        },
+        {
+          name: "Extra",
+          open: false,
+          buildProps: ["opacity", "transition", "perspective", "transform"],
+        },
+        {
+          name: "Flex",
+          open: false,
+          buildProps: [
+            "flex-direction",
+            "align-items",
+            "justify-content",
+            "flex-wrap",
+            "align-content",
+            "order",
+            "flex-basis",
+            "flex-grow",
+            "flex-shrink",
+            "align-self",
+          ],
+          properties: [
+            {
+              name: "Flex",
+              property: "display",
+              type: "select",
+              defaults: "flex",
+              list: [{ value: "flex" }, { value: "inline-flex" }],
+            },
+            {
+              name: "Direction",
+              property: "flex-direction",
+              type: "select",
+              defaults: "row",
+              list: [
+                { value: "row" },
+                { value: "row-reverse" },
+                { value: "column" },
+                { value: "column-reverse" },
+              ],
+            },
+            {
+              name: "Wrap",
+              property: "flex-wrap",
+              type: "select",
+              defaults: "nowrap",
+              list: [
+                { value: "nowrap" },
+                { value: "wrap" },
+                { value: "wrap-reverse" },
+              ],
+            },
+            {
+              name: "Justify Content",
+              property: "justify-content",
+              type: "select",
+              defaults: "flex-start",
+              list: [
+                { value: "flex-start" },
+                { value: "flex-end" },
+                { value: "center" },
+                { value: "space-between" },
+                { value: "space-around" },
+                { value: "space-evenly" },
+              ],
+            },
+            {
+              name: "Align Items",
+              property: "align-items",
+              type: "select",
+              defaults: "stretch",
+              list: [
+                { value: "stretch" },
+                { value: "flex-start" },
+                { value: "flex-end" },
+                { value: "center" },
+                { value: "baseline" },
+              ],
+            },
+            {
+              name: "Align Content",
+              property: "align-content",
+              type: "select",
+              defaults: "stretch",
+              list: [
+                { value: "stretch" },
+                { value: "flex-start" },
+                { value: "flex-end" },
+                { value: "center" },
+                { value: "space-between" },
+                { value: "space-around" },
+              ],
+            },
+            {
+              name: "Align Self",
+              property: "align-self",
+              type: "select",
+              defaults: "auto",
+              list: [
+                { value: "auto" },
+                { value: "flex-start" },
+                { value: "flex-end" },
+                { value: "center" },
+                { value: "baseline" },
+                { value: "stretch" },
+              ],
+            },
+            {
+              name: "Gap",
+              property: "gap",
+              type: "integer",
+              units: ["px", "em", "%"],
+              defaults: 0,
+            },
+            {
+              name: "Row Gap",
+              property: "row-gap",
+              type: "integer",
+              units: ["px", "em", "%"],
+              defaults: 0,
+            },
+            {
+              name: "Column Gap",
+              property: "column-gap",
+              type: "integer",
+              units: ["px", "em", "%"],
+              defaults: 0,
+            },
+          ],
+        },
+        {
+          name: "Advanced",
+          open: false,
+          buildProps: [
+            "z-index",
+            "align-self",
+            "background-attachment",
+            "background-blend-mode",
+            "background-clip",
+            "background-origin",
+            "background-position-x",
+            "background-position-y",
+            "background-repeat",
+            "background-size",
+            "border-collapse",
+            "border-spacing",
+            "caption-side",
+            "empty-cells",
+            "table-layout",
+            "animation",
+            "animation-name",
+            "animation-duration",
+            "animation-timing-function",
+            "animation-delay",
+            "animation-iteration-count",
+            "animation-direction",
+            "animation-fill-mode",
+            "animation-play-state",
+            "backdrop-filter",
+            "cursor",
+            "pointer-events",
+            "transition-property",
+            "transition-duration",
+            "transition-timing-function",
+            "transition-delay",
+            "transform",
+            "transform-origin",
+            "backface-visibility",
+            "filter",
+          ],
+        },
+      ],
+    },
+  });
+
+  const pageContent = await fetchPageContent(pageId);
+  if (pageContent && pageContent.html && pageContent.css) {
+    editor.setComponents(pageContent.html);
+    editor.setStyle(pageContent.css);
+  } else {
+    editor.BlockManager.get("fixed-content-block").set({ active: true });
+    editor.runCommand("core:canvas-clear");
+  }
+
+  customElementsPlugin(editor);
+
+  document.addEventListener("keydown", handleKeydown);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", handleKeydown);
+});
 
 const customElementsPlugin = (editor) => {
   editor.Blocks.add("1-column", {
@@ -738,295 +1081,7 @@ const uploadFileToSpace = async (file) => {
 
   return data.fileUrl;
 };
-
-onMounted(async () => {
-  await authStore.initializeStore();
-
-  const pageId = route.query.id;
-  if (!pageId) {
-    console.error("Page ID is missing");
-    return;
-  }
-
-  editor = grapesjs.init({
-    container: grapesjsEditor.value,
-    plugins: [customElementsPlugin, plugin],
-    fromElement: true,
-    height: "100vh",
-    width: "100%",
-    assetManager: {
-      upload: false,
-      uploadFile: async (e) => {
-        const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
-        const images = [];
-
-        for (const file of files) {
-          try {
-            const fileUrl = await uploadFileToSpace(file);
-            images.push({ src: fileUrl });
-          } catch (error) {
-            console.error("Error uploading file:", error);
-          }
-        }
-
-        editor.AssetManager.add(images);
-      },
-    },
-    styleManager: {
-      sectors: [
-        {
-          name: "General",
-          open: false,
-          buildProps: [
-            "float",
-            "display",
-            "position",
-            "top",
-            "right",
-            "left",
-            "bottom",
-          ],
-        },
-        {
-          name: "Dimension",
-          open: false,
-          buildProps: [
-            "width",
-            "min-height",
-            "height",
-            "max-width",
-            "min-width",
-            "max-height",
-            "margin",
-            "margin-top",
-            "margin-right",
-            "margin-bottom",
-            "margin-left",
-            "padding",
-            "padding-top",
-            "padding-right",
-            "padding-bottom",
-            "padding-left",
-          ],
-        },
-        {
-          name: "Typography",
-          open: false,
-          buildProps: [
-            "font-family",
-            "font-size",
-            "font-weight",
-            "letter-spacing",
-            "color",
-            "line-height",
-            "text-align",
-            "text-decoration",
-            "text-shadow",
-          ],
-        },
-        {
-          name: "Decoration",
-          open: false,
-          buildProps: [
-            "background-color",
-            "border-radius",
-            "border",
-            "box-shadow",
-            "background",
-          ],
-        },
-        {
-          name: "Extra",
-          open: false,
-          buildProps: ["opacity", "transition", "perspective", "transform"],
-        },
-        {
-          name: "Flex",
-          open: false,
-          buildProps: [
-            "flex-direction",
-            "align-items",
-            "justify-content",
-            "flex-wrap",
-            "align-content",
-            "order",
-            "flex-basis",
-            "flex-grow",
-            "flex-shrink",
-            "align-self",
-          ],
-          properties: [
-            {
-              name: "Flex",
-              property: "display",
-              type: "select",
-              defaults: "flex",
-              list: [{ value: "flex" }, { value: "inline-flex" }],
-            },
-            {
-              name: "Direction",
-              property: "flex-direction",
-              type: "select",
-              defaults: "row",
-              list: [
-                { value: "row" },
-                { value: "row-reverse" },
-                { value: "column" },
-                { value: "column-reverse" },
-              ],
-            },
-            {
-              name: "Wrap",
-              property: "flex-wrap",
-              type: "select",
-              defaults: "nowrap",
-              list: [
-                { value: "nowrap" },
-                { value: "wrap" },
-                { value: "wrap-reverse" },
-              ],
-            },
-            {
-              name: "Justify Content",
-              property: "justify-content",
-              type: "select",
-              defaults: "flex-start",
-              list: [
-                { value: "flex-start" },
-                { value: "flex-end" },
-                { value: "center" },
-                { value: "space-between" },
-                { value: "space-around" },
-                { value: "space-evenly" },
-              ],
-            },
-            {
-              name: "Align Items",
-              property: "align-items",
-              type: "select",
-              defaults: "stretch",
-              list: [
-                { value: "stretch" },
-                { value: "flex-start" },
-                { value: "flex-end" },
-                { value: "center" },
-                { value: "baseline" },
-              ],
-            },
-            {
-              name: "Align Content",
-              property: "align-content",
-              type: "select",
-              defaults: "stretch",
-              list: [
-                { value: "stretch" },
-                { value: "flex-start" },
-                { value: "flex-end" },
-                { value: "center" },
-                { value: "space-between" },
-                { value: "space-around" },
-              ],
-            },
-            {
-              name: "Align Self",
-              property: "align-self",
-              type: "select",
-              defaults: "auto",
-              list: [
-                { value: "auto" },
-                { value: "flex-start" },
-                { value: "flex-end" },
-                { value: "center" },
-                { value: "baseline" },
-                { value: "stretch" },
-              ],
-            },
-            {
-              name: "Gap",
-              property: "gap",
-              type: "integer",
-              units: ["px", "em", "%"],
-              defaults: 0,
-            },
-            {
-              name: "Row Gap",
-              property: "row-gap",
-              type: "integer",
-              units: ["px", "em", "%"],
-              defaults: 0,
-            },
-            {
-              name: "Column Gap",
-              property: "column-gap",
-              type: "integer",
-              units: ["px", "em", "%"],
-              defaults: 0,
-            },
-          ],
-        },
-        {
-          name: "Advanced",
-          open: false,
-          buildProps: [
-            "z-index",
-            "align-self",
-            "background-attachment",
-            "background-blend-mode",
-            "background-clip",
-            "background-origin",
-            "background-position-x",
-            "background-position-y",
-            "background-repeat",
-            "background-size",
-            "border-collapse",
-            "border-spacing",
-            "caption-side",
-            "empty-cells",
-            "table-layout",
-            "animation",
-            "animation-name",
-            "animation-duration",
-            "animation-timing-function",
-            "animation-delay",
-            "animation-iteration-count",
-            "animation-direction",
-            "animation-fill-mode",
-            "animation-play-state",
-            "backdrop-filter",
-            "cursor",
-            "pointer-events",
-            "transition-property",
-            "transition-duration",
-            "transition-timing-function",
-            "transition-delay",
-            "transform",
-            "transform-origin",
-            "backface-visibility",
-            "filter",
-          ],
-        },
-      ],
-    },
-  });
-
-  document.documentElement.style.setProperty("--gjs-primary-color", "#172947");
-  document.documentElement.style.setProperty("--gjs-secondary-color", "#fff");
-
-  const pageContent = await fetchPageContent(pageId);
-  if (pageContent && pageContent.html && pageContent.css) {
-    editor.setComponents(pageContent.html);
-    editor.setStyle(pageContent.css);
-  } else {
-    editor.BlockManager.get("fixed-content-block").set({ active: true });
-    editor.runCommand("core:canvas-clear");
-  }
-
-  customElementsPlugin(editor);
-});
-
-
 </script>
-
 <style scoped>
 @import "assets/css/style.css";
 
