@@ -9,7 +9,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -128,14 +127,14 @@ const customElementsPlugin = editor => {
   });
 
   editor.Blocks.add('2-columns-2-3', {
-      label: '2 Columns 2/3',
-      content: `<div style="display:flex;">
-                  <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                  <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
-                </div>`,
-      category: 'Column',
-      attributes: { class: 'fa fa-columns' }
-    });
+    label: '2 Columns 2/3',
+    content: `<div style="display:flex;">
+                <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+                <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
+              </div>`,
+    category: 'Column',
+    attributes: { class: 'fa fa-columns' }
+  });
 
   editor.Blocks.add('2-columns-3-7', {
     label: '2 Columns 3/7',
@@ -679,6 +678,43 @@ const customElementsPlugin = editor => {
     category: 'Layout',
     attributes: { class: 'fa fa-lock' }
   });
+
+  editor.StyleManager.addSector('General', {
+    name: 'General',
+    open: false,
+    buildProps: ['float', 'display', 'position', 'top', 'right', 'left', 'bottom']
+  });
+
+  editor.StyleManager.addSector('Dimension', {
+    name: 'Dimension',
+    open: false,
+    buildProps: ['width', 'height', 'max-width', 'min-height', 'margin', 'padding']
+  });
+
+  editor.StyleManager.addSector('Typography', {
+    name: 'Typography',
+    open: false,
+    buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align', 'text-decoration', 'text-shadow']
+  });
+
+  editor.StyleManager.addSector('Decoration', {
+    name: 'Decoration',
+    open: false,
+    buildProps: ['background-color', 'border-radius', 'border', 'box-shadow', 'background']
+  });
+
+  editor.StyleManager.addSector('Extra', {
+    name: 'Extra',
+    open: false,
+    buildProps: ['transition', 'transform', 'perspective', 'opacity']
+  });
+
+  editor.StyleManager.addSector('Flex', {
+    name: 'Flex',
+    open: false,
+    buildProps: ['flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-self', 'order', 'flex-basis', 'flex-grow', 'flex-shrink']
+  });
+
 };
 
 const uploadFileToSpace = async (file) => {
@@ -778,4 +814,3 @@ onMounted(async () => {
   min-width: 100px;
 }
 </style>
-
