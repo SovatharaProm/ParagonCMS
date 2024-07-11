@@ -1,24 +1,37 @@
 <template>
-  <div ref="grapesjsEditor" class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"></div>
+  <div
+    ref="grapesjsEditor"
+    class="grapesjs-editor border-[1px] border-[solid] border-[#ddd] rounded-[3px]"
+  ></div>
 
   <div class="sticky-footer">
     <NuxtLink :to="discardRoute" class="mr-5">
-      <v-btn class="text-none button-same-size" color="blue-darken-4" variant="outlined">Discard</v-btn>
+      <v-btn
+        class="text-none button-same-size"
+        color="blue-darken-4"
+        variant="outlined"
+        >Discard</v-btn
+      >
     </NuxtLink>
-    <v-btn class="text-none text-white px-8 mr-5 button-same-size" color="blue-darken-4" variant="flat" @click="saveContent">Save</v-btn>
+    <v-btn
+      class="text-none text-white px-8 mr-5 button-same-size"
+      color="blue-darken-4"
+      variant="flat"
+      @click="saveContent"
+      >Save</v-btn
+    >
   </div>
 </template>
 
-
 <script setup>
-import { onMounted, ref, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import grapesjs from 'grapesjs';
-import 'grapesjs/dist/css/grapes.min.css';
-import plugin from 'grapesjs-tailwind';
-import { useAuthStore } from '@/stores/auth';
-import { useToast } from 'vue-toast-notification';
-import 'vue-toast-notification/dist/theme-sugar.css';
+import { onMounted, ref, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import grapesjs from "grapesjs";
+import "grapesjs/dist/css/grapes.min.css";
+import plugin from "grapesjs-tailwind";
+import { useAuthStore } from "@/stores/auth";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 const grapesjsEditor = ref(null);
 const route = useRoute();
@@ -28,15 +41,15 @@ const toast = useToast();
 let editor = null;
 
 const discardRoute = computed(() => {
-  if (authStore.userRole === 'admin' || authStore.userRole === 'super_admin') {
-    return '/admin/website';
+  if (authStore.userRole === "admin" || authStore.userRole === "super_admin") {
+    return "/admin/website";
   }
-  return '/';
+  return "/";
 });
 
 const saveContent = async () => {
   if (!editor) {
-    console.error('Editor is not initialized');
+    console.error("Editor is not initialized");
     return;
   }
 
@@ -51,151 +64,163 @@ const saveContent = async () => {
   };
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-page-content`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.token}`,
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/update-page-content`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authStore.token}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
     const result = await response.json();
     if (result.code === 200) {
-      toast.success('Content saved successfully!');
-      if (authStore.userRole === 'admin' || authStore.userRole === 'super_admin') {
-        router.push('/admin/website');
+      toast.success("Content saved successfully!");
+      if (
+        authStore.userRole === "admin" ||
+        authStore.userRole === "super_admin"
+      ) {
+        router.push("/admin/website");
       } else {
-        router.push('/');
+        router.push("/");
       }
     } else {
-      toast.error('Error: ' + result.message);
+      toast.error("Error: " + result.message);
     }
   } catch (error) {
-    toast.error('Error: ' + error.message);
+    toast.error("Error: " + error.message);
   }
 };
 
 const fetchPageContent = async (pageId) => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/edit-page-content?page_id=${pageId}`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.token}`,
-      },
-    });
+    const response = await fetch(
+      `${
+        import.meta.env.VITE_API_BASE_URL
+      }/edit-page-content?page_id=${pageId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      }
+    );
     if (!response.ok) {
       if (response.status === 403 || response.status === 400) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
-      throw new Error('Failed to fetch page content');
+      throw new Error("Failed to fetch page content");
     }
     const data = await response.json();
     if (data.code === 200) {
-      return data.data['Page Content'];
+      return data.data["Page Content"];
     } else {
-      console.error('Error fetching page content:', data.message);
+      console.error("Error fetching page content:", data.message);
       return null;
     }
   } catch (error) {
-    console.error('Error fetching page content:', error);
-    if (error.message === 'Unauthorized') {
-      toast.error('User does not have permission');
-      router.push('/');
+    console.error("Error fetching page content:", error);
+    if (error.message === "Unauthorized") {
+      toast.error("User does not have permission");
+      router.push("/");
     } else {
-      toast.error('Error fetching page content: ' + error.message);
+      toast.error("Error fetching page content: " + error.message);
     }
     return null;
   }
 };
 
-const customElementsPlugin = editor => {
-  editor.Blocks.add('1-column', {
-    label: '1 Column',
+const customElementsPlugin = (editor) => {
+  editor.Blocks.add("1-column", {
+    label: "1 Column",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('2-columns', {
-    label: '2 Columns',
+  editor.Blocks.add("2-columns", {
+    label: "2 Columns",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('2-columns-2-3', {
-      label: '2 Columns 2/3',
-      content: `<div style="display:flex;">
+  editor.Blocks.add("2-columns-2-3", {
+    label: "2 Columns 2/3",
+    content: `<div style="display:flex;">
                   <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                   <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 </div>`,
-      category: 'Column',
-      attributes: { class: 'fa fa-columns' }
-    });
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
+  });
 
-  editor.Blocks.add('2-columns-3-7', {
-    label: '2 Columns 3/7',
+  editor.Blocks.add("2-columns-3-7", {
+    label: "2 Columns 3/7",
     content: `<div style="display:flex;">
                 <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('2-columns-7-3', {
-    label: '2 Columns 7/3',
+  editor.Blocks.add("2-columns-7-3", {
+    label: "2 Columns 7/3",
     content: `<div style="display:flex;">
                 <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('3-columns', {
-    label: '3 Columns',
+  editor.Blocks.add("3-columns", {
+    label: "3 Columns",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('4-columns', {
-    label: '4 Columns',
+  editor.Blocks.add("4-columns", {
+    label: "4 Columns",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('text-block', {
-    label: 'Text',
+  editor.Blocks.add("text-block", {
+    label: "Text",
     content: '<div data-gjs-type="text">Insert your text here</div>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-text-height' }
+    category: "Basic",
+    attributes: { class: "fa fa-text-height" },
   });
 
-  editor.Blocks.add('image-block', {
-    label: 'Image',
-    content: '<img data-gjs-type="image" src="/path-to-default-image.jpg" alt="Placeholder image"/>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-image' }
+  editor.Blocks.add("image-block", {
+    label: "Image",
+    content:
+      '<img data-gjs-type="image" src="/path-to-default-image.jpg" alt="Placeholder image"/>',
+    category: "Basic",
+    attributes: { class: "fa fa-image" },
   });
 
-  editor.Blocks.add('icon-bar-block', {
-    label: 'Icon Bar',
+  editor.Blocks.add("icon-bar-block", {
+    label: "Icon Bar",
     content: `
         <div class="container mx-auto" style="display: flex; justify-content: space-around; align-items: center; padding: 10px; background-color: #f4f4f4;">
         <div class="item" style="text-align: left; padding: 10px; color: #2c3e50; width: 300px">
@@ -219,12 +244,12 @@ const customElementsPlugin = editor => {
             <a style="font-size: 1rem; line-height: 1.5rem;  font-style: italic; font-weight: 700; " href="#">View ...</a>
         </div>
     </div>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-cog' }
+    category: "Advanced",
+    attributes: { class: "fa fa-cog" },
   });
 
-  editor.Blocks.add('page-detail-block', {
-    label: 'Page Detail',
+  editor.Blocks.add("page-detail-block", {
+    label: "Page Detail",
     content: `
         <div class="container" style="width: 300px; margin: 20px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
         <div class="header" style="background-color: #f1f1f1; padding: 20px; text-align: center; border-bottom: 1px solid #ddd;">
@@ -237,12 +262,12 @@ const customElementsPlugin = editor => {
             <a href="#" class="link" style="display: block; margin: 10px 0; text-decoration: none; color: #333; font-size: 1.2em; position: relative; padding-left: 20px;">Apply for Admission</a>
         </div>
     </div>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-list-ul' }
+    category: "Advanced",
+    attributes: { class: "fa fa-list-ul" },
   });
 
-  editor.Blocks.add('dep-contact-block', {
-    label: 'Department Contact',
+  editor.Blocks.add("dep-contact-block", {
+    label: "Department Contact",
     content: `
     <body style="font-family: Arial, sans-serif;
             background-color: #1d274b;
@@ -272,12 +297,12 @@ const customElementsPlugin = editor => {
         </div>
     </div>
     </body>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-list-ul' }
+    category: "Advanced",
+    attributes: { class: "fa fa-list-ul" },
   });
 
-  editor.Blocks.add('faculty-departments-block', {
-    label: 'Faculty Departments',
+  editor.Blocks.add("faculty-departments-block", {
+    label: "Faculty Departments",
     content: `
     <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
         <table style="width: 100%; border-collapse: collapse; margin: 0 auto; background-color: #ffffff;">
@@ -312,60 +337,61 @@ const customElementsPlugin = editor => {
             </tbody>
         </table>
     </div>`,
-    category: 'Advanced',
-    attributes: { class: 'fa fa-table' }
+    category: "Advanced",
+    attributes: { class: "fa fa-table" },
   });
 
-  editor.Blocks.add('video-block', {
-    label: 'Video',
-    content: '<video controls><source src="/path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-video-camera' }
+  editor.Blocks.add("video-block", {
+    label: "Video",
+    content:
+      '<video controls><source src="/path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
+    category: "Basic",
+    attributes: { class: "fa fa-video-camera" },
   });
 
-  editor.Blocks.add('link-block', {
-    label: 'Link',
+  editor.Blocks.add("link-block", {
+    label: "Link",
     content: '<a href="#" class="custom-link">Click here</a>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-link' }
+    category: "Basic",
+    attributes: { class: "fa fa-link" },
   });
 
-  editor.Blocks.add('map-block', {
-    label: 'Map',
+  editor.Blocks.add("map-block", {
+    label: "Map",
     content: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019879094116!2d144.96305831531678!3d-37.81410797975133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5777529bb4d3bd5!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1614114372457!5m2!1sen!2sau" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`,
-    category: 'Basic',
-    attributes: { class: 'fa fa-map' }
+    category: "Basic",
+    attributes: { class: "fa fa-map" },
   });
 
-  editor.Blocks.add('text-section-block', {
-    label: 'Text Section',
+  editor.Blocks.add("text-section-block", {
+    label: "Text Section",
     content: `<div class="text-section">
                 <h2>Title</h2>
                 <p>This is a text section. Add your content here.</p>
               </div>`,
-    category: 'Basic',
-    attributes: { class: 'fa fa-font' }
+    category: "Basic",
+    attributes: { class: "fa fa-font" },
   });
 
-  editor.Blocks.add('link-block', {
-    label: 'Link',
+  editor.Blocks.add("link-block", {
+    label: "Link",
     content: '<a href="#" class="custom-link">Click here</a>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-link' }
+    category: "Basic",
+    attributes: { class: "fa fa-link" },
   });
 
-  editor.Blocks.add('testimonial-block', {
-    label: 'Testimonial',
+  editor.Blocks.add("testimonial-block", {
+    label: "Testimonial",
     content: `<div class="testimonial">
                 <p>"This is a fantastic product! Highly recommend it to everyone."</p>
                 <cite>- Jane Doe</cite>
               </div>`,
-    category: 'Basic',
-    attributes: { class: 'fa fa-quote-right' }
+    category: "Basic",
+    attributes: { class: "fa fa-quote-right" },
   });
 
-  editor.Blocks.add('form-block', {
-    label: 'Form',
+  editor.Blocks.add("form-block", {
+    label: "Form",
     content: `<form class="custom-form" style=" max-width: 400px; margin: 0 auto; padding: 20px; background: #f4f4f4; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                 <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="name" placeholder="Your Name"/>
                 <input type="text" style=" width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" name="phonenumber" placeholder="Phone Number"/>
@@ -380,12 +406,12 @@ const customElementsPlugin = editor => {
                 </div>
                 <button type="submit" style="width: 100%; padding: 10px; background: #007bff; border: none; border-radius: 4px; color: #fff; font-size: 16px; cursor: pointer;">Submit</button>
               </form>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-wpforms' }
+    category: "Forms",
+    attributes: { class: "fa fa-wpforms" },
   });
 
-  editor.Blocks.add('contact-form-block', {
-    label: 'Contact Form',
+  editor.Blocks.add("contact-form-block", {
+    label: "Contact Form",
     content: `<form class="contact-form">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name">
@@ -395,75 +421,78 @@ const customElementsPlugin = editor => {
                 <textarea id="message" name="message"></textarea>
                 <button type="submit">Send</button>
               </form>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-envelope' }
+    category: "Forms",
+    attributes: { class: "fa fa-envelope" },
   });
 
-  editor.Blocks.add('input-block', {
-    label: 'Input',
-    content: '<input type="text" name="name" placeholder="Your Name" class="custom-input"/>',
-    category: 'Forms',
-    attributes: { class: 'fa fa-pencil' }
+  editor.Blocks.add("input-block", {
+    label: "Input",
+    content:
+      '<input type="text" name="name" placeholder="Your Name" class="custom-input"/>',
+    category: "Forms",
+    attributes: { class: "fa fa-pencil" },
   });
 
-  editor.Blocks.add('textarea-block', {
-    label: 'Textarea',
-    content: '<textarea name="message" placeholder="Your Message" class="custom-textarea"></textarea>',
-    category: 'Forms',
-    attributes: { class: 'fa fa-align-left' }
+  editor.Blocks.add("textarea-block", {
+    label: "Textarea",
+    content:
+      '<textarea name="message" placeholder="Your Message" class="custom-textarea"></textarea>',
+    category: "Forms",
+    attributes: { class: "fa fa-align-left" },
   });
 
-  editor.Blocks.add('select-block', {
-    label: 'Select',
+  editor.Blocks.add("select-block", {
+    label: "Select",
     content: `<select name="options" class="custom-select">
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
               </select>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-caret-down' }
+    category: "Forms",
+    attributes: { class: "fa fa-caret-down" },
   });
 
-  editor.Blocks.add('checkbox-block', {
-    label: 'Checkbox',
-    content: '<label><input type="checkbox" name="subscribe" class="custom-checkbox"/> Subscribe to newsletter</label>',
-    category: 'Forms',
-    attributes: { class: 'fa fa-check-square' }
+  editor.Blocks.add("checkbox-block", {
+    label: "Checkbox",
+    content:
+      '<label><input type="checkbox" name="subscribe" class="custom-checkbox"/> Subscribe to newsletter</label>',
+    category: "Forms",
+    attributes: { class: "fa fa-check-square" },
   });
 
-  editor.Blocks.add('radio-block', {
-    label: 'Radio',
+  editor.Blocks.add("radio-block", {
+    label: "Radio",
     content: `<div>
                 <label><input type="radio" name="gender" value="male" class="custom-radio"/> Male</label>
                 <label><input type="radio" name="gender" value="female" class="custom-radio"/> Female</label>
               </div>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-dot-circle-o' }
+    category: "Forms",
+    attributes: { class: "fa fa-dot-circle-o" },
   });
 
-  editor.Blocks.add('button-block', {
-    label: 'Button',
+  editor.Blocks.add("button-block", {
+    label: "Button",
     content: `<button class="btn-primary" style="font-size: .92em !important; padding: 15px 35px !important; background: #ffae00 !important; color: #ffffff !important; letter-spacing: 1px; font-weight: bold !important;
     text-transform: uppercase;
     border: none !important;
     border-radius: 3px !important;
     height: auto !important;">Click Me</button>`,
-    category: 'Forms',
-    attributes: { class: 'fa fa-minus-square-o' }
+    category: "Forms",
+    attributes: { class: "fa fa-minus-square-o" },
   });
 
-  editor.Blocks.add('feature-list-block', {
-    label: 'Feature List',
+  editor.Blocks.add("feature-list-block", {
+    label: "Feature List",
     content: `<ul class="features">
                 <li>Feature 1</li>
                 <li>Feature 2</li>
                 <li>Feature 3</li>
               </ul>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-list' }
+    category: "Extra",
+    attributes: { class: "fa fa-list" },
   });
 
-  editor.Blocks.add('footer-block', {
-    label: 'Footer',
+  editor.Blocks.add("footer-block", {
+    label: "Footer",
     content: `<footer class="bg-stone-900 text-gray-300 py-10">
       <div class="container mx-auto grid grid-cols-4 gap-8">
         <div>
@@ -517,12 +546,12 @@ const customElementsPlugin = editor => {
         <p>Copyright © All Rights Reserved. 2022, PARAGON International University</p>
       </div>
     </footer>`,
-    category: 'Layout',
-    attributes: { class: 'fa fa-file-text-o' }
+    category: "Layout",
+    attributes: { class: "fa fa-file-text-o" },
   });
 
-  editor.Blocks.add('faq-block', {
-    label: 'FAQ',
+  editor.Blocks.add("faq-block", {
+    label: "FAQ",
     content: `<div class="faq">
                 <h2>Frequently Asked Questions</h2>
                 <div class="faq-item">
@@ -534,12 +563,12 @@ const customElementsPlugin = editor => {
                   <p>Answer to question 2.</p>
                 </div>
               </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-question-circle' }
+    category: "Extra",
+    attributes: { class: "fa fa-question-circle" },
   });
 
-  editor.Blocks.add('team-section-block', {
-    label: 'Team Section',
+  editor.Blocks.add("team-section-block", {
+    label: "Team Section",
     content: `<div class="team-section">
                 <h2>Our Team</h2>
                 <div class="team-member">
@@ -553,23 +582,23 @@ const customElementsPlugin = editor => {
                   <p>Position</p>
                 </div>
               </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-users' }
+    category: "Extra",
+    attributes: { class: "fa fa-users" },
   });
 
-  editor.Blocks.add('cta-block', {
-    label: 'Call to Action',
+  editor.Blocks.add("cta-block", {
+    label: "Call to Action",
     content: `<div class="cta">
                 <h2>Call to Action</h2>
                 <p>This is an important call to action message.</p>
                 <button class="btn-cta">Take Action</button>
               </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-bullhorn' }
+    category: "Extra",
+    attributes: { class: "fa fa-bullhorn" },
   });
 
-  editor.Blocks.add('curriculum-table', {
-    label: 'Curriculum Table',
+  editor.Blocks.add("curriculum-table", {
+    label: "Curriculum Table",
     content: `<div style="display: flex; justify-content: space-around; padding: 20px;">
                 <div style="background-color: #f9f9f9; border: 2px solid #ccc; padding: 20px; width: 48%;">
                     <h3 style="color: #333; margin-bottom: 15px;">Semester I</h3>
@@ -590,27 +619,27 @@ const customElementsPlugin = editor => {
                     <div style="background-color: #fff; border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 5px;">CS 260 - Web Design & Development</div>
                 </div>
             </div>`,
-    category: 'Extra',
-    attributes: { class: 'fa fa-table' }
+    category: "Extra",
+    attributes: { class: "fa fa-table" },
   });
 
-  editor.DomComponents.addType('fixed-content', {
-     model: {
-       defaults: {
-         name: 'Fixed Content',
-         draggable: false,
-         copyable: false,
-         removable: false,
-         content: `<div class="fixed-content">
+  editor.DomComponents.addType("fixed-content", {
+    model: {
+      defaults: {
+        name: "Fixed Content",
+        draggable: false,
+        copyable: false,
+        removable: false,
+        content: `<div class="fixed-content">
                      <h1>Welcome to My Website</h1>
                      <p>This content is fixed and cannot be edited or removed.</p>
-                   </div>`
-       }
-     }
-   });
+                   </div>`,
+      },
+    },
+  });
 
-  editor.Blocks.add('fixed-content-block', {
-    label: 'NavBar',
+  editor.Blocks.add("fixed-content-block", {
+    label: "NavBar",
     content: `<header style="background-color: rgb(23 37 84); padding: 0.5rem;">
       <div class="container mx-auto" style="display: flex; align-items: flex-end;">
         <nav style="display: flex; margin-left: 500px; justify-content: flex-end;">
@@ -676,33 +705,35 @@ const customElementsPlugin = editor => {
         </div>
       </div>
     </main>`,
-    category: 'Layout',
-    attributes: { class: 'fa fa-lock' }
+    category: "Layout",
+    attributes: { class: "fa fa-lock" },
   });
 };
 
 const uploadFileToSpace = async (file) => {
-  const response = await fetch(`https://mypress.paragoniu.app/image/generate-url?filename=${file.name}`);
+  const response = await fetch(
+    `https://mypress.paragoniu.app/image/generate-url?filename=${file.name}`
+  );
   if (!response.ok) {
-    throw new Error('Failed to generate pre-signed URL');
+    throw new Error("Failed to generate pre-signed URL");
   }
   const data = await response.json();
 
   if (!data.success) {
-    throw new Error('Failed to generate pre-signed URL');
+    throw new Error("Failed to generate pre-signed URL");
   }
 
   const uploadResponse = await fetch(data.uploadUrl, {
-    method: 'PUT',
+    method: "PUT",
     body: file,
     headers: {
-      'Content-Type': file.type,
-      'x-amz-acl': 'public-read',
-    }
+      "Content-Type": file.type,
+      "x-amz-acl": "public-read",
+    },
   });
 
   if (!uploadResponse.ok) {
-    throw new Error('Failed to upload file to DigitalOcean Space');
+    throw new Error("Failed to upload file to DigitalOcean Space");
   }
 
   return data.fileUrl;
@@ -713,7 +744,7 @@ onMounted(async () => {
 
   const pageId = route.query.id;
   if (!pageId) {
-    console.error('Page ID is missing');
+    console.error("Page ID is missing");
     return;
   }
 
@@ -721,8 +752,8 @@ onMounted(async () => {
     container: grapesjsEditor.value,
     plugins: [customElementsPlugin, plugin],
     fromElement: true,
-    height: '100vh',
-    width: '100%',
+    height: "100vh",
+    width: "100%",
     assetManager: {
       upload: false,
       uploadFile: async (e) => {
@@ -734,7 +765,7 @@ onMounted(async () => {
             const fileUrl = await uploadFileToSpace(file);
             images.push({ src: fileUrl });
           } catch (error) {
-            console.error('Error uploading file:', error);
+            console.error("Error uploading file:", error);
           }
         }
 
@@ -743,16 +774,16 @@ onMounted(async () => {
     },
   });
 
-  document.documentElement.style.setProperty('--gjs-primary-color', '#172947');
-  document.documentElement.style.setProperty('--gjs-secondary-color', '#fff');
+  document.documentElement.style.setProperty("--gjs-primary-color", "#172947");
+  document.documentElement.style.setProperty("--gjs-secondary-color", "#fff");
 
   const pageContent = await fetchPageContent(pageId);
   if (pageContent && pageContent.html && pageContent.css) {
     editor.setComponents(pageContent.html);
     editor.setStyle(pageContent.css);
   } else {
-    editor.BlockManager.get('fixed-content-block').set({ active: true });
-    editor.runCommand('core:canvas-clear');
+    editor.BlockManager.get("fixed-content-block").set({ active: true });
+    editor.runCommand("core:canvas-clear");
   }
 
   customElementsPlugin(editor);
@@ -778,4 +809,3 @@ onMounted(async () => {
   min-width: 100px;
 }
 </style>
-
