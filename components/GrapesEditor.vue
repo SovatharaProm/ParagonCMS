@@ -9,6 +9,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -468,10 +469,12 @@ onMounted(async () => {
       },
     },
     styleManager: {
-      sectors: [{
+      sectors: [
+        {
           name: 'General',
           buildProps: ['float', 'display', 'position', 'top', 'right', 'left', 'bottom'],
-          properties: [{
+          properties: [
+            {
               name: 'Display',
               property: 'display',
               type: 'select',
@@ -505,28 +508,29 @@ onMounted(async () => {
           name: 'Dimension',
           open: false,
           buildProps: ['width', 'height', 'max-width', 'min-height', 'margin', 'padding'],
-          properties: [{
-            name: 'Margin',
-            property: 'margin',
-            type: 'composite',
-            properties: [
-              { name: 'Top', property: 'margin-top', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-              { name: 'Right', property: 'margin-right', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-              { name: 'Bottom', property: 'margin-bottom', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-              { name: 'Left', property: 'margin-left', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-            ]
-          },
-          {
-            name: 'Padding',
-            property: 'padding',
-            type: 'composite',
-            properties: [
-              { name: 'Top', property: 'padding-top', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-              { name: 'Right', property: 'padding-right', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-              { name: 'Bottom', property: 'padding-bottom', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-              { name: 'Left', property: 'padding-left', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
-            ]
-          },
+          properties: [
+            {
+              name: 'Margin',
+              property: 'margin',
+              type: 'composite',
+              properties: [
+                { name: 'Top', property: 'margin-top', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+                { name: 'Right', property: 'margin-right', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+                { name: 'Bottom', property: 'margin-bottom', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+                { name: 'Left', property: 'margin-left', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              ]
+            },
+            {
+              name: 'Padding',
+              property: 'padding',
+              type: 'composite',
+              properties: [
+                { name: 'Top', property: 'padding-top', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+                { name: 'Right', property: 'padding-right', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+                { name: 'Bottom', property: 'padding-bottom', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+                { name: 'Left', property: 'padding-left', type: 'integer', units: ['px', 'em', '%'], defaults: 0 },
+              ]
+            },
           ]
         },
         {
@@ -582,6 +586,7 @@ onMounted(async () => {
 });
 </script>
 
+
 <style scoped>
 @import "assets/css/style.css";
 
@@ -601,3 +606,4 @@ onMounted(async () => {
   min-width: 100px;
 }
 </style>
+
