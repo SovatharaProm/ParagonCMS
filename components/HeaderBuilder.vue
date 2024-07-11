@@ -300,23 +300,73 @@ const customElementsPlugin = (editor) => {
   });
 
   // Add Header 1 block to the canvas
-  editor.BlockManager.add("header-1-block", {
-    label: "Header 1",
-    content: `<header class="bg-blue-950 p-2 my-auto">
-            <div class="container mx-auto flex items-end justify-end">
+  editor.BlockManager.add('header-1-block', {
+  label: 'Header 1',
+  content: `<header class="bg-blue-950 p-2 my-auto">
+              <div class="container mx-auto flex items-end justify-end">
                 <nav class="flex space-x-5">
-                    <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
-                    <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
-                    <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
-                    <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
-                    <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
-                    <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
-                    <a href="#" class="text-white hover:text-gray-300 bg-yellow-500 p-2 py-full">My.Paragon.U</a>
+                  <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
+                  <a href="#" class="text-white hover:text-gray-300 my-auto">Covid-19 Info</a>
+                  <a href="#" class="text-white hover:text-gray-300 my-auto">Alumni</a>
+                  <a href="#" class="text-white hover:text-gray-300 my-auto">Calendar</a>
+                  <a href="#" class="text-white hover:text-gray-300 my-auto">FAQ</a>
+                  <a href="#" class="text-white hover:text-gray-300 my-auto">Jobs@Paragon.U</a>
+                  <a href="#" class="text-white hover:text-gray-300 bg-yellow-500 p-2">My.Paragon.U</a>
                 </nav>
-            </div>
-        </header>`,
-    category: "Layout",
-    attributes: { class: "fa fa-minus" },
+              </div>
+            </header>
+            <main class="mx-20 my-auto border-b-2">
+              <div class="flex items-center justify-between">
+                <img src="/assets/images/Logo.png" alt="Paragon University Logo" class="h-20">
+                <div class="flex space-x-8 text-blue-950 font-semibold font-sans">
+                  <div class="relative group">
+                    <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">About</a>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg">
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Our History</a>
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mission & Vision</a>
+                    </div>
+                  </div>
+                  <div class="relative group">
+                    <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Paragon Students</a>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg">
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Current Students</a>
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Student Life</a>
+                    </div>
+                  </div>
+                  <div class="relative group">
+                    <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Prospective Students</a>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg">
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Admissions</a>
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Programs</a>
+                    </div>
+                  </div>
+                  <div class="relative group">
+                    <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Academics</a>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg">
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Departments</a>
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Research</a>
+                    </div>
+                  </div>
+                  <div class="relative group">
+                    <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Admissions</a>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg">
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Apply Now</a>
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Financial Aid</a>
+                    </div>
+                  </div>
+                  <div class="relative group">
+                    <a href="#" class="text-gray-800 hover:text-gray-500 font-medium">Partnerships</a>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg">
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Collaborations</a>
+                      <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Corporate Partners</a>
+                    </div>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+              </div>
+            </main>`
   });
 
   // Add Header 2 block to the canvas
