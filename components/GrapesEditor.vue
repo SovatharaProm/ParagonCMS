@@ -936,7 +936,8 @@ onMounted(async () => {
       ]
     }
   });
-
+  document.documentElement.style.setProperty('--gjs-primary-color', '#172947');
+  document.documentElement.style.setProperty('--gjs-secondary-color', '#fff');
   const pageContent = await fetchPageContent(pageId);
   if (pageContent && pageContent.html && pageContent.css) {
     editor.setComponents(pageContent.html);
