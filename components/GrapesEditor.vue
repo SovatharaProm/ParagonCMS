@@ -974,6 +974,8 @@ onMounted(async () => {
             "text-align",
             "text-decoration",
             "text-shadow",
+            "text-wrap",
+            "white-space",
           ],
         },
         {
