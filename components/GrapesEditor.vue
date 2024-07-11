@@ -853,6 +853,7 @@ onMounted(async () => {
             "flex-basis",
             "flex-grow",
             "flex-shrink",
+            "align-self",
           ],
           properties: [
             {
@@ -924,6 +925,20 @@ onMounted(async () => {
                 { value: "center" },
                 { value: "space-between" },
                 { value: "space-around" },
+              ],
+            },
+            {
+              name: "Align Self",
+              property: "align-self",
+              type: "select",
+              defaults: "auto",
+              list: [
+                { value: "auto" },
+                { value: "flex-start" },
+                { value: "flex-end" },
+                { value: "center" },
+                { value: "baseline" },
+                { value: "stretch" },
               ],
             },
             {
@@ -1008,6 +1023,7 @@ onMounted(async () => {
 
   customElementsPlugin(editor);
 });
+
 
 </script>
 
