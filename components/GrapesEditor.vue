@@ -797,6 +797,16 @@ onMounted(async () => {
             "max-width",
             "min-width",
             "max-height",
+            "margin",
+            "margin-top",
+            "margin-right",
+            "margin-bottom",
+            "margin-left",
+            "padding",
+            "padding-top",
+            "padding-right",
+            "padding-bottom",
+            "padding-left",
           ],
         },
         {
@@ -998,6 +1008,7 @@ onMounted(async () => {
 
   customElementsPlugin(editor);
 });
+
 </script>
 
 <style scoped>
