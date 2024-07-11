@@ -265,7 +265,145 @@ const customElementsPlugin = (editor) => {
     category: "Advanced",
     attributes: { class: "fa fa-list-ul" },
   });
-
+  editor.Blocks.add("faculty-layout", {
+    label: "Faculty Layout",
+    category: "Custom Blocks",
+    content: `
+      <div class="faculty-layout">
+        <div id="irpk">
+          <div id="i1o9" class="flex-grow min-h-[75px] bg-cover bg-center h-[250px] flex justify-center flex-col" style="background-image: url('https://paragoncms.sgp1.digitaloceanspaces.com/1720679431488_engineering-faculty-bg.jpg');">
+            <div id="izpfu" class="font-bold text-[36px] text-white pl-[15%]">Faculty of Engineering</div>
+          </div>
+          <div id="inhd" class="flex justify-between flex-wrap my-10 mx-[5%]">
+            <div id="iyauz" class="flex-grow min-h-[75px] m-1.5 flex flex-col flex-wrap w-[70%]">
+              <div id="it0k" class="text-base text-gray-800 mb-4">
+                The Faculty of Engineering at Paragon.U strives to prepare its students with the highest quality education and research who will endure the challenges of the industry and the society competently. We envision our mission by providing a learning environment that promotes integrity and creativity, professional practice and commitment to the public service.
+              </div>
+              <b id="i3dl" class="text-[30px]">Undergraduate Majors</b>
+              <div id="iyl89g" class="flex flex-wrap justify-start gap-[32px] mt-1">
+                <div id="if27kz" class="relative min-h-[100px] w-[400px] bg-yellow-500">
+                  <div id="iitmk8" class="absolute inset-0 bg-cover opacity-20" style="background-image: url('https://paragoncms.sgp1.digitaloceanspaces.com/1720680062556_Arc2.jpg');"></div>
+                  <a href="#" class="custom-link text-white font-bold p-3 text-center w-full h-full flex justify-center items-center absolute z-10">Architecture (ARC)</a>
+                </div>
+                <div id="i1ijje" class="relative min-h-[100px] w-[400px] bg-yellow-500">
+                  <div id="iqgo5z" class="absolute inset-0 bg-cover opacity-20" style="background-image: url('https://paragoncms.sgp1.digitaloceanspaces.com/1720702433333_CE2.jpg');"></div>
+                  <a href="#" class="custom-link text-white font-bold p-3 text-center w-full h-full flex justify-center items-center absolute z-10">Civil Engineering (CE)</a>
+                </div>
+                <div id="io713d" class="relative min-h-[100px] w-[400px] bg-yellow-500">
+                  <div id="iu2z0i" class="absolute inset-0 bg-cover opacity-20" style="background-image: url('https://paragoncms.sgp1.digitaloceanspaces.com/1720681152517_IE2.jpg');"></div>
+                  <a href="#" class="custom-link text-white font-bold p-3 text-center w-full h-full flex justify-center items-center absolute z-10">Industrial Engineering (IE)</a>
+                </div>
+              </div>
+            </div>
+            <div id="ib9h" class="min-h-[75px] m-1.5 flex flex-col gap-2">
+              <div id="i5jtx7" class="flex flex-col">
+                <div id="is5009">
+                  <b id="iy9afj" class="py-1.5 px-2.5">Faculty of Economics and Administrative Sciences</b>
+                </div>
+                <a href="#" id="igl8nb" class="py-1.5">Academic Staff</a>
+                <a href="#" id="iaac0m" class="py-1.5">Department of Architecture</a>
+                <a href="#" id="irh1gh" class="py-1.5">Department of Civil Engineering</a>
+                <a href="#" id="imhdb3" class="py-1.5">Department of Industrial Engineering</a>
+              </div>
+              <div id="isbdqa" class="flex flex-col bg-[#192f59] p-5 gap-2">
+                <div id="iipx6b" class="text-white flex flex-col gap-1">
+                  <b id="i8fvt" class="text-[20px]">Faculty Contact Info</b>
+                  <b id="i6htbv" class="text-yellow-500">Faculty of Engineering</b>
+                  <div id="iza2dz">Paragon International University</div>
+                  <div id="ipcl0n">Monday - Friday 08:00 - 17:00</div>
+                  <div id="ibzvxh">engineering@paragoniu.edu.kh</div>
+                </div>
+                <div id="ik42iy" class="text-white flex flex-col gap-1.5">
+                  <b id="iitfur">Social Info</b>
+                  <a href="#" id="i356r3" class="text-yellow-500">Facebook</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="i5ko" class="p-5 bg-gray-200 block">
+            <div id="i1cv4" class="text-[30px] text-gray-900 font-bold">Academic Staff of Engineering Faculty</div>
+            <div id="iewtm" class="flex flex-wrap justify-start gap-4">
+              <div id="i8l9nz" class="relative w-[197px]">
+                <div class="flex flex-col gap-1.5">
+                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720685210605_Vichera-Heang-500x500.jpeg" alt="Placeholder image" class="w-full h-full"/>
+                  <div id="ipgoxh" class="font-bold">Vichera HEANG</div>
+                  <div id="ik3fie" class="text-gray-600">Lecturer</div>
+                  <div id="iym7n1" class="text-gray-600">Dean of the Engineering Faculty</div>
+                </div>
+                <div id="i5akwg" class="w-full mt-2.5">
+                  <a href="#" class="details-link bg-yellow-500 text-white font-bold px-2.5 py-1.5 rounded">Click here</a>
+                </div>
+              </div>
+              <div id="iwdtdk" class="relative w-[197px]">
+                <div class="flex flex-col gap-1.5">
+                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720685210153_Mengleang-LAY-2-sq-500x500.jpg" alt="Placeholder image" class="w-full h-full"/>
+                  <div id="i0v2hx" class="font-bold">MengLeang LAY</div>
+                  <div id="iqwvaf" class="text-gray-600">Lecturer</div>
+                  <div id="ikmmp4" class="text-gray-600">Mathematics and Science Faculty</div>
+                </div>
+                <div id="ici9zg" class="w-full mt-2.5">
+                  <a href="#" class="details-link bg-yellow-500 text-white font-bold px-2.5 py-1.5 rounded">Click here</a>
+                </div>
+              </div>
+              <div id="iksufa" class="relative w-[197px]">
+                <div class="flex flex-col gap-1.5">
+                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699618961_Nurmurat-KANDYMOV-02-sq-500x500.jpg" alt="Placeholder image" class="w-full h-full"/>
+                  <div id="ibizd1" class="font-bold">Nurmurat KANDYMOV</div>
+                  <div id="i8wx75" class="text-gray-600">Lecturer</div>
+                  <a href="#" class="details-link bg-yellow-500 text-white font-bold px-2.5 py-1.5 rounded">Click here</a>
+                </div>
+              </div>
+              <div id="ii10jm" class="relative w-[197px]">
+                <div class="flex flex-col gap-1.5">
+                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699574721_Samnang-OU-SQ-min-500x500.jpg" alt="Placeholder image" class="w-full h-full"/>
+                  <div id="i1qs6a" class="font-bold">Samnang OU</div>
+                  <div id="ixkljs" class="text-gray-600">Lecturer</div>
+                  <div id="i8qryy" class="text-gray-600">Head of IE Department</div>
+                  <a href="#" class="details-link bg-yellow-500 text-white font-bold px-2.5 py-1.5 rounded">Click here</a>
+                </div>
+              </div>
+              <div id="ihcfq3" class="relative w-[197px]">
+                <div class="flex flex-col gap-1.5">
+                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699574402_RUBEN-CASTILLERO-500x500.jpg" alt="Placeholder image" class="w-full h-full"/>
+                  <div id="i6d7kh" class="font-bold">Ruben Castillero MORTERA</div>
+                  <div id="idzkk8" class="text-gray-600">Lecturer</div>
+                  <div id="i43d4j" class="text-gray-600">Head of ARC Department</div>
+                  <a href="#" class="details-link bg-yellow-500 text-white font-bold px-2.5 py-1.5 rounded">Click here</a>
+                </div>
+              </div>
+              <div id="iwi986" class="relative w-[197px]">
+                <div class="flex flex-col gap-1.5">
+                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699575054_Uddamvithiyea-ROM-sq-500x500.jpg" alt="Placeholder image" class="w-full h-full"/>
+                  <div id="ibdi8d" class="font-bold">Uddamvithiyea ROM</div>
+                  <div id="i2vl2f" class="text-gray-600">Lecturer</div>
+                  <div id="i4qx31" class="text-gray-600">Engineering Lab Manager</div>
+                  <a href="#" class="details-link bg-yellow-500 text-white font-bold px-2.5 py-1.5 rounded">Click here</a>
+                </div>
+              </div>
+              <div id="i1oyv3" class="relative w-[197px]">
+                <div class="flex flex-col gap-1.5">
+                  <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720699573722_Mr.-Sorn-Lida-sq-500x500.jpg" alt="Placeholder image" class="w-full h-full"/>
+                  <div id="i4s82i" class="font-bold">Lida SORN</div>
+                  <div id="iv0skh" class="text-gray-600">Lecturer</div>
+                  <div id="ihk3ed" class="text-gray-600">Head of CE department</div>
+                  <a href="#" class="details-link bg-yellow-500 text-white font-bold px-2.5 py-1.5 rounded">Click here</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="ie7hc" class="flex justify-center items-stretch mt-0 mb-5">
+            <div id="ix2fm" class="flex flex-wrap justify-center items-center gap-2">
+              <a href="#" class="apply-now bg-yellow-500 text-white font-bold p-2.5 rounded">Click here</a>
+              <a href="#" class="download-prospectus text-yellow-500 border border-yellow-500 font-bold p-2.5 rounded">Download Prospectus</a>
+            </div>
+            <div id="igns7o" class="relative min-h-[75px] flex justify-center items-center m-1.5">
+              <img src="https://paragoncms.sgp1.digitaloceanspaces.com/1720690374591_BUS-bg-400x257.jpg" alt="Placeholder image" class="w-full h-full"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+  });
   editor.Blocks.add("dep-contact-block", {
     label: "Department Contact",
     content: `
