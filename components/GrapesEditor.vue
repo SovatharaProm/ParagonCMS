@@ -974,7 +974,6 @@ onMounted(async () => {
             "text-align",
             "text-decoration",
             "text-shadow",
-            "white-space",
           ],
         },
         {
@@ -1176,6 +1175,7 @@ onMounted(async () => {
 
   customElementsPlugin(editor);
 });
+
 
 </script>
 
