@@ -29,7 +29,7 @@ export default defineNuxtConfig({
   },
 
   css: [
-    '~/assets/css/main.css', // Ensure this file exists and contains Tailwind CSS directives
+    '~/assets/css/main.css',
   ],
 
   postcss: {
@@ -61,4 +61,6 @@ export default defineNuxtConfig({
       ],
     },
   },
+
+  compatibilityDate: "2024-08-03",
 });

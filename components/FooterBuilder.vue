@@ -6,7 +6,10 @@
 
   <div class="sticky-footer flex justify-end my-5 ml-[300px] flex-grow">
     <NuxtLink to="/admin/website" class="mr-5">
-      <v-btn class="text-none button-same-size" color="blue-darken-4" variant="outlined"
+      <v-btn
+        class="text-none button-same-size"
+        color="blue-darken-4"
+        variant="outlined"
         >Discard</v-btn
       >
     </NuxtLink>
@@ -22,7 +25,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useAuthStore } from "@/stores/auth";
@@ -30,9 +32,8 @@ import { useRoute, useRouter } from "vue-router";
 import grapesjs from "grapesjs";
 import "grapesjs/dist/css/grapes.min.css";
 import plugin from "grapesjs-tailwind";
-import "tailwindcss/tailwind.css";
-import { useToast } from 'vue-toast-notification';
-import 'vue-toast-notification/dist/theme-sugar.css';
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 const toast = useToast();
 const isAdmin = computed(
@@ -89,9 +90,9 @@ const fetchFooterContent = async () => {
     });
 
     const data = await response.json();
-    if (data.code === 200) {
-      console.log("Fetched footer content", data); // Debug log
-      return data;
+    if (data.code === 200 && data.data && data.data["Page Content"]) {
+      console.log("Fetched footer content", data.data["Page Content"]); // Debug log
+      return data.data["Page Content"];
     } else {
       console.error("Error fetching footer content:", data.message);
       return null;
@@ -102,120 +103,122 @@ const fetchFooterContent = async () => {
   }
 };
 
-const customElementsPlugin = editor => {
-    editor.Blocks.add('1-column', {
-    label: '1 Column',
+const customElementsPlugin = (editor) => {
+  editor.Blocks.add("1-column", {
+    label: "1 Column",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('2-columns', {
-    label: '2 Columns',
+  editor.Blocks.add("2-columns", {
+    label: "2 Columns",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('2-columns-2-3', {
-      label: '2 Columns 2/3',
-      content: `<div style="display:flex;">
+  editor.Blocks.add("2-columns-2-3", {
+    label: "2 Columns 2/3",
+    content: `<div style="display:flex;">
                   <div style="flex: 2; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                   <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 </div>`,
-      category: 'Column',
-      attributes: { class: 'fa fa-columns' }
-    });
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
+  });
 
-  editor.Blocks.add('2-columns-3-7', {
-    label: '2 Columns 3/7',
+  editor.Blocks.add("2-columns-3-7", {
+    label: "2 Columns 3/7",
     content: `<div style="display:flex;">
                 <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('2-columns-7-3', {
-    label: '2 Columns 7/3',
+  editor.Blocks.add("2-columns-7-3", {
+    label: "2 Columns 7/3",
     content: `<div style="display:flex;">
                 <div style="flex: 7; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex: 3; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('3-columns', {
-    label: '3 Columns',
+  editor.Blocks.add("3-columns", {
+    label: "3 Columns",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
-  
-  editor.Blocks.add('3-columns', {
-    label: '3 Columns',
+
+  editor.Blocks.add("3-columns", {
+    label: "3 Columns",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('4-columns', {
-    label: '4 Columns',
+  editor.Blocks.add("4-columns", {
+    label: "4 Columns",
     content: `<div style="display:flex;">
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
                 <div style="flex-grow:1; min-height: 75px; margin: 5px; background-color: #f7f7f7"></div>
               </div>`,
-    category: 'Column',
-    attributes: { class: 'fa fa-columns' }
+    category: "Column",
+    attributes: { class: "fa fa-columns" },
   });
 
-  editor.Blocks.add('text-block', {
-    label: 'Text',
+  editor.Blocks.add("text-block", {
+    label: "Text",
     content: '<div data-gjs-type="text">Insert your text here</div>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-text-height' }
+    category: "Basic",
+    attributes: { class: "fa fa-text-height" },
   });
 
-  editor.Blocks.add('image-block', {
-    label: 'Image',
-    content: '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-image' }
+  editor.Blocks.add("image-block", {
+    label: "Image",
+    content:
+      '<img data-gjs-type="image" src="path-to-default-image.jpg" alt="Placeholder image"/>',
+    category: "Basic",
+    attributes: { class: "fa fa-image" },
   });
 
-  editor.Blocks.add('video-block', {
-    label: 'Video',
-    content: '<video controls><source src="path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-video-camera' }
+  editor.Blocks.add("video-block", {
+    label: "Video",
+    content:
+      '<video controls><source src="path-to-video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
+    category: "Basic",
+    attributes: { class: "fa fa-video-camera" },
   });
 
-   editor.Blocks.add('link-block', {
-    label: 'Link',
+  editor.Blocks.add("link-block", {
+    label: "Link",
     content: '<a href="#" class="custom-link">Click here</a>',
-    category: 'Basic',
-    attributes: { class: 'fa fa-link' }
+    category: "Basic",
+    attributes: { class: "fa fa-link" },
   });
 
-    editor.BlockManager.add('footer-block', {
-    label: 'Footer',
+  editor.BlockManager.add("footer-block", {
+    label: "Footer",
     content: `<footer class="bg-stone-900 text-gray-300 py-10">
       <div class="container mx-auto grid grid-cols-4 gap-8">
         <div>
@@ -269,8 +272,8 @@ const customElementsPlugin = editor => {
         <p>Copyright © All Rights Reserved. 2022, PARAGON International University</p>
       </div>
     </footer>`,
-    category: 'Layout',
-    attributes: { class: 'fa fa-window-maximize' }
+    category: "Layout",
+    attributes: { class: "fa fa-window-maximize" },
   });
 };
 
