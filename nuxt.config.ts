@@ -28,6 +28,17 @@ export default defineNuxtConfig({
     display: "swap",
   },
 
+  css: [
+    '~/assets/css/main.css', // Ensure this file exists and contains Tailwind CSS directives
+  ],
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+
   vite: {
     vue: {
       template: {
@@ -35,6 +46,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   app: {
     head: {
       title: "My Press - Paragon.U",
