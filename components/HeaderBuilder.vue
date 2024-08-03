@@ -32,7 +32,6 @@ import { useRoute, useRouter } from "vue-router";
 import grapesjs from "grapesjs";
 import "grapesjs/dist/css/grapes.min.css";
 import plugin from "grapesjs-tailwind";
-import "tailwindcss/tailwind.css";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
@@ -98,12 +97,18 @@ const fetchPageContent = async (headerId) => {
 
     const data = await response.json();
     if (data.code === 200) {
-      console.log(
-        "Fetched content for header:",
-        headerId,
-        data.data["page_Content"]
-      ); // Debug log
-      return data.data["page_Content"];
+      const pageContent = data.data["page_Content"];
+
+      if (!pageContent || !pageContent.html || !pageContent.css) {
+        console.warn("No content found for header ID:", headerId);
+        // Return default content or handle the case where content is missing
+        return {
+          html: "<div>No content available</div>", // Placeholder content
+          css: "",
+        };
+      }
+
+      return pageContent;
     } else {
       console.error("Error fetching page content:", data.message);
       return null;
@@ -300,9 +305,9 @@ const customElementsPlugin = (editor) => {
   });
 
   // Add Header 1 block to the canvas
-  editor.BlockManager.add('header-1-block', {
-  label: 'Header 1',
-  content: `<header class="bg-blue-950 p-2 my-auto">
+  editor.BlockManager.add("header-1-block", {
+    label: "Header 1",
+    content: `<header class="bg-blue-950 p-2 my-auto">
               <div class="container mx-auto flex items-end justify-end">
                 <nav class="flex space-x-5">
                   <a href="#" class="text-white hover:text-gray-300 my-auto">Rector's Scholarship</a>
@@ -366,7 +371,7 @@ const customElementsPlugin = (editor) => {
                   </svg>
                 </div>
               </div>
-            </main>`
+            </main>`,
   });
 
   // Add Header 2 block to the canvas
@@ -500,18 +505,26 @@ onMounted(async () => {
 
   const pageContent = await fetchPageContent(headerId);
 
-if (pageContent && pageContent.html && pageContent.css) {
-  console.log("Fetched HTML Content:", pageContent.html); // Log fetched content for inspection
-  // Clean the fetched HTML content to remove unwanted characters
-  const cleanedHtml = pageContent.html.replace(/> >/g, '');
-  editor.setComponents(cleanedHtml);
-  editor.setStyle(pageContent.css);
-} else {
-  console.warn("No content found for header ID:", headerId); // Debug log
-}
+  if (pageContent && pageContent.html && pageContent.css) {
+    console.log("Fetched HTML Content:", pageContent.html); // Log fetched content for inspection
+    editor.setComponents(pageContent.html);
+    editor.setStyle(pageContent.css);
+  } else {
+    console.warn("No content found for header ID:", headerId);
+    // Set a default or fallback content if necessary
+    editor.setComponents("<div>No content available</div>");
+  }
 
+  if (pageContent && pageContent.html && pageContent.css) {
+    console.log("Fetched HTML Content:", pageContent.html); // Log fetched content for inspection
+    // Clean the fetched HTML content to remove unwanted characters
+    const cleanedHtml = pageContent.html.replace(/> >/g, "");
+    editor.setComponents(cleanedHtml);
+    editor.setStyle(pageContent.css);
+  } else {
+    console.warn("No content found for header ID:", headerId); // Debug log
+  }
 });
-
 </script>
 
 <style scoped>
