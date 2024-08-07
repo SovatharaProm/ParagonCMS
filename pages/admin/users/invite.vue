@@ -1,10 +1,10 @@
 <template>
-    <AdminInviteUser/>
+  <AdminInviteUser />
 </template>
-<script setup>
-definePageMeta ({
-    layout: 'dashboard',
-    middleware: "auth",
-})
 
+<script setup>
+definePageMeta({
+  layout: "dashboard",
+  middleware: "auth",
+});
 </script>

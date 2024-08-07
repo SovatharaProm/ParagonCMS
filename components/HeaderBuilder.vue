@@ -36,9 +36,6 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 const toast = useToast();
-const isAdmin = computed(
-  () => authStore.userRole === "admin" || authStore.userRole === "super_admin"
-);
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const authStore = useAuthStore();
 const grapesjsEditor = ref(null);
